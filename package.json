@@ -13,8 +13,9 @@
   },
   "dependencies": {
     "@mantine/core": "^8.3.14",
-    "@mantine/form": "^8.3.14",
     "@mantine/hooks": "^8.3.14",
+    "@tabler/icons-react": "^3.36.1",
+    "cantor-digitalis": "^0.0.5",
     "pitchfinder": "^2.3.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
