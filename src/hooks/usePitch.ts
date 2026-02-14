@@ -1,12 +1,12 @@
 import { useRef, useState, useCallback } from 'react'
 import { Macleod } from 'pitchfinder'
 import { useMedianBuffer } from './useMedianBuffer'
+import { useAudio } from '../audio/AudioProvider'
 
 interface UsePitchOptions {
   probabilityThreshold?: number
   medianCount?: number
   bufferSize?: number
-  sampleRate?: number
 }
 
 interface UsePitchReturn {
@@ -21,39 +21,40 @@ export function usePitch(options: UsePitchOptions = {}): UsePitchReturn {
     probabilityThreshold = 0.3,
     medianCount = 1,
     bufferSize = 1024,
-    sampleRate = 44100,
   } = options
+
+  const { getOrCreateAudioContext } = useAudio()
 
   const [isRunning, setIsRunning] = useState(false)
 
-  const audioContextRef = useRef<AudioContext | null>(null)
   const rafRef = useRef<number>(0)
   const streamRef = useRef<MediaStream | null>(null)
+  const analyserRef = useRef<AnalyserNode | null>(null)
   const pitchBuffer = useMedianBuffer(medianCount)
 
   const stop = useCallback(() => {
     cancelAnimationFrame(rafRef.current)
     streamRef.current?.getTracks().forEach((t) => t.stop())
-    audioContextRef.current?.close()
-    audioContextRef.current = null
     streamRef.current = null
+    analyserRef.current = null
     pitchBuffer.clear()
     setIsRunning(false)
   }, [pitchBuffer])
 
   const start = useCallback(async () => {
-    if (audioContextRef.current) return
+    if (analyserRef.current) return
 
+    const audioContext = getOrCreateAudioContext()
+    const sampleRate = audioContext.sampleRate
     const detectPitch = Macleod({ sampleRate, bufferSize })
 
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-    const audioContext = new AudioContext({ sampleRate })
     const source = audioContext.createMediaStreamSource(stream)
     const analyser = audioContext.createAnalyser()
     analyser.fftSize = bufferSize
     source.connect(analyser)
 
-    audioContextRef.current = audioContext
+    analyserRef.current = analyser
     streamRef.current = stream
     pitchBuffer.clear()
     setIsRunning(true)
@@ -74,7 +75,7 @@ export function usePitch(options: UsePitchOptions = {}): UsePitchReturn {
     }
 
     loop()
-  }, [sampleRate, bufferSize, probabilityThreshold, pitchBuffer])
+  }, [getOrCreateAudioContext, bufferSize, probabilityThreshold, pitchBuffer])
 
   return { isRunning, start, stop, pitch: pitchBuffer.value }
 }

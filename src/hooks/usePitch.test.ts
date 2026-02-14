@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
+import type { ReactNode } from 'react'
+import { createElement } from 'react'
 import { usePitch } from './usePitch'
+import { AudioProvider } from '../audio/AudioProvider'
 
 // Controllable mock for pitchfinder
 let mockDetectPitch: (buf: Float32Array) => { freq: number; probability: number }
@@ -27,22 +30,21 @@ function createMockAnalyser() {
   }
 }
 
-function createMockAudioContextConstructor(analyser: ReturnType<typeof createMockAnalyser>) {
-  const ctx = {
+function createMockAudioContext(analyser: ReturnType<typeof createMockAnalyser>) {
+  return {
+    sampleRate: 44100,
+    state: 'running' as AudioContextState,
+    onstatechange: null as (() => void) | null,
     createMediaStreamSource: vi.fn(() => ({ connect: vi.fn() })),
     createAnalyser: vi.fn(() => analyser),
     close: vi.fn(),
   }
-  const ctor = vi.fn(function (this: unknown) {
-    Object.assign(this as Record<string, unknown>, ctx)
-  })
-  return { ctor, ctx }
 }
 
 let rafCallbacks: Array<FrameRequestCallback> = []
 let rafIdCounter = 1
 
-function setupGlobalMocks(mockStream: MediaStream, MockAudioContext: unknown) {
+function setupGlobalMocks(mockStream: MediaStream, mockAudioCtx: ReturnType<typeof createMockAudioContext>) {
   vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {
     rafCallbacks.push(cb)
     return rafIdCounter++
@@ -53,7 +55,10 @@ function setupGlobalMocks(mockStream: MediaStream, MockAudioContext: unknown) {
       getUserMedia: vi.fn().mockResolvedValue(mockStream),
     },
   })
-  vi.stubGlobal('AudioContext', MockAudioContext)
+  // Constructor that returns mockAudioCtx directly
+  vi.stubGlobal('AudioContext', vi.fn(function () {
+    return mockAudioCtx
+  }))
 }
 
 function flushRafCallbacks(count = 1) {
@@ -63,12 +68,17 @@ function flushRafCallbacks(count = 1) {
   }
 }
 
+function wrapper({ children }: { children: ReactNode }) {
+  return createElement(AudioProvider, null, children)
+}
+
 // --- Tests ---
 
 describe('usePitch', () => {
   let analyser: ReturnType<typeof createMockAnalyser>
   let mockStream: MediaStream
   let mockTrack: ReturnType<typeof createMockTrack>
+  let mockAudioCtx: ReturnType<typeof createMockAudioContext>
 
   beforeEach(() => {
     rafCallbacks = []
@@ -77,8 +87,8 @@ describe('usePitch', () => {
     analyser = createMockAnalyser()
     mockTrack = createMockTrack()
     mockStream = createMockStream([mockTrack])
-    const { ctor } = createMockAudioContextConstructor(analyser)
-    setupGlobalMocks(mockStream, ctor)
+    mockAudioCtx = createMockAudioContext(analyser)
+    setupGlobalMocks(mockStream, mockAudioCtx)
   })
 
   afterEach(() => {
@@ -86,13 +96,13 @@ describe('usePitch', () => {
   })
 
   it('starts with isRunning false and pitch null', () => {
-    const { result } = renderHook(() => usePitch())
+    const { result } = renderHook(() => usePitch(), { wrapper })
     expect(result.current.isRunning).toBe(false)
     expect(result.current.pitch).toBeNull()
   })
 
   it('sets isRunning to true after start', async () => {
-    const { result } = renderHook(() => usePitch())
+    const { result } = renderHook(() => usePitch(), { wrapper })
     await act(async () => {
       await result.current.start()
     })
@@ -100,7 +110,7 @@ describe('usePitch', () => {
   })
 
   it('sets isRunning to false after stop', async () => {
-    const { result } = renderHook(() => usePitch())
+    const { result } = renderHook(() => usePitch(), { wrapper })
     await act(async () => {
       await result.current.start()
     })
@@ -108,25 +118,20 @@ describe('usePitch', () => {
     expect(result.current.isRunning).toBe(false)
   })
 
-  it('stops media tracks and closes audio context on stop', async () => {
-    const { ctor, ctx } = createMockAudioContextConstructor(analyser)
-    setupGlobalMocks(mockStream, ctor)
-
-    const { result } = renderHook(() => usePitch())
+  it('stops media tracks on stop but does not close the shared AudioContext', async () => {
+    const { result } = renderHook(() => usePitch(), { wrapper })
     await act(async () => {
       await result.current.start()
     })
     act(() => result.current.stop())
 
     expect(mockTrack.stop).toHaveBeenCalled()
-    expect(ctx.close).toHaveBeenCalled()
+    // Shared AudioContext should NOT be closed by usePitch
+    expect(mockAudioCtx.close).not.toHaveBeenCalled()
   })
 
-  it('is idempotent — calling start twice does not create a second context', async () => {
-    const { ctor } = createMockAudioContextConstructor(analyser)
-    setupGlobalMocks(mockStream, ctor)
-
-    const { result } = renderHook(() => usePitch())
+  it('is idempotent — calling start twice does not create a second analyser', async () => {
+    const { result } = renderHook(() => usePitch(), { wrapper })
     await act(async () => {
       await result.current.start()
     })
@@ -134,13 +139,13 @@ describe('usePitch', () => {
       await result.current.start()
     })
 
-    expect(ctor).toHaveBeenCalledTimes(1)
+    expect(mockAudioCtx.createAnalyser).toHaveBeenCalledTimes(1)
   })
 
   it('detects pitch from valid results', async () => {
     mockDetectPitch = () => ({ freq: 440, probability: 0.95 })
 
-    const { result } = renderHook(() => usePitch({ medianCount: 1 }))
+    const { result } = renderHook(() => usePitch({ medianCount: 1 }), { wrapper })
     await act(async () => {
       await result.current.start()
     })
@@ -153,8 +158,9 @@ describe('usePitch', () => {
   it('does not push when probability is below threshold', async () => {
     mockDetectPitch = () => ({ freq: 440, probability: 0.1 })
 
-    const { result } = renderHook(() =>
-      usePitch({ probabilityThreshold: 0.3, medianCount: 1 }),
+    const { result } = renderHook(
+      () => usePitch({ probabilityThreshold: 0.3, medianCount: 1 }),
+      { wrapper },
     )
     await act(async () => {
       await result.current.start()
@@ -168,7 +174,7 @@ describe('usePitch', () => {
   it('rejects frequencies outside the 20-1000 Hz range', async () => {
     mockDetectPitch = () => ({ freq: 5000, probability: 0.95 })
 
-    const { result } = renderHook(() => usePitch({ medianCount: 1 }))
+    const { result } = renderHook(() => usePitch({ medianCount: 1 }), { wrapper })
     await act(async () => {
       await result.current.start()
     })
