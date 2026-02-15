@@ -1,9 +1,4 @@
-import {
-  Voice,
-  generateSynthParams,
-  type PerceptualParams,
-  type SynthOptions,
-} from "cantor-digitalis";
+import { Voice, type SynthParams } from "cantor-digitalis";
 
 export type PartialsResult = {
   real: Float32Array;
@@ -17,11 +12,9 @@ export type PartialsResult = {
  * waveform, derived from the cantor-digitalis frequency response model.
  */
 export function generatePartials(
-  params: PerceptualParams,
+  synthParams: SynthParams,
   partialsCount: number = 64,
-  options?: SynthOptions,
 ): PartialsResult {
-  const synthParams = generateSynthParams(params, options);
   const f0 = synthParams.f0;
 
   const frequencies = Array.from(
@@ -35,7 +28,7 @@ export function generatePartials(
   const imag = new Float32Array(partialsCount);
 
   for (let i = 0; i < partialsCount; i++) {
-    real[i] = amplitudes[i];
+    real[i] = amplitudes[i] / 20; // Scale down to prevent clipping
   }
 
   return { real, imag };

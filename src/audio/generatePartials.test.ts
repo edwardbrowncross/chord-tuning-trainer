@@ -1,8 +1,12 @@
 import { describe, it, expect, vi } from "vitest";
-import { type PerceptualParams } from "cantor-digitalis";
+import {
+  generateSynthParams,
+  type PerceptualParams,
+  type SynthParams,
+} from "cantor-digitalis";
 import { generatePartials } from "./generatePartials";
 
-const defaultParams: PerceptualParams = {
+const defaultPerceptualParams: PerceptualParams = {
   pitch: 0.5,
   pitchOffset: 60,
   vocalEffort: 0.7,
@@ -15,16 +19,18 @@ const defaultParams: PerceptualParams = {
   isFalsetto: false,
 };
 
+const defaultSynthParams: SynthParams =
+  generateSynthParams(defaultPerceptualParams);
+
 describe("generatePartials", () => {
   it("passes frequencies that are multiples of f0 to getFrequencyResponse", async () => {
-    const { Voice, generateSynthParams } = await import("cantor-digitalis");
+    const { Voice } = await import("cantor-digitalis");
     const spy = vi.spyOn(Voice, "getFrequencyResponse");
 
     const partialsCount = 8;
-    generatePartials(defaultParams, partialsCount);
+    generatePartials(defaultSynthParams, partialsCount);
 
-    const synthParams = generateSynthParams(defaultParams);
-    const f0 = synthParams.f0;
+    const f0 = defaultSynthParams.f0;
 
     expect(spy).toHaveBeenCalledOnce();
     const frequencies = spy.mock.calls[0][0];
@@ -37,18 +43,18 @@ describe("generatePartials", () => {
   });
 
   it("returns arrays of the requested length", () => {
-    const { real, imag } = generatePartials(defaultParams, 16);
+    const { real, imag } = generatePartials(defaultSynthParams, 16);
     expect(real).toHaveLength(16);
     expect(imag).toHaveLength(16);
   });
 
   it("returns all zeros for imag", () => {
-    const { imag } = generatePartials(defaultParams, 16);
+    const { imag } = generatePartials(defaultSynthParams, 16);
     expect(imag.every((v) => v === 0)).toBe(true);
   });
 
   it("returns real values that are not all zero", () => {
-    const { real } = generatePartials(defaultParams, 16);
+    const { real } = generatePartials(defaultSynthParams, 16);
     expect(real.some((v) => v !== 0)).toBe(true);
   });
 });
