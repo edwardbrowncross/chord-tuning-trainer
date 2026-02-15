@@ -1,7 +1,34 @@
 import type { PerceptualParams } from 'cantor-digitalis'
+import type { ChordType } from '../audio/intervals'
+import type { EnglishVowel } from '../audio/vowels'
 
-// --- Configuration ---
+// --- Exercise Generator ---
 
+export type Part = 'bass' | 'bari' | 'lead' | 'tenor'
+
+export type ExerciseSet = {
+  name: string
+  description: string
+  exercises: Exercise[]
+}
+
+// The specification for generating a random exercise (or sequence thereof).
+export type Exercise = {
+  level: number
+  chordType: ChordType
+  voicing: string
+  partwiseDifficulty: [number, number, number, number] // bass, bari, lead, tenor
+
+  vowel?: EnglishVowel
+  minOffsetCents?: number
+  maxOffsetCents?: number
+  offsetDirection?: 'up' | 'down' | 'either'
+  starThresholds?: [number, number]
+  repeats?: number
+}
+
+// --- Level Configuration ---
+// A single exercise config, with all parameters fully specified, to be delivered to the user
 export type ExerciseConfig = {
   /** Single voice for match-root playback (the note the user will sing) */
   referenceTone: PerceptualParams

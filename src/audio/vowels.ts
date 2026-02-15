@@ -1,6 +1,6 @@
 import type { VowelTable } from "cantor-digitalis";
 
-export const englishVowelTable: VowelTable = {
+export const englishVowelTable = {
   vowels: [
     {
       ipa: "iː",
@@ -153,4 +153,6 @@ export const englishVowelTable: VowelTable = {
   ],
   idwPower: 2,
   sourceVocalTractSize: 0.28,
-};
+} as const satisfies VowelTable;
+
+export type EnglishVowel = (typeof englishVowelTable)['vowels'][number]['ipa']
