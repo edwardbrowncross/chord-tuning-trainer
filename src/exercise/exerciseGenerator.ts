@@ -1,7 +1,8 @@
 import type { PerceptualParams } from 'cantor-digitalis'
 import { getMidiChord } from '../audio/intervals'
 import { englishVowelTable } from '../audio/vowels'
-import type { LevelSpecification, Exercise, Part } from './types'
+import type { LevelSpecification } from '../modules/types'
+import type { Exercise, Part } from './types'
 
 /** MIDI note ranges per voice part — placeholder values, replace with real limits */
 export const PART_RANGES: Record<Part, { min: number; max: number }> = {

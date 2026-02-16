@@ -1,49 +1,30 @@
 import { useReducer, useEffect, useCallback } from 'react'
 import { Container, Stack } from '@mantine/core'
-import type { PerceptualParams } from 'cantor-digitalis'
 import { useAudio, useVowelPlayer, usePitchDetector } from '../audio/AudioProvider'
 import { midiToHz } from '../audio/cents'
 import { exerciseReducer, initialPhase } from './exerciseReducer'
 import { usePhaseTransitions } from './usePhaseTransitions'
 import type { Exercise } from './types'
+import type { ExerciseResult } from '../progress/types'
 import { IdleView } from './views/IdleView'
 import { MatchRootView } from './views/MatchRootView'
 import { AdjustChordView } from './views/AdjustChordView'
 import { ResultView } from './views/ResultView'
 
-// Default voice template
-const voice = (pitchOffset: number, overrides?: Partial<PerceptualParams>): PerceptualParams => ({
-  pitch: 0,
-  pitchOffset,
-  vocalEffort: 0.7,
-  vowelHeight: 0.95,
-  vowelBackness: 0.2,
-  tenseness: 0.5,
-  breathiness: 0,
-  roughness: 0,
-  vocalTractSize: 0.3,
-  isFalsetto: false,
-  ...overrides,
-})
-
-// Default exercise: user sings the lead (pitchOffset 57)
-// other 3 voices form the rest of the chord
-const defaultConfig: Exercise = {
-  referenceTone: voice(55),
-  targetNote: 57,
-  chordVoices: [
-    voice(45),
-    voice(52),
-    voice(60.85, { tenseness: 0.7, isFalsetto: true }),
-  ],
-  matchThresholdCents: 20,
-  matchSustainMs: 1000,
-  adjustThresholdCents: 10,
-  adjustSustainMs: 1500,
-  starThresholds: [3000, 8000],
-}
-
-export function ExerciseScreen() {
+export function ExerciseScreen({
+  exercises,
+  exerciseIndex,
+  exerciseCount,
+  onComplete,
+  onBack,
+}: {
+  exercises: Exercise[]
+  exerciseIndex: number
+  exerciseCount: number
+  onComplete: (result: ExerciseResult) => void
+  onBack: () => void
+}) {
+  const config = exercises[exerciseIndex]
   const [phase, dispatch] = useReducer(exerciseReducer, initialPhase)
   const { getOrCreateAudioContext } = useAudio()
   const vowelPlayer = useVowelPlayer()
@@ -81,8 +62,8 @@ export function ExerciseScreen() {
 
   const handleStart = useCallback(() => {
     getOrCreateAudioContext()
-    dispatch({ type: 'START_EXERCISE', config: defaultConfig })
-  }, [getOrCreateAudioContext])
+    dispatch({ type: 'START_EXERCISE', config })
+  }, [getOrCreateAudioContext, config])
 
   const handleRetry = useCallback(() => {
     if (phase.type === 'result') {
@@ -90,9 +71,12 @@ export function ExerciseScreen() {
     }
   }, [phase])
 
-  const handleReset = useCallback(() => {
-    dispatch({ type: 'RESET' })
-  }, [])
+  const handleNext = useCallback(() => {
+    if (phase.type === 'result') {
+      onComplete({ stars: phase.stars, durationMs: phase.durationMs })
+      dispatch({ type: 'RESET' })
+    }
+  }, [phase, onComplete])
 
   return (
     <Container size="xs" py="xl" style={{ height: '100vh' }}>
@@ -100,7 +84,13 @@ export function ExerciseScreen() {
         {(() => {
           switch (phase.type) {
             case 'idle':
-              return <IdleView onStart={handleStart} />
+              return (
+                <IdleView
+                  onStart={handleStart}
+                  exerciseIndex={exerciseIndex}
+                  exerciseCount={exerciseCount}
+                />
+              )
             case 'match-root':
               return (
                 <MatchRootView
@@ -124,7 +114,10 @@ export function ExerciseScreen() {
                   stars={phase.stars}
                   durationMs={phase.durationMs}
                   onRetry={handleRetry}
-                  onReset={handleReset}
+                  onNext={handleNext}
+                  onBack={onBack}
+                  exerciseIndex={exerciseIndex}
+                  exerciseCount={exerciseCount}
                 />
               )
           }

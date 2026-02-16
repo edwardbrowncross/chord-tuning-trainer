@@ -1,7 +1,7 @@
-import { ExerciseScreen } from './exercise/ExerciseScreen'
+import { ProgressScreen } from './progress/ProgressScreen'
 
 function App() {
-  return <ExerciseScreen />
+  return <ProgressScreen />
 }
 
 export default App

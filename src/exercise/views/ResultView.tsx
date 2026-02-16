@@ -5,15 +5,22 @@ export function ResultView({
   stars,
   durationMs,
   onRetry,
-  onReset,
+  onNext,
+  onBack,
+  exerciseIndex,
+  exerciseCount,
 }: {
   stars: 1 | 2 | 3
   durationMs: number
   onRetry: () => void
-  onReset: () => void
+  onNext: () => void
+  onBack: () => void
+  exerciseIndex: number
+  exerciseCount: number
 }) {
   const seconds = (durationMs / 1000).toFixed(1)
   const message = stars === 3 ? 'Perfect!' : stars === 2 ? 'Good job!' : 'Completed!'
+  const isLastExercise = exerciseIndex + 1 >= exerciseCount
 
   return (
     <Stack align="center" gap="md">
@@ -26,9 +33,15 @@ export function ResultView({
         )}
       </Group>
       <Text size="md" c="dimmed">{seconds}s</Text>
+      <Text size="sm" c="dimmed">
+        Exercise {exerciseIndex + 1} of {exerciseCount}
+      </Text>
       <Group>
         <Button onClick={onRetry}>Try Again</Button>
-        <Button variant="outline" onClick={onReset}>Back</Button>
+        <Button onClick={onNext}>
+          {isLastExercise ? 'Finish' : 'Next'}
+        </Button>
+        <Button variant="outline" onClick={onBack}>Back</Button>
       </Group>
     </Stack>
   )

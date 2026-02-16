@@ -83,6 +83,7 @@ export class PitchDetector {
   }
 
   stop(): void {
+    if (!this.analyser) return
     cancelAnimationFrame(this.rafId)
     this.stream?.getTracks().forEach((t) => t.stop())
     this.stream = null

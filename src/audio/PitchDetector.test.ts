@@ -111,6 +111,20 @@ describe('PitchDetector', () => {
     expect(mockAudioCtx.createAnalyser).toHaveBeenCalledTimes(1)
   })
 
+  it('is idempotent — calling stop twice does not notify subscribers again', async () => {
+    const detector = new PitchDetector(mockAudioCtx)
+    await detector.start()
+
+    const listener = vi.fn()
+    detector.subscribe(listener)
+
+    detector.stop()
+    const callsAfterFirstStop = listener.mock.calls.length
+
+    detector.stop()
+    expect(listener).toHaveBeenCalledTimes(callsAfterFirstStop)
+  })
+
   it('detects pitch from valid results', async () => {
     mockDetectPitch = () => ({ freq: 440, probability: 0.95 })
     const detector = new PitchDetector(mockAudioCtx)

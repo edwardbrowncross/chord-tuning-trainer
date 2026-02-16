@@ -2,7 +2,8 @@ import { describe, it, expect } from 'vitest'
 import { generateExercises, PART_RANGES, PART_INDEX } from './exerciseGenerator'
 import { getMidiChord } from '../audio/intervals'
 import { englishVowelTable } from '../audio/vowels'
-import type { LevelSpecification, Part } from './types'
+import type { LevelSpecification } from '../modules/types'
+import type { Part } from './types'
 
 const baseLevel: LevelSpecification = {
   level: 1,
