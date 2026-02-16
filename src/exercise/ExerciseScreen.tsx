@@ -28,10 +28,10 @@ export function ExerciseScreen({
   const [phase, dispatch] = useReducer(exerciseReducer, initialPhase)
   const { getOrCreateAudioContext } = useAudio()
   const vowelPlayer = useVowelPlayer()
-  const { pitch, start, stop } = usePitchDetector({ medianCount: 15 })
+  const { pitch, start, stop } = usePitchDetector({ medianCount: 20 })
 
   // Phase transition detection
-  usePhaseTransitions(phase, pitch, dispatch)
+  const sustainProgress = usePhaseTransitions(phase, pitch, dispatch)
 
   // Audio playback per phase
   useEffect(() => {
@@ -106,6 +106,8 @@ export function ExerciseScreen({
                   pitch={pitch}
                   thresholdCents={phase.config.adjustThresholdCents}
                   startedAt={phase.startedAt}
+                  sustainProgress={sustainProgress}
+                  starThresholds={phase.config.starThresholds}
                 />
               )
             case 'result':
