@@ -6,10 +6,10 @@ import type { Exercise, Part } from './types'
 
 /** MIDI note ranges per voice part — placeholder values, replace with real limits */
 export const PART_RANGES: Record<Part, { min: number; max: number }> = {
-  bass:  { min: 36, max: 57 },  // C2 – A3
-  bari:  { min: 43, max: 64 },  // G2 – E4
-  lead:  { min: 48, max: 69 },  // C3 – A4
-  tenor: { min: 55, max: 76 },  // G3 – E5
+  bass:  { min: 43, max: 57 },  // G2 – G3
+  bari:  { min: 50, max: 62 },  // D3 – D4
+  lead:  { min: 53, max: 65 },  // F3 – F4
+  tenor: { min: 48, max: 72 },  // C3 – C5
 }
 
 /** Part index within a 4-voice voicing (bass=0, bari=1, lead=2, tenor=3) */
