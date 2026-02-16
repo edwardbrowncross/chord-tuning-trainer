@@ -2,9 +2,9 @@ import { describe, it, expect } from 'vitest'
 import { generateExercises, PART_RANGES, PART_INDEX } from './exerciseGenerator'
 import { getMidiChord } from '../audio/intervals'
 import { englishVowelTable } from '../audio/vowels'
-import type { Exercise, Part } from './types'
+import type { LevelSpecification, Part } from './types'
 
-const baseExercise: Exercise = {
+const baseLevel: LevelSpecification = {
   level: 1,
   chordType: 'major',
   voicing: '1513',
@@ -15,18 +15,18 @@ const allParts: Part[] = ['bass', 'bari', 'lead', 'tenor']
 
 describe('generateExercises', () => {
   it('returns one config by default', () => {
-    const configs = generateExercises(baseExercise, 'lead')
+    const configs = generateExercises(baseLevel, 'lead')
     expect(configs).toHaveLength(1)
   })
 
   it('returns the requested number of repeats', () => {
-    const configs = generateExercises({ ...baseExercise, repeats: 5 }, 'lead')
+    const configs = generateExercises({ ...baseLevel, repeats: 5 }, 'lead')
     expect(configs).toHaveLength(5)
   })
 
   it('returns 1 config when repeats is undefined', () => {
-    const { repeats: _, ...noRepeats } = baseExercise
-    const configs = generateExercises(noRepeats as Exercise, 'lead')
+    const { repeats: _, ...noRepeats } = baseLevel
+    const configs = generateExercises(noRepeats as LevelSpecification, 'lead')
     expect(configs).toHaveLength(1)
   })
 
@@ -34,7 +34,7 @@ describe('generateExercises', () => {
     it('target note falls within the part vocal range', () => {
       for (const part of allParts) {
         const range = PART_RANGES[part]
-        const configs = generateExercises({ ...baseExercise, repeats: 20 }, part)
+        const configs = generateExercises({ ...baseLevel, repeats: 20 }, part)
         for (const config of configs) {
           expect(config.targetNote).toBeGreaterThanOrEqual(range.min - 0.01)
           expect(config.targetNote).toBeLessThanOrEqual(range.max + 0.01)
@@ -45,7 +45,7 @@ describe('generateExercises', () => {
     it('target note matches the correct voice in the generated chord', () => {
       for (const part of allParts) {
         const partIdx = PART_INDEX[part]
-        const configs = generateExercises({ ...baseExercise, repeats: 10 }, part)
+        const configs = generateExercises({ ...baseLevel, repeats: 10 }, part)
         for (const config of configs) {
           // Reconstruct: the target note is chordNotes[partIdx], and chord voices are the other 3
           // So all 4 notes = chordVoices + targetNote, and they should form a valid chord
@@ -56,8 +56,8 @@ describe('generateExercises', () => {
           const allNotes = [...config.chordVoices.map(v => v.pitchOffset)]
           allNotes.splice(partIdx, 0, config.targetNote)
           // All four notes should form a valid chord from getMidiChord
-          const root = allNotes[0] - getMidiChord(0, baseExercise.chordType, baseExercise.voicing)[0]
-          const expectedChord = getMidiChord(root, baseExercise.chordType, baseExercise.voicing)
+          const root = allNotes[0] - getMidiChord(0, baseLevel.chordType, baseLevel.voicing)[0]
+          const expectedChord = getMidiChord(root, baseLevel.chordType, baseLevel.voicing)
           for (let i = 0; i < 4; i++) {
             expect(allNotes[i]).toBeCloseTo(expectedChord[i], 5)
           }
@@ -68,7 +68,7 @@ describe('generateExercises', () => {
 
   describe('reference tone offset', () => {
     it('reference tone differs from target note', () => {
-      const configs = generateExercises({ ...baseExercise, repeats: 10 }, 'lead')
+      const configs = generateExercises({ ...baseLevel, repeats: 10 }, 'lead')
       for (const config of configs) {
         expect(config.referenceTone.pitchOffset).not.toBeCloseTo(config.targetNote, 5)
       }
@@ -76,7 +76,7 @@ describe('generateExercises', () => {
 
     it('offset direction "up" produces reference tone above target', () => {
       const configs = generateExercises(
-        { ...baseExercise, offsetDirection: 'up', repeats: 20 },
+        { ...baseLevel, offsetDirection: 'up', repeats: 20 },
         'lead',
       )
       for (const config of configs) {
@@ -86,7 +86,7 @@ describe('generateExercises', () => {
 
     it('offset direction "down" produces reference tone below target', () => {
       const configs = generateExercises(
-        { ...baseExercise, offsetDirection: 'down', repeats: 20 },
+        { ...baseLevel, offsetDirection: 'down', repeats: 20 },
         'lead',
       )
       for (const config of configs) {
@@ -98,7 +98,7 @@ describe('generateExercises', () => {
       const minCents = 30
       const maxCents = 60
       const configs = generateExercises(
-        { ...baseExercise, minOffsetCents: minCents, maxOffsetCents: maxCents, repeats: 50 },
+        { ...baseLevel, minOffsetCents: minCents, maxOffsetCents: maxCents, repeats: 50 },
         'lead',
       )
       for (const config of configs) {
@@ -114,7 +114,7 @@ describe('generateExercises', () => {
     it('uses specified vowel coordinates when vowel is set', () => {
       const vowel = 'ɑː'
       const vowelData = englishVowelTable.vowels.find(v => v.ipa === vowel)!
-      const configs = generateExercises({ ...baseExercise, vowel, repeats: 5 }, 'lead')
+      const configs = generateExercises({ ...baseLevel, vowel, repeats: 5 }, 'lead')
       for (const config of configs) {
         expect(config.referenceTone.vowelHeight).toBe(vowelData.h)
         expect(config.referenceTone.vowelBackness).toBe(vowelData.v)
@@ -127,7 +127,7 @@ describe('generateExercises', () => {
 
     it('picks a vowel from the vowel table when vowel is not set', () => {
       const validCoords = englishVowelTable.vowels.map(v => ({ h: v.h, v: v.v }))
-      const configs = generateExercises({ ...baseExercise, repeats: 10 }, 'lead')
+      const configs = generateExercises({ ...baseLevel, repeats: 10 }, 'lead')
       for (const config of configs) {
         const match = validCoords.some(
           c => c.h === config.referenceTone.vowelHeight && c.v === config.referenceTone.vowelBackness,
@@ -137,7 +137,7 @@ describe('generateExercises', () => {
     })
 
     it('all voices in a single config share the same vowel coordinates', () => {
-      const configs = generateExercises({ ...baseExercise, repeats: 10 }, 'lead')
+      const configs = generateExercises({ ...baseLevel, repeats: 10 }, 'lead')
       for (const config of configs) {
         const h = config.referenceTone.vowelHeight
         const v = config.referenceTone.vowelBackness
@@ -152,12 +152,12 @@ describe('generateExercises', () => {
   describe('star thresholds', () => {
     it('uses provided star thresholds', () => {
       const thresholds: [number, number] = [2000, 5000]
-      const [config] = generateExercises({ ...baseExercise, starThresholds: thresholds }, 'lead')
+      const [config] = generateExercises({ ...baseLevel, starThresholds: thresholds }, 'lead')
       expect(config.starThresholds).toEqual(thresholds)
     })
 
     it('uses default star thresholds when not specified', () => {
-      const [config] = generateExercises(baseExercise, 'lead')
+      const [config] = generateExercises(baseLevel, 'lead')
       // Just verify it's a 2-element tuple of positive numbers
       expect(config.starThresholds).toHaveLength(2)
       expect(config.starThresholds[0]).toBeGreaterThan(0)
@@ -168,7 +168,7 @@ describe('generateExercises', () => {
   describe('all parts', () => {
     it('generates valid configs for every part', () => {
       for (const part of allParts) {
-        const configs = generateExercises(baseExercise, part)
+        const configs = generateExercises(baseLevel, part)
         expect(configs).toHaveLength(1)
         expect(configs[0].chordVoices).toHaveLength(3)
         expect(typeof configs[0].targetNote).toBe('number')
@@ -179,7 +179,7 @@ describe('generateExercises', () => {
   describe('chord types', () => {
     it('works with different chord types', () => {
       for (const chordType of ['dominant', 'minor', 'diminished'] as const) {
-        const exercise: Exercise = { ...baseExercise, chordType, voicing: '1351' }
+        const exercise: LevelSpecification = { ...baseLevel, chordType, voicing: '1351' }
         const configs = generateExercises(exercise, 'lead')
         expect(configs).toHaveLength(1)
         expect(configs[0].chordVoices).toHaveLength(3)

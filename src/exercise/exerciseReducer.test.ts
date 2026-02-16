@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { exerciseReducer, initialPhase, calculateStars } from './exerciseReducer'
-import type { ExerciseConfig, ExercisePhase } from './types'
+import type { Exercise, ExercisePhase } from './types'
 import type { PerceptualParams } from 'cantor-digitalis'
 
 const stubVoice: PerceptualParams = {
@@ -9,7 +9,7 @@ const stubVoice: PerceptualParams = {
   vocalTractSize: 0.3, isFalsetto: false,
 }
 
-const testConfig: ExerciseConfig = {
+const testConfig: Exercise = {
   referenceTone: stubVoice,
   targetNote: 50,
   chordVoices: [stubVoice, stubVoice, stubVoice],

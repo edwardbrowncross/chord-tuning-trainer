@@ -3,17 +3,16 @@ import type { ChordType } from '../audio/intervals'
 import type { EnglishVowel } from '../audio/vowels'
 
 // --- Exercise Generator ---
-
 export type Part = 'bass' | 'bari' | 'lead' | 'tenor'
 
-export type ExerciseSet = {
+export type ModuleSpecification = {
   name: string
   description: string
-  exercises: Exercise[]
+  exercises: LevelSpecification[]
 }
 
 // The specification for generating a random exercise (or sequence thereof).
-export type Exercise = {
+export type LevelSpecification = {
   level: number
   chordType: ChordType
   voicing: string
@@ -27,9 +26,9 @@ export type Exercise = {
   repeats?: number
 }
 
-// --- Level Configuration ---
+// --- Exercise Configuration ---
 // A single exercise config, with all parameters fully specified, to be delivered to the user
-export type ExerciseConfig = {
+export type Exercise = {
   /** Single voice for match-root playback (the note the user will sing) */
   referenceTone: PerceptualParams
   /** MIDI note number for the user's destination pitch in the chord */
@@ -48,7 +47,7 @@ export type ExerciseConfig = {
   starThresholds: [number, number]
 }
 
-// --- Phases (discriminated union) ---
+// --- Phases of a single exercise (discriminated union) ---
 
 export type IdlePhase = {
   type: 'idle'
@@ -56,18 +55,18 @@ export type IdlePhase = {
 
 export type MatchRootPhase = {
   type: 'match-root'
-  config: ExerciseConfig
+  config: Exercise
 }
 
 export type AdjustChordPhase = {
   type: 'adjust-chord'
-  config: ExerciseConfig
+  config: Exercise
   startedAt: number
 }
 
 export type ResultPhase = {
   type: 'result'
-  config: ExerciseConfig
+  config: Exercise
   durationMs: number
   stars: 1 | 2 | 3
 }
@@ -81,7 +80,7 @@ export type ExercisePhase =
 // --- Actions ---
 
 export type ExerciseAction =
-  | { type: 'START_EXERCISE'; config: ExerciseConfig }
+  | { type: 'START_EXERCISE'; config: Exercise }
   | { type: 'ROOT_MATCHED'; timestamp: number }
   | { type: 'CHORD_LOCKED'; timestamp: number }
   | { type: 'RESET' }

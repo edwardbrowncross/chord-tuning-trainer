@@ -5,7 +5,7 @@ import { useAudio, useVowelPlayer, usePitchDetector } from '../audio/AudioProvid
 import { midiToHz } from '../audio/cents'
 import { exerciseReducer, initialPhase } from './exerciseReducer'
 import { usePhaseTransitions } from './usePhaseTransitions'
-import type { ExerciseConfig } from './types'
+import type { Exercise } from './types'
 import { IdleView } from './views/IdleView'
 import { MatchRootView } from './views/MatchRootView'
 import { AdjustChordView } from './views/AdjustChordView'
@@ -28,7 +28,7 @@ const voice = (pitchOffset: number, overrides?: Partial<PerceptualParams>): Perc
 
 // Default exercise: user sings the lead (pitchOffset 57)
 // other 3 voices form the rest of the chord
-const defaultConfig: ExerciseConfig = {
+const defaultConfig: Exercise = {
   referenceTone: voice(55),
   targetNote: 57,
   chordVoices: [

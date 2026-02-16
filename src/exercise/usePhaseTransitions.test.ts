@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { renderHook } from '@testing-library/react'
 import { usePhaseTransitions } from './usePhaseTransitions'
-import type { ExerciseConfig, ExercisePhase, ExerciseAction } from './types'
+import type { Exercise, ExercisePhase, ExerciseAction } from './types'
 import type { PerceptualParams } from 'cantor-digitalis'
 
 const stubVoice: PerceptualParams = {
@@ -10,7 +10,7 @@ const stubVoice: PerceptualParams = {
   vocalTractSize: 0.3, isFalsetto: false,
 }
 
-const testConfig: ExerciseConfig = {
+const testConfig: Exercise = {
   referenceTone: stubVoice,
   targetNote: 69,
   chordVoices: [stubVoice, stubVoice, stubVoice],
