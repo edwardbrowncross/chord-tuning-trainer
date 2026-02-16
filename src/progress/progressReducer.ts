@@ -15,18 +15,28 @@ export function createInitialState(modules: ModuleSpecification[], part: Part): 
 export function progressReducer(state: ProgressState, action: ProgressAction): ProgressState {
   switch (action.type) {
     case 'SELECT_MODULE': {
-      if (state.phase.type !== 'module-select') return state
       const mod = state.modules[action.moduleIndex]
       if (!mod) return state
-      const exercises = generateExercises(mod.levels[0], state.part)
+      const levelIndex = action.levelIndex ?? 0
+      const levelSpec = mod.levels[levelIndex]
+      if (!levelSpec) return state
+      const exercises = generateExercises(levelSpec, state.part)
       return {
         ...state,
         phase: {
-          type: 'level-active',
+          type: 'level-ready',
           moduleIndex: action.moduleIndex,
-          levelIndex: 0,
+          levelIndex,
           level: { exerciseIndex: 0, exercises, results: [] },
         },
+      }
+    }
+
+    case 'START_LEVEL': {
+      if (state.phase.type !== 'level-ready') return state
+      return {
+        ...state,
+        phase: { ...state.phase, type: 'level-active' },
       }
     }
 
@@ -60,12 +70,6 @@ export function progressReducer(state: ProgressState, action: ProgressAction): P
       }
     }
 
-    case 'RETRY_EXERCISE': {
-      if (state.phase.type !== 'level-active') return state
-      // No state change needed — ExerciseScreen will restart the same exercise
-      return state
-    }
-
     case 'NEXT_LEVEL': {
       if (state.phase.type !== 'level-complete') return state
       const { moduleIndex, levelIndex } = state.phase
@@ -81,7 +85,7 @@ export function progressReducer(state: ProgressState, action: ProgressAction): P
       return {
         ...state,
         phase: {
-          type: 'level-active',
+          type: 'level-ready',
           moduleIndex,
           levelIndex: nextLevelIndex,
           level: { exerciseIndex: 0, exercises, results: [] },

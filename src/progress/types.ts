@@ -11,6 +11,7 @@ export type LevelProgress = {
 
 export type ProgressPhase =
   | { type: 'module-select' }
+  | { type: 'level-ready'; moduleIndex: number; levelIndex: number; level: LevelProgress }
   | { type: 'level-active'; moduleIndex: number; levelIndex: number; level: LevelProgress }
   | { type: 'level-complete'; moduleIndex: number; levelIndex: number; results: ExerciseResult[] }
 
@@ -23,9 +24,9 @@ export type ProgressState = {
 }
 
 export type ProgressAction =
-  | { type: 'SELECT_MODULE'; moduleIndex: number }
+  | { type: 'SELECT_MODULE'; moduleIndex: number; levelIndex?: number }
+  | { type: 'START_LEVEL' }
   | { type: 'EXERCISE_COMPLETED'; result: ExerciseResult }
-  | { type: 'RETRY_EXERCISE' }
   | { type: 'NEXT_LEVEL' }
   | { type: 'BACK_TO_MODULES' }
   | { type: 'SET_PART'; part: Part }

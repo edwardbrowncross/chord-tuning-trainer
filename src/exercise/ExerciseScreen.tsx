@@ -1,37 +1,43 @@
-import { useReducer, useEffect, useCallback } from 'react'
-import { Container, Stack } from '@mantine/core'
-import { useAudio, useVowelPlayer, usePitchDetector } from '../audio/AudioProvider'
+import { useReducer, useEffect, useCallback, useMemo } from 'react'
+import { Stack } from '@mantine/core'
+import { useVowelPlayer, usePitchDetector } from '../audio/AudioProvider'
 import { midiToHz } from '../audio/cents'
 import { exerciseReducer, initialPhase } from './exerciseReducer'
 import { usePhaseTransitions } from './usePhaseTransitions'
 import type { Exercise } from './types'
 import type { ExerciseResult } from '../progress/types'
-import { IdleView } from './views/IdleView'
 import { MatchRootView } from './views/MatchRootView'
 import { AdjustChordView } from './views/AdjustChordView'
 import { ResultView } from './views/ResultView'
+import { ExerciseDots } from './views/ExerciseDots'
 
 export function ExerciseScreen({
   exercises,
   exerciseIndex,
   exerciseCount,
+  results,
   onComplete,
-  onBack,
 }: {
   exercises: Exercise[]
   exerciseIndex: number
   exerciseCount: number
+  results: ExerciseResult[]
   onComplete: (result: ExerciseResult) => void
-  onBack: () => void
 }) {
   const config = exercises[exerciseIndex]
   const [phase, dispatch] = useReducer(exerciseReducer, initialPhase)
-  const { getOrCreateAudioContext } = useAudio()
   const vowelPlayer = useVowelPlayer()
   const { pitch, start, stop } = usePitchDetector({ medianCount: 20 })
 
   // Phase transition detection
   const sustainProgress = usePhaseTransitions(phase, pitch, dispatch)
+
+  // Auto-start: on mount and when config changes (after Next advances exerciseIndex)
+  useEffect(() => {
+    if (phase.type === 'idle' || phase.type === 'result') {
+      dispatch({ type: 'START_EXERCISE', config })
+    }
+  }, [config]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Audio playback per phase
   useEffect(() => {
@@ -60,10 +66,12 @@ export function ExerciseScreen({
     }
   }, [phase.type, start, stop])
 
-  const handleStart = useCallback(() => {
-    getOrCreateAudioContext()
-    dispatch({ type: 'START_EXERCISE', config })
-  }, [getOrCreateAudioContext, config])
+  const dotsResults = useMemo(() => {
+    if (phase.type === 'result') {
+      return [...results, { stars: phase.stars, durationMs: phase.durationMs }]
+    }
+    return results
+  }, [phase, results])
 
   const handleRetry = useCallback(() => {
     if (phase.type === 'result') {
@@ -74,23 +82,16 @@ export function ExerciseScreen({
   const handleNext = useCallback(() => {
     if (phase.type === 'result') {
       onComplete({ stars: phase.stars, durationMs: phase.durationMs })
-      dispatch({ type: 'RESET' })
     }
   }, [phase, onComplete])
 
   return (
-    <Container size="xs" py="xl" style={{ height: '100vh' }}>
-      <Stack align="center" justify="center" style={{ height: '100%' }}>
+    <>
+      <Stack align="center" justify="center" style={{ flex: 1 }}>
         {(() => {
           switch (phase.type) {
             case 'idle':
-              return (
-                <IdleView
-                  onStart={handleStart}
-                  exerciseIndex={exerciseIndex}
-                  exerciseCount={exerciseCount}
-                />
-              )
+              return null
             case 'match-root':
               return (
                 <MatchRootView
@@ -117,7 +118,6 @@ export function ExerciseScreen({
                   durationMs={phase.durationMs}
                   onRetry={handleRetry}
                   onNext={handleNext}
-                  onBack={onBack}
                   exerciseIndex={exerciseIndex}
                   exerciseCount={exerciseCount}
                 />
@@ -125,6 +125,11 @@ export function ExerciseScreen({
           }
         })()}
       </Stack>
-    </Container>
+      <ExerciseDots
+        count={exerciseCount}
+        currentIndex={exerciseIndex}
+        results={dotsResults}
+      />
+    </>
   )
 }

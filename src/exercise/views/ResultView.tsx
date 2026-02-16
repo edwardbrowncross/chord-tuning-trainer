@@ -6,7 +6,6 @@ export function ResultView({
   durationMs,
   onRetry,
   onNext,
-  onBack,
   exerciseIndex,
   exerciseCount,
 }: {
@@ -14,7 +13,6 @@ export function ResultView({
   durationMs: number
   onRetry: () => void
   onNext: () => void
-  onBack: () => void
   exerciseIndex: number
   exerciseCount: number
 }) {
@@ -33,15 +31,11 @@ export function ResultView({
         )}
       </Group>
       <Text size="md" c="dimmed">{seconds}s</Text>
-      <Text size="sm" c="dimmed">
-        Exercise {exerciseIndex + 1} of {exerciseCount}
-      </Text>
       <Group>
-        <Button onClick={onRetry}>Try Again</Button>
+        <Button variant="outline" onClick={onRetry}>Retry</Button>
         <Button onClick={onNext}>
           {isLastExercise ? 'Finish' : 'Next'}
         </Button>
-        <Button variant="outline" onClick={onBack}>Back</Button>
       </Group>
     </Stack>
   )

@@ -7,20 +7,22 @@ export function LevelCompleteView({
   levelIndex,
   hasNextLevel,
   onNextLevel,
-  onBack,
+  onRetry,
+  onCompleteModule,
 }: {
   results: ExerciseResult[]
   levelIndex: number
   hasNextLevel: boolean
   onNextLevel: () => void
-  onBack: () => void
+  onRetry: () => void
+  onCompleteModule: () => void
 }) {
   const totalStars = results.reduce((sum, r) => sum + r.stars, 0)
   const maxStars = results.length * 3
   const avgDuration = results.reduce((sum, r) => sum + r.durationMs, 0) / results.length
 
   return (
-    <Stack align="center" gap="md">
+    <Stack align="center" justify="center" gap="md" style={{ flex: 1 }}>
       <Title order={3}>Level {levelIndex + 1} Complete!</Title>
       <Text size="lg" fw={500}>
         {totalStars} / {maxStars} Stars
@@ -44,10 +46,12 @@ export function LevelCompleteView({
         Average: {(avgDuration / 1000).toFixed(1)}s
       </Text>
       <Group>
-        {hasNextLevel && (
+        <Button variant="outline" onClick={onRetry}>Retry</Button>
+        {hasNextLevel ? (
           <Button onClick={onNextLevel}>Next Level</Button>
+        ) : (
+          <Button onClick={onCompleteModule}>Complete Module</Button>
         )}
-        <Button variant="outline" onClick={onBack}>Back to Modules</Button>
       </Group>
     </Stack>
   )

@@ -26,7 +26,8 @@ describe('generateExercises', () => {
   })
 
   it('returns 1 config when repeats is undefined', () => {
-    const { repeats: _, ...noRepeats } = baseLevel
+    const noRepeats = { ...baseLevel }
+    delete noRepeats.repeats
     const configs = generateExercises(noRepeats as LevelSpecification, 'lead')
     expect(configs).toHaveLength(1)
   })
@@ -113,7 +114,7 @@ describe('generateExercises', () => {
 
   describe('vowel handling', () => {
     it('uses specified vowel coordinates when vowel is set', () => {
-      const vowel = 'ɑː'
+      const vowel = 'æ'
       const vowelData = englishVowelTable.vowels.find(v => v.ipa === vowel)!
       const configs = generateExercises({ ...baseLevel, vowel, repeats: 5 }, 'lead')
       for (const config of configs) {

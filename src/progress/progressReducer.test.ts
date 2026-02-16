@@ -82,10 +82,10 @@ describe('progressReducer', () => {
   })
 
   describe('SELECT_MODULE', () => {
-    it('transitions from module-select to level-active at level 0', () => {
+    it('transitions from module-select to level-ready at level 0', () => {
       const next = progressReducer(initialState, { type: 'SELECT_MODULE', moduleIndex: 0 })
-      expect(next.phase.type).toBe('level-active')
-      if (next.phase.type === 'level-active') {
+      expect(next.phase.type).toBe('level-ready')
+      if (next.phase.type === 'level-ready') {
         expect(next.phase.moduleIndex).toBe(0)
         expect(next.phase.levelIndex).toBe(0)
         expect(next.phase.level.exerciseIndex).toBe(0)
@@ -98,7 +98,7 @@ describe('progressReducer', () => {
       expect(mockGenerateExercises).toHaveBeenCalledWith(testModules[0].levels[0], 'lead')
     })
 
-    it('is a no-op when not in module-select phase', () => {
+    it('allows jumping to a different module from level-active phase', () => {
       const activeState: ProgressState = {
         ...initialState,
         phase: {
@@ -109,7 +109,26 @@ describe('progressReducer', () => {
         },
       }
       const next = progressReducer(activeState, { type: 'SELECT_MODULE', moduleIndex: 1 })
-      expect(next).toBe(activeState)
+      expect(next.phase.type).toBe('level-ready')
+      if (next.phase.type === 'level-ready') {
+        expect(next.phase.moduleIndex).toBe(1)
+        expect(next.phase.levelIndex).toBe(0)
+      }
+    })
+
+    it('accepts an optional levelIndex', () => {
+      const next = progressReducer(initialState, { type: 'SELECT_MODULE', moduleIndex: 0, levelIndex: 1 })
+      expect(next.phase.type).toBe('level-ready')
+      if (next.phase.type === 'level-ready') {
+        expect(next.phase.moduleIndex).toBe(0)
+        expect(next.phase.levelIndex).toBe(1)
+      }
+      expect(mockGenerateExercises).toHaveBeenCalledWith(testModules[0].levels[1], 'lead')
+    })
+
+    it('is a no-op for invalid level index', () => {
+      const next = progressReducer(initialState, { type: 'SELECT_MODULE', moduleIndex: 0, levelIndex: 99 })
+      expect(next).toBe(initialState)
     })
 
     it('is a no-op for invalid module index', () => {
@@ -223,27 +242,6 @@ describe('progressReducer', () => {
     })
   })
 
-  describe('RETRY_EXERCISE', () => {
-    it('returns same state (no change needed)', () => {
-      const state: ProgressState = {
-        ...initialState,
-        phase: {
-          type: 'level-active',
-          moduleIndex: 0,
-          levelIndex: 0,
-          level: { exerciseIndex: 1, exercises: [stubExercise, stubExercise], results: [threeStarResult] },
-        },
-      }
-      const next = progressReducer(state, { type: 'RETRY_EXERCISE' })
-      expect(next).toBe(state)
-    })
-
-    it('is a no-op when not in level-active phase', () => {
-      const next = progressReducer(initialState, { type: 'RETRY_EXERCISE' })
-      expect(next).toBe(initialState)
-    })
-  })
-
   describe('NEXT_LEVEL', () => {
     it('advances to next level within the module', () => {
       const state: ProgressState = {
@@ -256,8 +254,8 @@ describe('progressReducer', () => {
         },
       }
       const next = progressReducer(state, { type: 'NEXT_LEVEL' })
-      expect(next.phase.type).toBe('level-active')
-      if (next.phase.type === 'level-active') {
+      expect(next.phase.type).toBe('level-ready')
+      if (next.phase.type === 'level-ready') {
         expect(next.phase.moduleIndex).toBe(0)
         expect(next.phase.levelIndex).toBe(1)
         expect(next.phase.level.exerciseIndex).toBe(0)
