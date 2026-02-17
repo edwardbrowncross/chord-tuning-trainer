@@ -22,17 +22,18 @@ export const PART_INDEX: Record<Part, number> = {
 
 /** Default voice template */
 function makeVoice(pitchOffset: number, overrides?: Partial<PerceptualParams>): PerceptualParams {
+  const isFalsetto = pitchOffset >= 52
   return {
     pitch: 0,
     pitchOffset,
-    vocalEffort: 0.7,
+    vocalEffort: isFalsetto ? 0.7 : 0.6,
     vowelHeight: 0.95,
     vowelBackness: 0.2,
-    tenseness: 0.5,
+    tenseness: isFalsetto ? 0.65 : 0.3,
     breathiness: 0,
     roughness: 0,
     vocalTractSize: 0.3,
-    isFalsetto: false,
+    isFalsetto,
     ...overrides,
   }
 }
@@ -57,20 +58,25 @@ const DEFAULT_STAR_THRESHOLDS: [number, number] = [3000, 8000]
 export function generateExercises(level: LevelSpecification, part: Part): Exercise[] {
   const repeats = level.repeats ?? 1
   const partIdx = PART_INDEX[part]
-  const partRange = PART_RANGES[part]
 
   // Use getMidiChord with root=0 to find the part's semitone offset from root
   const referenceChord = getMidiChord(0, level.chordType, level.voicing)
-  const partOffset = referenceChord[partIdx] // offset relative to root
 
-  // Determine valid root note range so the part note stays within the singer's range
-  const minRoot = Math.ceil(partRange.min - partOffset)
-  const maxRoot = Math.floor(partRange.max - partOffset)
+  // Determine valid root note range so ALL four parts stay within their vocal ranges
+  const parts: Part[] = ['bass', 'bari', 'lead', 'tenor']
+  let minRoot = -Infinity
+  let maxRoot = Infinity
+  for (const p of parts) {
+    const range = PART_RANGES[p]
+    const offset = referenceChord[PART_INDEX[p]]
+    minRoot = Math.max(minRoot, Math.ceil(range.min - offset))
+    maxRoot = Math.min(maxRoot, Math.floor(range.max - offset))
+  }
 
   if (minRoot > maxRoot) {
     throw new Error(
-      `No valid root notes for part "${part}" with chord type "${level.chordType}" ` +
-      `and voicing "${level.voicing}". Part offset ${partOffset} exceeds range.`
+      `No valid root notes for chord type "${level.chordType}" ` +
+      `and voicing "${level.voicing}". No root keeps all four parts within their vocal ranges.`
     )
   }
 

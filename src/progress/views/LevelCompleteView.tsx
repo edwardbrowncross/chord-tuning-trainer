@@ -9,6 +9,7 @@ export function LevelCompleteView({
   onNextLevel,
   onRetry,
   onCompleteModule,
+  onQuit,
 }: {
   results: ExerciseResult[]
   levelIndex: number
@@ -16,6 +17,7 @@ export function LevelCompleteView({
   onNextLevel: () => void
   onRetry: () => void
   onCompleteModule: () => void
+  onQuit: () => void
 }) {
   const totalStars = results.reduce((sum, r) => sum + r.stars, 0)
   const maxStars = results.length * 3
@@ -46,6 +48,7 @@ export function LevelCompleteView({
         Average: {(avgDuration / 1000).toFixed(1)}s
       </Text>
       <Group>
+        <Button variant="outline" onClick={onQuit}>Quit</Button>
         <Button variant="outline" onClick={onRetry}>Retry</Button>
         {hasNextLevel ? (
           <Button onClick={onNextLevel}>Next Level</Button>

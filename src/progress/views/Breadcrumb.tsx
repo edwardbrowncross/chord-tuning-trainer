@@ -21,7 +21,7 @@ export function Breadcrumb({
     <Group justify="center">
     <Breadcrumbs>
       <UnstyledButton onClick={onBackToModules}>
-        <Text size="lg" c="blue">{moduleName}</Text>
+        <Text size="md" c="blue">{moduleName}</Text>
       </UnstyledButton>
       <Menu position="bottom-end">
         <Menu.Target>

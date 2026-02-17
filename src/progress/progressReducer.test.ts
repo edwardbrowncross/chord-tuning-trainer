@@ -339,6 +339,21 @@ describe('progressReducer', () => {
       expect(next.part).toBe('bass')
     })
 
+    it('resets scores when changing part', () => {
+      const state: ProgressState = {
+        ...initialState,
+        moduleScores: initialState.moduleScores.map(row => row.map(() => 5)),
+      }
+      const next = progressReducer(state, { type: 'SET_PART', part: 'bass' })
+      expect(next.part).toBe('bass')
+      expect(next.moduleScores.every(row => row.every(s => s === null))).toBe(true)
+    })
+
+    it('is a no-op when part is already selected', () => {
+      const next = progressReducer(initialState, { type: 'SET_PART', part: 'lead' })
+      expect(next).toBe(initialState)
+    })
+
     it('is a no-op when not in module-select phase', () => {
       const state: ProgressState = {
         ...initialState,

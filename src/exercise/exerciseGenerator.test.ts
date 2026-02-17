@@ -44,6 +44,25 @@ describe('generateExercises', () => {
       }
     })
 
+    it('all four chord notes fall within their respective part vocal ranges', () => {
+      for (const part of allParts) {
+        const partIdx = PART_INDEX[part]
+        const configs = generateExercises({ ...baseLevel, repeats: 20 }, part)
+        for (const config of configs) {
+          // Reconstruct all 4 notes
+          const allNotes = [...config.chordVoices.map(v => v.pitchOffset)]
+          allNotes.splice(partIdx, 0, config.targetNote)
+          // Check each voice is within its range
+          for (let i = 0; i < 4; i++) {
+            const voicePart = allParts[i]
+            const range = PART_RANGES[voicePart]
+            expect(allNotes[i]).toBeGreaterThanOrEqual(range.min - 0.01)
+            expect(allNotes[i]).toBeLessThanOrEqual(range.max + 0.01)
+          }
+        }
+      }
+    })
+
     it('target note matches the correct voice in the generated chord', () => {
       for (const part of allParts) {
         const partIdx = PART_INDEX[part]

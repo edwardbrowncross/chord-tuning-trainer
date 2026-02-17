@@ -1,54 +1,49 @@
-import { useReducer, useCallback } from 'react'
-import { Button, Container, Stack, Text, Title } from '@mantine/core'
-import { allModules } from '../modules'
+import { Button, Container, NativeSelect, Stack, Text, Title } from '@mantine/core'
 import { useAudio } from '../audio/AudioProvider'
+import type { Part } from '../exercise/types'
 import { ExerciseScreen } from '../exercise/ExerciseScreen'
-import { progressReducer, createInitialState } from './progressReducer'
 import { ModuleSelectView } from './views/ModuleSelectView'
 import { LevelCompleteView } from './views/LevelCompleteView'
 import { Breadcrumb } from './views/Breadcrumb'
-import type { ExerciseResult } from './types'
+import { useProgressState } from './useProgressState'
 
 export function ProgressScreen() {
-  const [state, dispatch] = useReducer(
-    progressReducer,
-    { modules: allModules, part: 'lead' as const },
-    ({ modules, part }) => createInitialState(modules, part),
-  )
+  const {
+    state,
+    handleSelectModule,
+    handleSelectLevel,
+    handleStartLevel: startLevel,
+    handleExerciseComplete,
+    handleBack,
+    handleNextLevel,
+    handleSetPart,
+  } = useProgressState()
   const { getOrCreateAudioContext } = useAudio()
 
-  const handleSelectModule = useCallback((moduleIndex: number) => {
-    dispatch({ type: 'SELECT_MODULE', moduleIndex })
-  }, [])
-
-  const handleSelectLevel = useCallback((moduleIndex: number, levelIndex: number) => {
-    dispatch({ type: 'SELECT_MODULE', moduleIndex, levelIndex })
-  }, [])
-
-  const handleStartLevel = useCallback(() => {
+  const handleStartLevel = () => {
     getOrCreateAudioContext()
-    dispatch({ type: 'START_LEVEL' })
-  }, [getOrCreateAudioContext])
-
-  const handleExerciseComplete = useCallback((result: ExerciseResult) => {
-    dispatch({ type: 'EXERCISE_COMPLETED', result })
-  }, [])
-
-  const handleBack = useCallback(() => {
-    dispatch({ type: 'BACK_TO_MODULES' })
-  }, [])
-
-  const handleNextLevel = useCallback(() => {
-    dispatch({ type: 'NEXT_LEVEL' })
-  }, [])
+    startLevel()
+  }
 
   const { phase } = state
 
   switch (phase.type) {
     case 'module-select':
       return (
-        <Container size="xs" py="xl" style={{ height: '100vh' }}>
-          <Stack align="center" justify="center" style={{ height: '100%' }}>
+        <Container size="xs" py="xl" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+          <NativeSelect
+            label="Voice part"
+            value={state.part}
+            onChange={(e) => handleSetPart(e.currentTarget.value as Part)}
+            data={[
+              { value: 'bass', label: 'Bass' },
+              { value: 'bari', label: 'Baritone' },
+              { value: 'lead', label: 'Lead' },
+              { value: 'tenor', label: 'Tenor' },
+            ]}
+            style={{ alignSelf: 'flex-end', display: 'flex', alignItems: 'center', gap: 8 }}
+          />
+          <Stack align="center" justify="center" style={{ flex: 1 }}>
             <ModuleSelectView
               modules={state.modules}
               moduleScores={state.moduleScores}
@@ -98,6 +93,7 @@ export function ProgressScreen() {
               onNextLevel={handleNextLevel}
               onRetry={() => handleSelectLevel(phase.moduleIndex, phase.levelIndex)}
               onCompleteModule={handleBack}
+              onQuit={handleBack}
             />
           )}
         </Container>

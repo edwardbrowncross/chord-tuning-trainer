@@ -98,7 +98,8 @@ export function progressReducer(state: ProgressState, action: ProgressAction): P
 
     case 'SET_PART': {
       if (state.phase.type !== 'module-select') return state
-      return { ...state, part: action.part }
+      if (action.part === state.part) return state
+      return createInitialState(state.modules, action.part)
     }
   }
 }
