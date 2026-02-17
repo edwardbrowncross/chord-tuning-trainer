@@ -6,10 +6,9 @@ import type { LevelSpecification } from '../modules/types'
 import type { Part } from './types'
 
 const baseLevel: LevelSpecification = {
-  level: 1,
   chordType: 'major',
   voicing: '1513',
-  partwiseDifficulty: [1, 1, 1, 1],
+  partwiseEaseOfTuning: [1, 1, 1, 1],
 }
 
 const allParts: Part[] = ['bass', 'bari', 'lead', 'tenor']

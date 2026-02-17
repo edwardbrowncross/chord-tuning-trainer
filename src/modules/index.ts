@@ -1,6 +1,5 @@
 import type { ModuleSpecification } from './types'
-import { majorTriads } from './majorTriads'
+import { modulesSchema } from './types'
+import chordsData from './chords.json'
 
-export const allModules: ModuleSpecification[] = [
-  majorTriads,
-]
+export const allModules: ModuleSpecification[] = modulesSchema.parse(chordsData)

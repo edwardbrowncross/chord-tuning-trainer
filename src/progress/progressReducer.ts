@@ -1,14 +1,21 @@
-import { generateExercises } from '../exercise/exerciseGenerator'
+import { generateExercises, PART_INDEX } from '../exercise/exerciseGenerator'
 import type { Part } from '../exercise/types'
 import type { ModuleSpecification } from '../modules/types'
 import type { ProgressState, ProgressAction } from './types'
 
 export function createInitialState(modules: ModuleSpecification[], part: Part): ProgressState {
+  const partIdx = PART_INDEX[part]
+  const sortedModules = modules.map(mod => ({
+    ...mod,
+    levels: [...mod.levels].sort(
+      (a, b) => b.partwiseEaseOfTuning[partIdx] - a.partwiseEaseOfTuning[partIdx],
+    ),
+  }))
   return {
     phase: { type: 'module-select' },
-    modules,
+    modules: sortedModules,
     part,
-    moduleScores: modules.map(m => m.levels.map(() => null)),
+    moduleScores: sortedModules.map(m => m.levels.map(() => null)),
   }
 }
 

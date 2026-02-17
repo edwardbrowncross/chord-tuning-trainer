@@ -8,6 +8,7 @@ import type { PerceptualParams } from 'cantor-digitalis'
 // Mock exerciseGenerator to avoid randomness in tests
 vi.mock('../exercise/exerciseGenerator', () => ({
   generateExercises: vi.fn(() => [stubExercise, stubExercise, stubExercise]),
+  PART_INDEX: { bass: 0, bari: 1, lead: 2, tenor: 3 },
 }))
 
 import { generateExercises } from '../exercise/exerciseGenerator'
@@ -34,16 +35,18 @@ const testModules: ModuleSpecification[] = [
   {
     name: 'Major Triads',
     description: 'Practice major triads',
+    difficulty: 'beginner',
     levels: [
-      { level: 1, chordType: 'major', voicing: '1513', partwiseDifficulty: [1, 1, 1, 1], repeats: 3 },
-      { level: 2, chordType: 'major', voicing: '1351', partwiseDifficulty: [2, 2, 2, 2], repeats: 3 },
+      { chordType: 'major', voicing: '1513', partwiseEaseOfTuning: [1, 1, 1, 1], repeats: 3 },
+      { chordType: 'major', voicing: '1351', partwiseEaseOfTuning: [2, 2, 2, 2], repeats: 3 },
     ],
   },
   {
     name: 'Minor Triads',
     description: 'Practice minor triads',
+    difficulty: 'beginner',
     levels: [
-      { level: 1, chordType: 'minor', voicing: '1513', partwiseDifficulty: [1, 1, 1, 1], repeats: 2 },
+      { chordType: 'minor', voicing: '1513', partwiseEaseOfTuning: [1, 1, 1, 1], repeats: 2 },
     ],
   },
 ]
@@ -68,8 +71,17 @@ describe('createInitialState', () => {
 
   it('stores modules and part', () => {
     const state = createInitialState(testModules, 'bass')
-    expect(state.modules).toBe(testModules)
+    expect(state.modules).not.toBe(testModules)
+    expect(state.modules.length).toBe(testModules.length)
     expect(state.part).toBe('bass')
+  })
+
+  it('sorts levels by partwiseEaseOfTuning descending for the selected part', () => {
+    // testModules[0] has levels with ease [1,1,1,1] and [2,2,2,2]
+    // After sorting descending, ease=2 level (voicing '1351') should come first
+    const state = createInitialState(testModules, 'lead')
+    expect(state.modules[0].levels[0].voicing).toBe('1351')
+    expect(state.modules[0].levels[1].voicing).toBe('1513')
   })
 })
 
@@ -95,7 +107,8 @@ describe('progressReducer', () => {
 
     it('calls generateExercises with the first level spec and part', () => {
       progressReducer(initialState, { type: 'SELECT_MODULE', moduleIndex: 0 })
-      expect(mockGenerateExercises).toHaveBeenCalledWith(testModules[0].levels[0], 'lead')
+      // After sorting by ease descending, first level is the one with ease=2 (voicing '1351')
+      expect(mockGenerateExercises).toHaveBeenCalledWith(initialState.modules[0].levels[0], 'lead')
     })
 
     it('allows jumping to a different module from level-active phase', () => {
@@ -123,7 +136,7 @@ describe('progressReducer', () => {
         expect(next.phase.moduleIndex).toBe(0)
         expect(next.phase.levelIndex).toBe(1)
       }
-      expect(mockGenerateExercises).toHaveBeenCalledWith(testModules[0].levels[1], 'lead')
+      expect(mockGenerateExercises).toHaveBeenCalledWith(initialState.modules[0].levels[1], 'lead')
     })
 
     it('is a no-op for invalid level index', () => {
@@ -261,7 +274,7 @@ describe('progressReducer', () => {
         expect(next.phase.level.exerciseIndex).toBe(0)
         expect(next.phase.level.results).toEqual([])
       }
-      expect(mockGenerateExercises).toHaveBeenCalledWith(testModules[0].levels[1], 'lead')
+      expect(mockGenerateExercises).toHaveBeenCalledWith(initialState.modules[0].levels[1], 'lead')
     })
 
     it('returns to module-select when no more levels', () => {

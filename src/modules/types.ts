@@ -1,23 +1,30 @@
+import { z } from 'zod'
+import { CHORD_TYPES } from '../audio/intervals'
 import type { ChordType } from '../audio/intervals'
-import type { EnglishVowel } from '../audio/vowels'
 
-export type ModuleSpecification = {
-  name: string
-  description: string
-  levels: LevelSpecification[]
-}
+const chordTypeKeys = Object.keys(CHORD_TYPES) as [ChordType, ...ChordType[]]
 
-// The specification for generating a random exercise (or sequence thereof).
-export type LevelSpecification = {
-  level: number
-  chordType: ChordType
-  voicing: string
-  partwiseDifficulty: [number, number, number, number] // bass, bari, lead, tenor
+export const levelSpecificationSchema = z.object({
+  chordType: z.enum(chordTypeKeys),
+  voicing: z.string(),
+  partwiseEaseOfTuning: z.tuple([z.number(), z.number(), z.number(), z.number()]),
+  chordTypeName: z.string().optional(),
+  vowel: z.string().optional(),
+  minOffsetCents: z.number().optional(),
+  maxOffsetCents: z.number().optional(),
+  offsetDirection: z.enum(['up', 'down', 'either']).optional(),
+  starThresholds: z.tuple([z.number(), z.number()]).optional(),
+  repeats: z.number().optional(),
+})
 
-  vowel?: EnglishVowel
-  minOffsetCents?: number
-  maxOffsetCents?: number
-  offsetDirection?: 'up' | 'down' | 'either'
-  starThresholds?: [number, number]
-  repeats?: number
-}
+export const moduleSpecificationSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
+  levels: z.array(levelSpecificationSchema),
+})
+
+export const modulesSchema = z.array(moduleSpecificationSchema)
+
+export type LevelSpecification = z.infer<typeof levelSpecificationSchema>
+export type ModuleSpecification = z.infer<typeof moduleSpecificationSchema>

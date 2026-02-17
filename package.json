@@ -18,7 +18,8 @@
     "cantor-digitalis": "^0.0.5",
     "pitchfinder": "^2.3.4",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

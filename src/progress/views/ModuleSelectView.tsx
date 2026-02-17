@@ -26,56 +26,78 @@ export function ModuleSelectView({
   const modalModule = modules[modalModuleIndex]
   const modalScores = moduleScores[modalModuleIndex]
 
+  const difficulties = ['beginner', 'intermediate', 'advanced'] as const
+  const difficultyLabels: Record<string, string> = {
+    beginner: 'Beginner',
+    intermediate: 'Intermediate',
+    advanced: 'Advanced',
+  }
+
+  const renderModuleCard = (mod: ModuleSpecification, mi: number) => {
+    const scores = moduleScores[mi]
+    const continueLevel = scores.findIndex(s => s === null)
+    const allCompleted = continueLevel === -1
+    const someCompleted = continueLevel > 0
+
+    return (
+      <Card key={mi} shadow="sm" padding="md" radius="md" withBorder>
+        <Stack gap="xs">
+          <Group justify="space-between">
+            <Text fw={600}>{mod.name}</Text>
+            <Group gap={4}>
+              <Text size="sm" fw={500}>
+                {scores.reduce((sum: number, s) => sum + (s ?? 0), 0)} / {mod.levels.reduce((sum, l) => sum + (l.repeats ?? 1) * 3, 0)}
+              </Text>
+              <IconStarFilled size={16} color="gold" />
+            </Group>
+          </Group>
+          <Text size="sm" c="dimmed">{mod.description}</Text>
+          <UnstyledButton onClick={() => openLevelModal(mi)}>
+            <Text size="xs" c="blue" td="underline" style={{ cursor: 'pointer' }}>
+              {mod.levels.length} levels
+            </Text>
+          </UnstyledButton>
+          <Group justify="flex-end">
+            {allCompleted ? (
+              <Button onClick={() => onSelectLevel(mi, 0)}>
+                Practice Again
+              </Button>
+            ) : someCompleted ? (
+              <>
+                <Button onClick={() => onSelectLevel(mi, continueLevel)}>
+                  Continue
+                </Button>
+                <Button variant="outline" onClick={() => onSelectLevel(mi, 0)}>
+                  Start Again
+                </Button>
+              </>
+            ) : (
+              <Button onClick={() => onSelect(mi)}>
+                Start
+              </Button>
+            )}
+          </Group>
+        </Stack>
+      </Card>
+    )
+  }
+
   return (
     <>
       <Stack gap="lg" w="100%">
         <Title order={2} ta="center">Choose a Module</Title>
-        {modules.map((mod, mi) => {
-          const scores = moduleScores[mi]
-          const continueLevel = scores.findIndex(s => s === null)
-          const allCompleted = continueLevel === -1
-          const someCompleted = continueLevel > 0
+        {difficulties.map(difficulty => {
+          const modulesInCategory = modules
+            .map((mod, mi) => ({ mod, mi }))
+            .filter(({ mod }) => mod.difficulty === difficulty)
+
+          if (modulesInCategory.length === 0) return null
 
           return (
-            <Card key={mi} shadow="sm" padding="md" radius="md" withBorder>
-              <Stack gap="xs">
-                <Group justify="space-between">
-                  <Text fw={600}>{mod.name}</Text>
-                  <Group gap={4}>
-                    <Text size="sm" fw={500}>
-                      {scores.reduce((sum: number, s) => sum + (s ?? 0), 0)} / {mod.levels.reduce((sum, l) => sum + (l.repeats ?? 1) * 3, 0)}
-                    </Text>
-                    <IconStarFilled size={16} color="gold" />
-                  </Group>
-                </Group>
-                <Text size="sm" c="dimmed">{mod.description}</Text>
-                <UnstyledButton onClick={() => openLevelModal(mi)}>
-                  <Text size="xs" c="blue" td="underline" style={{ cursor: 'pointer' }}>
-                    {mod.levels.length} levels
-                  </Text>
-                </UnstyledButton>
-                <Group justify="flex-end">
-                  {allCompleted ? (
-                    <Button onClick={() => onSelectLevel(mi, 0)}>
-                      Practice Again
-                    </Button>
-                  ) : someCompleted ? (
-                    <>
-                      <Button onClick={() => onSelectLevel(mi, continueLevel)}>
-                        Continue
-                      </Button>
-                      <Button variant="outline" onClick={() => onSelectLevel(mi, 0)}>
-                        Start Again
-                      </Button>
-                    </>
-                  ) : (
-                    <Button onClick={() => onSelect(mi)}>
-                      Start
-                    </Button>
-                  )}
-                </Group>
-              </Stack>
-            </Card>
+            <Stack key={difficulty} gap="sm">
+              <Title order={4}>{difficultyLabels[difficulty]}</Title>
+              {modulesInCategory.map(({ mod, mi }) => renderModuleCard(mod, mi))}
+            </Stack>
           )
         })}
       </Stack>
