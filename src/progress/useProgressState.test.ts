@@ -6,8 +6,8 @@ const PART_STORAGE_KEY = 'tuning-trainer:part'
 
 beforeEach(() => {
   localStorage.clear()
-  // Reset to root path
-  history.replaceState(null, '', '/')
+  // Reset to root hash
+  history.replaceState(null, '', '#/')
 })
 
 describe('useProgressState', () => {
@@ -43,33 +43,33 @@ describe('useProgressState', () => {
   })
 
   describe('URL sync', () => {
-    it('starts at / for module-select', () => {
+    it('starts at #/ for module-select', () => {
       renderHook(() => useProgressState())
-      expect(window.location.pathname).toBe('/')
+      expect(window.location.hash).toBe('#/')
     })
 
-    it('pushes a level URL when a module is selected', () => {
+    it('pushes a level URL with slug when a module is selected', () => {
       const { result } = renderHook(() => useProgressState())
       act(() => result.current.handleSelectModule(0))
-      // URL uses the voicing of the first sorted level
+      const slug = result.current.state.modules[0].slug
       const firstVoicing = result.current.state.modules[0].levels[0].voicing
-      expect(window.location.pathname).toBe(`/module/0/level/${firstVoicing}`)
+      expect(window.location.hash).toBe(`#/module/${slug}/level/${firstVoicing}`)
     })
 
-    it('pushes a level URL when a specific level is selected', () => {
+    it('pushes a level URL with slug when a specific level is selected', () => {
       const { result } = renderHook(() => useProgressState())
       act(() => result.current.handleSelectLevel(0, 1))
+      const slug = result.current.state.modules[0].slug
       const secondVoicing = result.current.state.modules[0].levels[1].voicing
-      expect(window.location.pathname).toBe(`/module/0/level/${secondVoicing}`)
+      expect(window.location.hash).toBe(`#/module/${slug}/level/${secondVoicing}`)
     })
 
-    it('returns to / when navigating back to modules', () => {
+    it('returns to #/ when navigating back to modules', () => {
       const { result } = renderHook(() => useProgressState())
       act(() => result.current.handleSelectModule(0))
-      const firstVoicing = result.current.state.modules[0].levels[0].voicing
-      expect(window.location.pathname).toBe(`/module/0/level/${firstVoicing}`)
+      expect(window.location.hash).not.toBe('#/')
       act(() => result.current.handleBack())
-      expect(window.location.pathname).toBe('/')
+      expect(window.location.hash).toBe('#/')
     })
 
     it('updates URL when advancing to next level', () => {
@@ -85,73 +85,73 @@ describe('useProgressState', () => {
       }
       expect(result.current.state.phase.type).toBe('level-complete')
       act(() => result.current.handleNextLevel())
+      const slug = result.current.state.modules[0].slug
       const secondVoicing = result.current.state.modules[0].levels[1].voicing
-      expect(window.location.pathname).toBe(`/module/0/level/${secondVoicing}`)
+      expect(window.location.hash).toBe(`#/module/${slug}/level/${secondVoicing}`)
     })
 
     it('does not change URL when phase changes within same level', () => {
       const pushStateSpy = vi.spyOn(history, 'pushState')
       const { result } = renderHook(() => useProgressState())
       act(() => result.current.handleSelectModule(0))
+      const slug = result.current.state.modules[0].slug
       const firstVoicing = result.current.state.modules[0].levels[0].voicing
       pushStateSpy.mockClear()
 
       // level-ready → level-active: same level, no URL push
       act(() => result.current.handleStartLevel())
       expect(pushStateSpy).not.toHaveBeenCalled()
-      expect(window.location.pathname).toBe(`/module/0/level/${firstVoicing}`)
+      expect(window.location.hash).toBe(`#/module/${slug}/level/${firstVoicing}`)
 
       pushStateSpy.mockRestore()
     })
   })
 
   describe('deep linking', () => {
-    it('restores level-ready state from a level URL', () => {
-      // Use a known voicing from module 0 (Augmented Triads)
-      history.replaceState(null, '', '/module/0/level/5351')
+    it('restores level-ready state from a level URL with slug', () => {
+      history.replaceState(null, '', '#/module/augmented-triads/level/5351')
       const { result } = renderHook(() => useProgressState())
       expect(result.current.state.phase.type).toBe('level-ready')
       const phase = result.current.state.phase as { moduleIndex: number; levelIndex: number }
       expect(phase.moduleIndex).toBe(0)
-      // levelIndex depends on sorted order, just verify it resolved
       expect(typeof phase.levelIndex).toBe('number')
     })
 
-    it('falls back to module-select for invalid module index', () => {
-      history.replaceState(null, '', '/module/999/level/1513')
+    it('falls back to module-select for invalid slug', () => {
+      history.replaceState(null, '', '#/module/nonexistent/level/1513')
       const { result } = renderHook(() => useProgressState())
       expect(result.current.state.phase.type).toBe('module-select')
     })
 
     it('falls back to module-select for invalid voicing', () => {
-      history.replaceState(null, '', '/module/0/level/9999')
+      history.replaceState(null, '', '#/module/augmented-triads/level/9999')
       const { result } = renderHook(() => useProgressState())
       expect(result.current.state.phase.type).toBe('module-select')
     })
   })
 
   describe('popstate (browser back/forward)', () => {
-    it('navigates back to module-select on popstate to /', () => {
+    it('navigates back to module-select on popstate to #/', () => {
       const { result } = renderHook(() => useProgressState())
       act(() => result.current.handleSelectModule(0))
       expect(result.current.state.phase.type).toBe('level-ready')
 
-      // jsdom doesn't fully simulate history.back(), so replaceState + popstate
       act(() => {
-        history.replaceState(null, '', '/')
+        history.replaceState(null, '', '#/')
         window.dispatchEvent(new PopStateEvent('popstate'))
       })
       expect(result.current.state.phase.type).toBe('module-select')
     })
 
-    it('navigates to a level on popstate with level URL', () => {
+    it('navigates to a level on popstate with slug URL', () => {
       const { result } = renderHook(() => useProgressState())
       act(() => result.current.handleSelectModule(0))
+      const slug = result.current.state.modules[0].slug
       const firstVoicing = result.current.state.modules[0].levels[0].voicing
       act(() => result.current.handleSelectLevel(0, 1))
 
       act(() => {
-        history.replaceState(null, '', `/module/0/level/${firstVoicing}`)
+        history.replaceState(null, '', `#/module/${slug}/level/${firstVoicing}`)
         window.dispatchEvent(new PopStateEvent('popstate'))
       })
       const phase = result.current.state.phase as { moduleIndex: number; levelIndex: number }

@@ -8,17 +8,26 @@ import type { ExerciseResult } from './types'
 const PART_STORAGE_KEY = 'tuning-trainer:part'
 const VALID_PARTS: Part[] = ['bass', 'bari', 'lead', 'tenor']
 
-const LEVEL_PATH_RE = /^\/module\/(\d+)\/level\/([a-zA-Z0-9]+)$/
+const LEVEL_PATH_RE = /^#\/module\/([a-z0-9-]+)\/level\/([a-zA-Z0-9]+)$/
 
 function loadPart(): Part {
   const stored = localStorage.getItem(PART_STORAGE_KEY)
   return VALID_PARTS.includes(stored as Part) ? (stored as Part) : 'lead'
 }
 
-function parseLevelPath(pathname: string): { moduleIndex: number; voicing: string } | null {
-  const match = pathname.match(LEVEL_PATH_RE)
+function getHashPath(): string {
+  return window.location.hash || '#/'
+}
+
+function parseLevelPath(hash: string): { slug: string; voicing: string } | null {
+  const match = hash.match(LEVEL_PATH_RE)
   if (!match) return null
-  return { moduleIndex: Number(match[1]), voicing: match[2] }
+  return { slug: match[1], voicing: match[2] }
+}
+
+function findModuleIndexBySlug(modules: ModuleSpecification[], slug: string): number | null {
+  const idx = modules.findIndex(m => m.slug === slug)
+  return idx >= 0 ? idx : null
 }
 
 function findLevelIndexByVoicing(modules: ModuleSpecification[], moduleIndex: number, voicing: string): number | null {
@@ -28,28 +37,32 @@ function findLevelIndexByVoicing(modules: ModuleSpecification[], moduleIndex: nu
   return idx >= 0 ? idx : null
 }
 
-function pathForPhase(
+function hashForPhase(
   phase: { type: string; moduleIndex?: number; levelIndex?: number },
   modules: ModuleSpecification[],
 ): string {
   if (phase.type !== 'module-select' && phase.moduleIndex != null && phase.levelIndex != null) {
-    const voicing = modules[phase.moduleIndex]?.levels[phase.levelIndex]?.voicing
-    if (voicing) return `/module/${phase.moduleIndex}/level/${voicing}`
+    const mod = modules[phase.moduleIndex]
+    const voicing = mod?.levels[phase.levelIndex]?.voicing
+    if (mod && voicing) return `#/module/${mod.slug}/level/${voicing}`
   }
-  return '/'
+  return '#/'
 }
 
 function initState({ modules, part }: { modules: typeof allModules; part: Part }) {
   const initial = createInitialState(modules, part)
-  const parsed = parseLevelPath(window.location.pathname)
+  const parsed = parseLevelPath(getHashPath())
   if (parsed) {
-    const levelIndex = findLevelIndexByVoicing(initial.modules, parsed.moduleIndex, parsed.voicing)
-    if (levelIndex != null) {
-      return progressReducer(initial, {
-        type: 'SELECT_MODULE',
-        moduleIndex: parsed.moduleIndex,
-        levelIndex,
-      })
+    const moduleIndex = findModuleIndexBySlug(initial.modules, parsed.slug)
+    if (moduleIndex != null) {
+      const levelIndex = findLevelIndexByVoicing(initial.modules, moduleIndex, parsed.voicing)
+      if (levelIndex != null) {
+        return progressReducer(initial, {
+          type: 'SELECT_MODULE',
+          moduleIndex,
+          levelIndex,
+        })
+      }
     }
   }
   return initial
@@ -72,26 +85,31 @@ export function useProgressState() {
   }, [state.part])
 
   // Sync URL when the navigable location (module/level identity) changes
-  const currentPath = pathForPhase(state.phase, state.modules)
+  const currentHash = hashForPhase(state.phase, state.modules)
   useEffect(() => {
     if (isPopstateRef.current) {
       isPopstateRef.current = false
       return
     }
-    if (window.location.pathname !== currentPath) {
-      history.pushState(null, '', currentPath)
+    if (getHashPath() !== currentHash) {
+      history.pushState(null, '', currentHash)
     }
-  }, [currentPath])
+  }, [currentHash])
 
   // Handle browser back/forward
   useEffect(() => {
     const handlePopState = () => {
       isPopstateRef.current = true
-      const parsed = parseLevelPath(window.location.pathname)
+      const parsed = parseLevelPath(getHashPath())
       if (parsed) {
-        const levelIndex = findLevelIndexByVoicing(modulesRef.current, parsed.moduleIndex, parsed.voicing)
-        if (levelIndex != null) {
-          dispatch({ type: 'SELECT_MODULE', moduleIndex: parsed.moduleIndex, levelIndex })
+        const moduleIndex = findModuleIndexBySlug(modulesRef.current, parsed.slug)
+        if (moduleIndex != null) {
+          const levelIndex = findLevelIndexByVoicing(modulesRef.current, moduleIndex, parsed.voicing)
+          if (levelIndex != null) {
+            dispatch({ type: 'SELECT_MODULE', moduleIndex, levelIndex })
+          } else {
+            dispatch({ type: 'BACK_TO_MODULES' })
+          }
         } else {
           dispatch({ type: 'BACK_TO_MODULES' })
         }

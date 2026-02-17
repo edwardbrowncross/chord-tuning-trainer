@@ -1,6 +1,7 @@
 [
     {
         "name": "Augmented Triads",
+        "slug": "augmented-triads",
         "description": "",
         "difficulty": "advanced",
         "levels": [
@@ -52,6 +53,7 @@
     },
     {
         "name": "Diminished Triads",
+        "slug": "diminished-triads",
         "description": "",
         "difficulty": "advanced",
         "levels": [
@@ -103,6 +105,7 @@
     },
     {
         "name": "Diminished Sevenths",
+        "slug": "diminished-sevenths",
         "description": "",
         "difficulty": "advanced",
         "levels": [
@@ -154,6 +157,7 @@
     },
     {
         "name": "Dominant Sevenths",
+        "slug": "dominant-sevenths",
         "description": "",
         "difficulty": "beginner",
         "levels": [
@@ -281,7 +285,8 @@
         ]
     },
     {
-        "name": "Dominant Ninth (no five)",
+        "name": "Dominant Ninths (no five)",
+        "slug": "dominant-ninths",
         "description": "",
         "difficulty": "intermediate",
         "levels": [
@@ -337,6 +342,7 @@
     },
     {
         "name": "Major Triads",
+        "slug": "major-triads",
         "description": "",
         "difficulty": "beginner",
         "levels": [
@@ -464,6 +470,7 @@
     },
     {
         "name": "Major Add Nine",
+        "slug": "major-add-nine",
         "description": "",
         "difficulty": "intermediate",
         "levels": [
@@ -531,6 +538,7 @@
     },
     {
         "name": "Major Sevenths",
+        "slug": "major-sevenths",
         "description": "",
         "difficulty": "beginner",
         "levels": [
@@ -598,6 +606,7 @@
     },
     {
         "name": "Minor Triads",
+        "slug": "minor-triads",
         "description": "",
         "difficulty": "beginner",
         "levels": [
@@ -689,6 +698,7 @@
     },
     {
         "name": "Minor Sevenths",
+        "slug": "minor-sevenths",
         "description": "",
         "difficulty": "intermediate",
         "levels": [
@@ -792,6 +802,7 @@
     },
     {
         "name": "Minor Sixths",
+        "slug": "minor-sixths",
         "description": "",
         "difficulty": "intermediate",
         "levels": [
@@ -895,6 +906,7 @@
     },
     {
         "name": "Suspended Fourths",
+        "slug": "suspended-fourths",
         "description": "",
         "difficulty": "beginner",
         "levels": [

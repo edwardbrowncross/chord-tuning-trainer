@@ -34,6 +34,7 @@ const stubExercise: Exercise = {
 const testModules: ModuleSpecification[] = [
   {
     name: 'Major Triads',
+    slug: 'major-triads',
     description: 'Practice major triads',
     difficulty: 'beginner',
     levels: [
@@ -43,6 +44,7 @@ const testModules: ModuleSpecification[] = [
   },
   {
     name: 'Minor Triads',
+    slug: 'minor-triads',
     description: 'Practice minor triads',
     difficulty: 'beginner',
     levels: [

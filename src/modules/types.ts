@@ -19,6 +19,7 @@ export const levelSpecificationSchema = z.object({
 
 export const moduleSpecificationSchema = z.object({
   name: z.string(),
+  slug: z.string().regex(/^[a-z0-9-]+$/),
   description: z.string(),
   difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
   levels: z.array(levelSpecificationSchema),
