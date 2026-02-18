@@ -310,7 +310,7 @@ describe('usePhaseTransitions', () => {
 
     it('returns 0 for result phase', () => {
       const dispatch = vi.fn()
-      const result: ExercisePhase = { type: 'result', config: testConfig, durationMs: 5000, stars: 2 }
+      const result: ExercisePhase = { type: 'result', config: testConfig, durationMs: 5000, stars: 2, meanOffsetCents: 0 }
       const { result: hookResult } = renderTransitions({ phase: result, pitch: 440, dispatch })
       expect(hookResult.current).toBe(0)
     })
@@ -440,7 +440,7 @@ describe('usePhaseTransitions', () => {
 
     it('does nothing during result phase', () => {
       const dispatch = vi.fn()
-      const result: ExercisePhase = { type: 'result', config: testConfig, durationMs: 5000, stars: 2 }
+      const result: ExercisePhase = { type: 'result', config: testConfig, durationMs: 5000, stars: 2, meanOffsetCents: 0 }
       renderTransitions({ phase: result, pitch: 440, dispatch })
       expect(dispatch).not.toHaveBeenCalled()
     })

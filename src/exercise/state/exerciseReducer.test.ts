@@ -32,7 +32,7 @@ describe('exerciseReducer', () => {
     })
 
     it('transitions from result to match-root', () => {
-      const result: ExercisePhase = { type: 'result', config: testConfig, durationMs: 5000, stars: 2 }
+      const result: ExercisePhase = { type: 'result', config: testConfig, durationMs: 5000, stars: 2, meanOffsetCents: 0 }
       const next = exerciseReducer(result, { type: 'START_EXERCISE', config: testConfig })
       expect(next).toEqual({ type: 'match-root', config: testConfig })
     })
@@ -105,7 +105,7 @@ describe('exerciseReducer', () => {
     })
 
     it('returns idle from result', () => {
-      const result: ExercisePhase = { type: 'result', config: testConfig, durationMs: 5000, stars: 2 }
+      const result: ExercisePhase = { type: 'result', config: testConfig, durationMs: 5000, stars: 2, meanOffsetCents: 0 }
       expect(exerciseReducer(result, { type: 'RESET' })).toEqual(initialPhase)
     })
 
