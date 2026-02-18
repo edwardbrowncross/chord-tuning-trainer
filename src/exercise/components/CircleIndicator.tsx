@@ -20,6 +20,7 @@ export const CircleIndicator = memo(function CircleIndicator({
       position: 'relative',
       overflow: 'hidden',
       transition: 'border-color 150ms ease',
+      transform: `scale(${1 + progress * progress * 0.05})`,
     }}>
       <div style={{
         position: 'absolute',
