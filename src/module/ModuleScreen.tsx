@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Button, Container, Modal, NativeSelect, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import type { Part } from '../types'
 import type { ExerciseResult } from '../exercise/state/types'
@@ -79,7 +80,7 @@ export function ModuleScreen() {
 
     case 'module-active':
       return (
-        <Container size="xs" py="xl" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <Container size="xs" py="xl" style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <Breadcrumb
             moduleName={mod.name}
             levels={mod.levels}
@@ -88,18 +89,28 @@ export function ModuleScreen() {
             onBackToModules={handleBack}
             onSelectLevel={(li) => handleSelectLevel(moduleIndex, li)}
           />
-          <LevelScreen
-            key={`${moduleIndex}-${levelIndex}`}
-            levelSpec={levelSpec}
-            part={state.part}
-            chordTypeName={mod.name}
-            levelIndex={levelIndex}
-            hasNextLevel={levelIndex + 1 < mod.levels.length}
-            onLevelComplete={onLevelComplete}
-            onNextLevel={handleNextLevel}
-            onRetry={() => handleSelectLevel(moduleIndex, levelIndex)}
-            onQuit={handleBack}
-          />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`${moduleIndex}-${levelIndex}`}
+              style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -30, opacity: 0 }}
+              transition={{ duration: 0.15, ease: 'easeOut' }}
+            >
+              <LevelScreen
+                levelSpec={levelSpec}
+                part={state.part}
+                chordTypeName={mod.name}
+                levelIndex={levelIndex}
+                hasNextLevel={levelIndex + 1 < mod.levels.length}
+                onLevelComplete={onLevelComplete}
+                onNextLevel={handleNextLevel}
+                onRetry={() => handleSelectLevel(moduleIndex, levelIndex)}
+                onQuit={handleBack}
+              />
+            </motion.div>
+          </AnimatePresence>
         </Container>
       )
   }

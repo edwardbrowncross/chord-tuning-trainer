@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import type { LevelSpecification } from '../data/types'
 import type { Part } from '../types'
 import type { ExerciseResult } from '../exercise/state/types'
@@ -6,6 +7,15 @@ import { LevelReadyView } from './views/LevelReadyView'
 import { LevelCompleteView } from './views/LevelCompleteView'
 import { ExerciseDots } from './components/ExerciseDots'
 import { useLevelState } from './state/useLevelState'
+
+const slideTransition = {
+  initial: { x: 30, opacity: 0 },
+  animate: { x: 0, opacity: 1 },
+  exit: { x: -30, opacity: 0 },
+  transition: { duration: 0.15, ease: 'easeOut' as const },
+}
+
+const motionStyle = { flex: 1, display: 'flex' as const, flexDirection: 'column' as const }
 
 export function LevelScreen({
   levelSpec,
@@ -37,21 +47,25 @@ export function LevelScreen({
     dotsResults,
   } = useLevelState({ levelSpec, part, onLevelComplete })
 
-  switch (state.phase) {
-    case 'ready':
-      return (
-        <LevelReadyView
-          chordTypeName={chordTypeName}
-          chordType={levelSpec.chordType}
-          voicing={levelSpec.voicing}
-          part={part}
-          onStart={handleStart}
-        />
-      )
+  const animationKey = state.phase === 'active'
+    ? `active-${state.exerciseIndex}`
+    : state.phase
 
-    case 'active':
-      return (
-        <>
+  const renderPhase = () => {
+    switch (state.phase) {
+      case 'ready':
+        return (
+          <LevelReadyView
+            chordTypeName={chordTypeName}
+            chordType={levelSpec.chordType}
+            voicing={levelSpec.voicing}
+            part={part}
+            onStart={handleStart}
+          />
+        )
+
+      case 'active':
+        return (
           <ExerciseScreen
             exercises={state.exercises}
             exerciseIndex={state.exerciseIndex}
@@ -59,25 +73,37 @@ export function LevelScreen({
             onComplete={handleExerciseComplete}
             onChordMatched={setCurrentResult}
           />
-          <ExerciseDots
-            count={state.exercises.length}
-            currentIndex={state.exerciseIndex}
-            results={dotsResults}
-          />
-        </>
-      )
+        )
 
-    case 'complete':
-      return (
-        <LevelCompleteView
-          results={state.results}
-          levelIndex={levelIndex}
-          hasNextLevel={hasNextLevel}
-          onNextLevel={onNextLevel}
-          onRetry={onRetry ?? handleRetry}
-          onCompleteModule={onQuit}
-          onQuit={onQuit}
-        />
-      )
+      case 'complete':
+        return (
+          <LevelCompleteView
+            results={state.results}
+            levelIndex={levelIndex}
+            hasNextLevel={hasNextLevel}
+            onNextLevel={onNextLevel}
+            onRetry={onRetry ?? handleRetry}
+            onCompleteModule={onQuit}
+            onQuit={onQuit}
+          />
+        )
+    }
   }
+
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div key={animationKey} style={motionStyle} {...slideTransition}>
+          {renderPhase()}
+        </motion.div>
+      </AnimatePresence>
+      {state.phase === 'active' && (
+        <ExerciseDots
+          count={state.exercises.length}
+          currentIndex={state.exerciseIndex}
+          results={dotsResults}
+        />
+      )}
+    </div>
+  )
 }

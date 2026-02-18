@@ -32,6 +32,7 @@ The exercises will actually be organised hierarchically as follows:
 
 - React 19, TypeScript (strict), Vite 7
 - Mantine v8 for UI components
+- Framer Motion for animations
 - pitchfinder (Macleod algorithm) for pitch detection via Web Audio API
 - cantor-digitalis a voice synthesiser for generating realistic sung vowel sounds.
 
@@ -96,6 +97,19 @@ Shared types live in `src/types.ts`:
 - **Part** — `'bass' | 'bari' | 'lead' | 'tenor'` voice part union, used across exercise, level, and module layers.
 
 `main.tsx` renders `ModuleScreen` directly (wrapped in `MantineProvider` and `AudioProvider`).
+
+## Animations
+
+Framer Motion is used for UI animations. The guiding principle is subtle and rewarding — animations should add moments of joy without feeling cartoonish. An `animation-ideas.md` file at the project root contains a backlog of ideas.
+
+Patterns in use:
+- **Remount-driven springs** — to trigger a one-shot spring animation (e.g. a bounce on entry), change the component's `key` so it remounts, set `initial` to the exaggerated state (e.g. `{ scale: 1.2, y: -2 }`), and `animate` to the resting state. This is simpler than imperative animation controls. Used in `LevelReadyView` for voicing digit bounces.
+- **Staggered reveals** — elements that appear sequentially use per-item `delay` in their `transition` prop, calculated from the item index. Used in `StarReveal` for the star cascade on the result screen.
+- **Particle bursts** — short-lived scale+opacity keyframe animations layered behind the main element (via `position: absolute`). Used in `StarReveal` for the gold glow behind earned stars.
+- **AnimatePresence screen transitions** — `AnimatePresence mode="wait"` wraps screen switches so outgoing views exit before incoming views enter. `LevelScreen` uses horizontal slides (x-axis) for phase changes (ready → active → complete) and exercise-to-exercise transitions within a level; `ExerciseDots` are rendered outside the `AnimatePresence` so they stay stable. `AnimatePresence initial={false}` skips the entrance animation on first mount to avoid doubling up with the parent's vertical slide. `ModuleScreen` uses vertical slides (y-axis) when transitioning between levels, keyed by `${moduleIndex}-${levelIndex}`. Both containers use `overflow: hidden` to clip sliding content and prevent scrollbar flicker.
+
+Components:
+- **StarReveal** (`src/exercise/components/StarReveal.tsx`) — animated 1–3 star display with staggered pop-in and particle bursts. Used by `ResultView`.
 
 ## Testing
 

@@ -103,7 +103,8 @@ describe('useNavigation', () => {
       const { result } = renderHook(() => useModuleWithNavigation())
       expect(result.current.state.phase.type).toBe('module-active')
       const phase = result.current.state.phase as { moduleIndex: number; levelIndex: number }
-      expect(phase.moduleIndex).toBe(0)
+      const expectedIndex = result.current.state.modules.findIndex(m => m.slug === 'augmented-triads')
+      expect(phase.moduleIndex).toBe(expectedIndex)
       expect(typeof phase.levelIndex).toBe('number')
     })
 

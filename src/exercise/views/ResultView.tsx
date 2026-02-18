@@ -37,14 +37,14 @@ export function ResultView({
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.15 + stars * 0.2 + 0.2, duration: 0.3 }}
+        transition={{ delay: 0.1 + stars * 0.1 + 0.2, duration: 0.3 }}
       >
         <Text size="md" c="dimmed">{seconds}s</Text>
       </motion.div>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.15 + stars * 0.2 + 0.3, duration: 0.3 }}
+        transition={{ delay: 0.1 + stars * 0.1 + 0.3, duration: 0.3 }}
       >
         <Group>
           <Button variant="outline" onClick={onRetry}>Retry</Button>
