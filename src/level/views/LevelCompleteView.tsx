@@ -2,6 +2,20 @@ import { Button, Group, Stack, Text, Title } from '@mantine/core'
 import { IconStar, IconStarFilled } from '@tabler/icons-react'
 import type { ExerciseResult } from '../state/types'
 
+function formatOffset(cents: number): string {
+  const abs = Math.abs(cents).toFixed(1)
+  if (cents > 0.05) return `${abs}¢ sharp`
+  if (cents < -0.05) return `${abs}¢ flat`
+  return `±0¢`
+}
+
+function offsetColor(cents: number): string {
+  const abs = Math.abs(cents)
+  if (abs < 3.3) return 'green'
+  if (abs < 6.7) return 'yellow'
+  return 'orange'
+}
+
 export function LevelCompleteView({
   results,
   levelIndex,
@@ -22,6 +36,7 @@ export function LevelCompleteView({
   const totalStars = results.reduce((sum, r) => sum + r.stars, 0)
   const maxStars = results.length * 3
   const avgDuration = results.reduce((sum, r) => sum + r.durationMs, 0) / results.length
+  const avgOffset = results.reduce((sum, r) => sum + r.meanOffsetCents, 0) / results.length
 
   return (
     <Stack align="center" justify="center" gap="md" style={{ flex: 1 }}>
@@ -41,11 +56,12 @@ export function LevelCompleteView({
               )}
             </Group>
             <Text size="sm" c="dimmed">{(r.durationMs / 1000).toFixed(1)}s</Text>
+            <Text size="sm" c={offsetColor(r.meanOffsetCents)}>{formatOffset(r.meanOffsetCents)}</Text>
           </Group>
         ))}
       </Stack>
       <Text size="sm" c="dimmed">
-        Average: {(avgDuration / 1000).toFixed(1)}s
+        Average: {(avgDuration / 1000).toFixed(1)}s — Tuning bias: <Text span c={offsetColor(avgOffset)}>{formatOffset(avgOffset)}</Text>
       </Text>
       <Group>
         <Button variant="outline" onClick={onQuit}>Quit</Button>

@@ -252,10 +252,9 @@ describe('usePhaseTransitions', () => {
       // 200ms * 2 = 400. Total = 2000 → dispatch
       now = 2000
       rerender({ phase: tick(adjustPhase), pitch: 440, dispatch })
-      expect(dispatch).toHaveBeenCalledWith({
-        type: 'CHORD_LOCKED',
-        timestamp: 2000,
-      })
+      expect(dispatch).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'CHORD_LOCKED', timestamp: 2000 }),
+      )
     })
 
     it('accumulates at 1x speed when 7.5 cents from center', () => {
@@ -274,10 +273,9 @@ describe('usePhaseTransitions', () => {
       // 200ms more = 2000 → dispatch
       now = 3000
       rerender({ phase: tick(adjustPhase), pitch: pitch75, dispatch })
-      expect(dispatch).toHaveBeenCalledWith({
-        type: 'CHORD_LOCKED',
-        timestamp: 3000,
-      })
+      expect(dispatch).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'CHORD_LOCKED', timestamp: 3000 }),
+      )
     })
 
     it('decrements progress when pitch goes out of range instead of resetting', () => {
@@ -296,10 +294,9 @@ describe('usePhaseTransitions', () => {
       // Back at center: 600ms * 2 = 1200. ~900+1200 ≈ 2100 (overshoot to avoid float edge) → dispatch
       now = 2400
       rerender({ phase: tick(adjustPhase), pitch: 440, dispatch })
-      expect(dispatch).toHaveBeenCalledWith({
-        type: 'CHORD_LOCKED',
-        timestamp: 2400,
-      })
+      expect(dispatch).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'CHORD_LOCKED', timestamp: 2400 }),
+      )
     })
   })
 

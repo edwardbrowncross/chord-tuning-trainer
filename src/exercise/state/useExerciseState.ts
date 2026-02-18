@@ -73,7 +73,7 @@ export function useExerciseState(
   })
   useEffect(() => {
     if (phase.type === 'result') {
-      onChordMatchedRef.current?.({ stars: phase.stars, durationMs: phase.durationMs })
+      onChordMatchedRef.current?.({ stars: phase.stars, durationMs: phase.durationMs, meanOffsetCents: phase.meanOffsetCents })
     } else {
       onChordMatchedRef.current?.(null)
     }
@@ -87,7 +87,7 @@ export function useExerciseState(
 
   const handleNext = useCallback(() => {
     if (phase.type === 'result') {
-      onComplete({ stars: phase.stars, durationMs: phase.durationMs })
+      onComplete({ stars: phase.stars, durationMs: phase.durationMs, meanOffsetCents: phase.meanOffsetCents })
     }
   }, [phase, onComplete])
 

@@ -30,8 +30,8 @@ const testModules: ModuleSpecification[] = [
   },
 ]
 
-const threeStarResult = { stars: 3 as const, durationMs: 2000 }
-const oneStarResult = { stars: 1 as const, durationMs: 10000 }
+const threeStarResult = { stars: 3 as const, durationMs: 2000, meanOffsetCents: 0 }
+const oneStarResult = { stars: 1 as const, durationMs: 10000, meanOffsetCents: 0 }
 
 describe('createInitialState', () => {
   it('starts in module-select phase', () => {

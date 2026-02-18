@@ -1,6 +1,6 @@
 import type { PerceptualParams } from 'cantor-digitalis'
 
-export type ExerciseResult = { stars: 1 | 2 | 3; durationMs: number }
+export type ExerciseResult = { stars: 1 | 2 | 3; durationMs: number; meanOffsetCents: number }
 
 // --- Exercise Configuration ---
 // A single exercise config, with all parameters fully specified, to be delivered to the user
@@ -45,6 +45,7 @@ export type ResultPhase = {
   config: Exercise
   durationMs: number
   stars: 1 | 2 | 3
+  meanOffsetCents: number
 }
 
 export type ExercisePhase =
@@ -58,5 +59,5 @@ export type ExercisePhase =
 export type ExerciseAction =
   | { type: 'START_EXERCISE'; config: Exercise }
   | { type: 'ROOT_MATCHED'; timestamp: number }
-  | { type: 'CHORD_LOCKED'; timestamp: number }
+  | { type: 'CHORD_LOCKED'; timestamp: number; meanOffsetCents: number }
   | { type: 'RESET' }

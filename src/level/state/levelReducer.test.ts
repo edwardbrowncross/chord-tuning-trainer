@@ -29,8 +29,8 @@ const stubExercise: Exercise = {
   starThresholds: [3000, 8000],
 }
 
-const threeStarResult = { stars: 3 as const, durationMs: 2000 }
-const twoStarResult = { stars: 2 as const, durationMs: 5000 }
+const threeStarResult = { stars: 3 as const, durationMs: 2000, meanOffsetCents: 0 }
+const twoStarResult = { stars: 2 as const, durationMs: 5000, meanOffsetCents: 0 }
 
 const testLevelSpec = {
   chordType: 'major' as const,

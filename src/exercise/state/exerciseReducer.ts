@@ -36,6 +36,7 @@ export function exerciseReducer(
         config: phase.config,
         durationMs,
         stars: calculateStars(durationMs, phase.config.starThresholds),
+        meanOffsetCents: action.meanOffsetCents,
       }
     }
 

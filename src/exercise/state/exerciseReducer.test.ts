@@ -72,22 +72,23 @@ describe('exerciseReducer', () => {
   describe('CHORD_LOCKED', () => {
     it('transitions from adjust-chord to result with correct duration', () => {
       const adjustChord: ExercisePhase = { type: 'adjust-chord', config: testConfig, startedAt: 1000 }
-      const next = exerciseReducer(adjustChord, { type: 'CHORD_LOCKED', timestamp: 3500 })
+      const next = exerciseReducer(adjustChord, { type: 'CHORD_LOCKED', timestamp: 3500, meanOffsetCents: 1.5 })
       expect(next.type).toBe('result')
       if (next.type === 'result') {
         expect(next.durationMs).toBe(2500)
         expect(next.stars).toBe(3)
+        expect(next.meanOffsetCents).toBe(1.5)
       }
     })
 
     it('is a no-op from idle', () => {
-      const next = exerciseReducer(initialPhase, { type: 'CHORD_LOCKED', timestamp: 5000 })
+      const next = exerciseReducer(initialPhase, { type: 'CHORD_LOCKED', timestamp: 5000, meanOffsetCents: 0 })
       expect(next).toBe(initialPhase)
     })
 
     it('is a no-op from match-root', () => {
       const matchRoot: ExercisePhase = { type: 'match-root', config: testConfig }
-      const next = exerciseReducer(matchRoot, { type: 'CHORD_LOCKED', timestamp: 5000 })
+      const next = exerciseReducer(matchRoot, { type: 'CHORD_LOCKED', timestamp: 5000, meanOffsetCents: 0 })
       expect(next).toBe(matchRoot)
     })
   })
