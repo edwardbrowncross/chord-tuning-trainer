@@ -1,5 +1,6 @@
 import type { PerceptualParams } from 'cantor-digitalis'
 import { getMidiChord } from '../audio/intervals'
+import { makeVoice } from '../audio/makeVoice'
 import { englishVowelTable } from '../audio/vowels'
 import type { LevelSpecification } from '../modules/types'
 import type { Exercise, Part } from './types'
@@ -20,23 +21,6 @@ export const PART_INDEX: Record<Part, number> = {
   tenor: 3,
 }
 
-/** Default voice template */
-function makeVoice(pitchOffset: number, overrides?: Partial<PerceptualParams>): PerceptualParams {
-  const isFalsetto = pitchOffset >= 52
-  return {
-    pitch: 0,
-    pitchOffset,
-    vocalEffort: isFalsetto ? 0.7 : 0.6,
-    vowelHeight: 0.95,
-    vowelBackness: 0.2,
-    tenseness: isFalsetto ? 0.65 : 0.3,
-    breathiness: 0,
-    roughness: 0,
-    vocalTractSize: 0.3,
-    isFalsetto,
-    ...overrides,
-  }
-}
 
 /** Random integer in [min, max] inclusive */
 function randInt(min: number, max: number): number {

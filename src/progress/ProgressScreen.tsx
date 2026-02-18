@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Button, Container, NativeSelect, Stack, Text, Title } from '@mantine/core'
+import { Container, NativeSelect, Stack } from '@mantine/core'
 import { useAudio } from '../audio/AudioProvider'
 import type { Part } from '../exercise/types'
 import type { ExerciseResult } from './types'
@@ -7,6 +7,7 @@ import { ExerciseScreen } from '../exercise/ExerciseScreen'
 import { ModuleSelectView } from './views/ModuleSelectView'
 import { LevelCompleteView } from './views/LevelCompleteView'
 import { Breadcrumb } from './views/Breadcrumb'
+import { LevelReadyView } from './views/LevelReadyView'
 import { ExerciseDots } from './views/ExerciseDots'
 import { useProgressState } from './useProgressState'
 
@@ -77,13 +78,13 @@ export function ProgressScreen() {
             onSelectLevel={(li) => handleSelectLevel(phase.moduleIndex, li)}
           />
           {phase.type === 'level-ready' ? (
-            <Stack align="center" justify="center" style={{ flex: 1 }}>
-              <Title order={2}>Ready?</Title>
-              <Text c="dimmed">Match the reference tone, then tune the chord.</Text>
-              <Button size="lg" onClick={handleStartLevel}>
-                Start Level
-              </Button>
-            </Stack>
+            <LevelReadyView
+              chordTypeName={mod.name}
+              chordType={mod.levels[phase.levelIndex].chordType}
+              voicing={mod.levels[phase.levelIndex].voicing}
+              part={state.part}
+              onStart={handleStartLevel}
+            />
           ) : phase.type === 'level-active' ? (
             <>
               <ExerciseScreen

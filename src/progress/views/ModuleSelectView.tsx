@@ -48,7 +48,7 @@ export function ModuleSelectView({
               <Text size="sm" fw={500}>
                 {scores.reduce((sum: number, s) => sum + (s ?? 0), 0)} / {mod.levels.reduce((sum, l) => sum + (l.repeats ?? 1) * 3, 0)}
               </Text>
-              <IconStarFilled size={16} color="gold" />
+              <IconStarFilled size={16} color={scores.some(l => l && l > 0) ? "gold" : "lightgray"} />
             </Group>
           </Group>
           <Text size="sm" c="dimmed">{mod.description}</Text>
@@ -61,7 +61,7 @@ export function ModuleSelectView({
             <Group gap="xs">
               {allCompleted ? (
                 <Button onClick={() => onSelectLevel(mi, 0)}>
-                  Practice Again
+                  Restart
                 </Button>
               ) : someCompleted ? (
                 <>
@@ -87,7 +87,7 @@ export function ModuleSelectView({
   return (
     <>
       <Stack gap="lg" w="100%">
-        <Title order={2} ta="center">Choose a Module</Title>
+        <Title order={2} ta="center">Choose a Chord</Title>
         {difficulties.map(difficulty => {
           const modulesInCategory = modules
             .map((mod, mi) => ({ mod, mi }))

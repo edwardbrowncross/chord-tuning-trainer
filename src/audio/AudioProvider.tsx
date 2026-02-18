@@ -9,6 +9,7 @@ interface AudioContextValue {
   getOrCreateAudioContext: () => AudioContext
   state: AudioState
   vowelPlayer: VowelPlayer | null
+  getVowelPlayer: () => VowelPlayer | null
   pitchDetector: PitchDetector | null
   getPitchDetector: () => PitchDetector | null
 }
@@ -17,6 +18,7 @@ const AudioCtx = createContext<AudioContextValue | null>(null)
 
 export function AudioProvider({ children }: { children: ReactNode }) {
   const ctxRef = useRef<AudioContext | null>(null)
+  const vowelPlayerRef = useRef<VowelPlayer | null>(null)
   const pitchDetectorRef = useRef<PitchDetector | null>(null)
   const [state, setState] = useState<AudioState>('uninitialized')
   const [vowelPlayer, setVowelPlayer] = useState<VowelPlayer | null>(null)
@@ -29,7 +31,9 @@ export function AudioProvider({ children }: { children: ReactNode }) {
 
     const ctx = new AudioContext()
     ctxRef.current = ctx
-    setVowelPlayer(new VowelPlayer(ctx))
+    const player = new VowelPlayer(ctx)
+    vowelPlayerRef.current = player
+    setVowelPlayer(player)
 
     const detector = new PitchDetector(ctx)
     pitchDetectorRef.current = detector
@@ -43,10 +47,11 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     return ctx
   }, [])
 
+  const getVowelPlayer = useCallback(() => vowelPlayerRef.current, [])
   const getPitchDetector = useCallback(() => pitchDetectorRef.current, [])
 
   return (
-    <AudioCtx.Provider value={{ getOrCreateAudioContext, state, vowelPlayer, pitchDetector, getPitchDetector }}>
+    <AudioCtx.Provider value={{ getOrCreateAudioContext, state, vowelPlayer, getVowelPlayer, pitchDetector, getPitchDetector }}>
       {children}
     </AudioCtx.Provider>
   )

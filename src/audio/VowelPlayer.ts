@@ -33,9 +33,16 @@ export class VowelPlayer {
 
   play(params: PerceptualParams | PerceptualParams[], { rampTime = 0.015 } = {}): void {
     this.stop({ rampTime });
-
     const paramsArray = Array.isArray(params) ? params : [params];
+    this.startVoices(paramsArray, rampTime, paramsArray.length);
+  }
 
+  addVoices(params: PerceptualParams | PerceptualParams[], { rampTime = 0.015, totalVoiceCount }: { rampTime?: number; totalVoiceCount?: number } = {}): void {
+    const paramsArray = Array.isArray(params) ? params : [params];
+    this.startVoices(paramsArray, rampTime, totalVoiceCount ?? paramsArray.length);
+  }
+
+  private startVoices(paramsArray: PerceptualParams[], rampTime: number, voiceCount: number): void {
     for (const p of paramsArray) {
       const synthParams = generateSynthParams(p, this.options);
       const { real, imag } = generatePartials(synthParams);
@@ -48,7 +55,7 @@ export class VowelPlayer {
       const gate = this.ctx.createGain();
       gate.gain.setValueAtTime(0.001, this.ctx.currentTime);
       gate.gain.linearRampToValueAtTime(
-        0.2/paramsArray.length,
+        0.2 / voiceCount,
         this.ctx.currentTime + rampTime,
       );
 
