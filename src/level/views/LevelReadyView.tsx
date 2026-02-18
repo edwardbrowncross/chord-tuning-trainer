@@ -82,11 +82,11 @@ export function LevelReadyView({ chordTypeName, chordType, voicing, part, onStar
   return (
     <Stack align="center" justify="center" style={{ flex: 1 }}>
       <Title order={2}>Ready?</Title>
-      <Text c="blue">
+      <Text c="blue" ta="center">
         You'll be singing a <strong>{chordTypeName}</strong> chord in <strong>{voicing}</strong> voicing.
       </Text>
       <Group>
-        <Text c="blue">
+        <Text c="blue" ta="center">
           Your target note will be the <strong>{toneName}</strong>.
         </Text>
         <Button size="xs" variant="outline" leftSection={<IconVolume size={18} />}onClick={isPlaying ? stopPlayback : handleListen}>
