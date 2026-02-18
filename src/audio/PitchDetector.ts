@@ -50,7 +50,7 @@ export class PitchDetector {
     })
 
     const stream = await navigator.mediaDevices.getUserMedia({
-      audio: { echoCancellation: false, noiseSuppression: true },
+      audio: { echoCancellation: false, noiseSuppression: false },
     })
     const source = this.ctx.createMediaStreamSource(stream)
     const analyser = this.ctx.createAnalyser()
