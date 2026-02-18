@@ -8,7 +8,6 @@ export const levelSpecificationSchema = z.object({
   chordType: z.enum(chordTypeKeys),
   voicing: z.string(),
   partwiseEaseOfTuning: z.tuple([z.number(), z.number(), z.number(), z.number()]),
-  chordTypeName: z.string().optional(),
   vowel: z.string().optional(),
   minOffsetCents: z.number().optional(),
   maxOffsetCents: z.number().optional(),

@@ -74,7 +74,7 @@ Progress state management lives in `src/progress/`:
 
 Static module data lives in `src/modules/`:
 
-- **types** — Zod schemas (`levelSpecificationSchema`, `moduleSpecificationSchema`, `modulesSchema`) and derived TypeScript types (`LevelSpecification`, `ModuleSpecification`). `ModuleSpecification` fields: name, slug (lowercase kebab-case, used in URLs), description, difficulty, levels. `LevelSpecification` fields: chord type, voicing, partwiseEaseOfTuning, optional chordTypeName/vowel/offset/threshold overrides, repeats.
+- **types** — Zod schemas (`levelSpecificationSchema`, `moduleSpecificationSchema`, `modulesSchema`) and derived TypeScript types (`LevelSpecification`, `ModuleSpecification`). `ModuleSpecification` fields: name, slug (lowercase kebab-case, used in URLs), description, difficulty, levels. `LevelSpecification` fields: chord type, voicing, partwiseEaseOfTuning, optional vowel/offset/threshold overrides, repeats.
 - **chords.json** — all module and level data as a JSON array, validated at runtime by the Zod schema.
 - **index** — imports `chords.json`, validates it with `modulesSchema.parse()`, and exports `allModules: ModuleSpecification[]`.
 

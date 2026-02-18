@@ -75,7 +75,7 @@ export function usePitchDetector(options?: { medianCount?: number }): {
 } {
   const { getOrCreateAudioContext, pitchDetector, getPitchDetector } = useAudio()
   const medianCount = options?.medianCount ?? 1
-  const medianBuffer = useMedianBuffer(medianCount)
+  const { value: medianValue, push: medianPush, shift: medianShift, clear: medianClear } = useMedianBuffer(medianCount)
 
   const subscribe = useCallback(
     (onStoreChange: () => void) => {
@@ -83,14 +83,14 @@ export function usePitchDetector(options?: { medianCount?: number }): {
       return pitchDetector.subscribe(() => {
         const { pitch } = pitchDetector.getSnapshot()
         if (pitch !== null) {
-          medianBuffer.push(pitch)
+          medianPush(pitch)
         } else {
-          medianBuffer.shift()
+          medianShift()
         }
         onStoreChange()
       })
     },
-    [pitchDetector, medianBuffer],
+    [pitchDetector, medianPush, medianShift],
   )
   const defaultSnapshot = useMemo(() => ({ isRunning: false, pitch: null }), [])
 
@@ -109,13 +109,13 @@ export function usePitchDetector(options?: { medianCount?: number }): {
 
   const stop = useCallback(() => {
     getPitchDetector()?.stop()
-    medianBuffer.clear()
-  }, [getPitchDetector, medianBuffer])
+    medianClear()
+  }, [getPitchDetector, medianClear])
 
   return {
     isRunning: snapshot.isRunning,
     start,
     stop,
-    pitch: medianBuffer.value,
+    pitch: medianValue,
   }
 }

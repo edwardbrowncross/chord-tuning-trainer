@@ -294,7 +294,6 @@
                 "chordType": "dominant",
                 "voicing": "1379",
                 "repeats": 3,
-                "chordTypeName": "dominant-ninth",
                 "partwiseEaseOfTuning": [
                     0.09007926924754125,
                     0.0796115717681666,
@@ -306,7 +305,6 @@
                 "chordType": "dominant",
                 "voicing": "1793",
                 "repeats": 3,
-                "chordTypeName": "dominant-ninth",
                 "partwiseEaseOfTuning": [
                     0.1292626975081876,
                     0.060778883832455596,
@@ -318,7 +316,6 @@
                 "chordType": "dominant",
                 "voicing": "1739",
                 "repeats": 2,
-                "chordTypeName": "dominant-ninth",
                 "partwiseEaseOfTuning": [
                     0.13906804568730646,
                     0.06388306017627984,
@@ -330,7 +327,6 @@
                 "chordType": "dominant",
                 "voicing": "1937",
                 "repeats": 2,
-                "chordTypeName": "dominant-ninth",
                 "partwiseEaseOfTuning": [
                     0.1521235192921766,
                     0.029592815691486418,
@@ -350,7 +346,6 @@
                 "chordType": "major",
                 "voicing": "1513",
                 "repeats": 6,
-                "chordTypeName": "major",
                 "partwiseEaseOfTuning": [
                     0.3555794608006425,
                     0.17096107403625416,
@@ -362,7 +357,6 @@
                 "chordType": "major",
                 "voicing": "1531",
                 "repeats": 6,
-                "chordTypeName": "major",
                 "partwiseEaseOfTuning": [
                     0.2966454836837934,
                     0.17666884451931086,
@@ -374,7 +368,6 @@
                 "chordType": "major",
                 "voicing": "1351",
                 "repeats": 5,
-                "chordTypeName": "major",
                 "partwiseEaseOfTuning": [
                     0.2735917286366285,
                     0.09194592509090654,
@@ -386,7 +379,6 @@
                 "chordType": "major",
                 "voicing": "1135",
                 "repeats": 4,
-                "chordTypeName": "major",
                 "partwiseEaseOfTuning": [
                     0.4442511592847458,
                     0.318948523987585,
@@ -398,7 +390,6 @@
                 "chordType": "major",
                 "voicing": "5135",
                 "repeats": 4,
-                "chordTypeName": "major",
                 "partwiseEaseOfTuning": [
                     0.2709292898497253,
                     0.19094056647574853,
@@ -410,7 +401,6 @@
                 "chordType": "major",
                 "voicing": "5351",
                 "repeats": 3,
-                "chordTypeName": "major",
                 "partwiseEaseOfTuning": [
                     0.28281007271631153,
                     0.07661905416248074,
@@ -422,7 +412,6 @@
                 "chordType": "major",
                 "voicing": "5315",
                 "repeats": 3,
-                "chordTypeName": "major",
                 "partwiseEaseOfTuning": [
                     0.2065213845348928,
                     0.10731447277895999,
@@ -434,7 +423,6 @@
                 "chordType": "major",
                 "voicing": "3515",
                 "repeats": 3,
-                "chordTypeName": "major",
                 "partwiseEaseOfTuning": [
                     0.07047942919839499,
                     0.1797837817863316,
@@ -446,7 +434,6 @@
                 "chordType": "major",
                 "voicing": "3151",
                 "repeats": 3,
-                "chordTypeName": "major",
                 "partwiseEaseOfTuning": [
                     0.08074407581360576,
                     0.22864952724146403,
@@ -458,7 +445,6 @@
                 "chordType": "major",
                 "voicing": "1535",
                 "repeats": 2,
-                "chordTypeName": "major",
                 "partwiseEaseOfTuning": [
                     0.30647955135222327,
                     0.2664564028990195,
@@ -478,7 +464,6 @@
                 "chordType": "major",
                 "voicing": "1935",
                 "repeats": 3,
-                "chordTypeName": "major-ninth",
                 "partwiseEaseOfTuning": [
                     0.2504759568456998,
                     0.06924533653560105,
@@ -490,7 +475,6 @@
                 "chordType": "major",
                 "voicing": "1593",
                 "repeats": 2,
-                "chordTypeName": "major-ninth",
                 "partwiseEaseOfTuning": [
                     0.18240138670238792,
                     0.22704599970755313,
@@ -502,7 +486,6 @@
                 "chordType": "major",
                 "voicing": "1539",
                 "repeats": 2,
-                "chordTypeName": "major-ninth",
                 "partwiseEaseOfTuning": [
                     0.24923968259311913,
                     0.25511363921798114,
@@ -514,7 +497,6 @@
                 "chordType": "major",
                 "voicing": "9135",
                 "repeats": 2,
-                "chordTypeName": "major-ninth",
                 "partwiseEaseOfTuning": [
                     0.05139127667920193,
                     0.12615378659531218,
@@ -526,7 +508,6 @@
                 "chordType": "major",
                 "voicing": "9513",
                 "repeats": 2,
-                "chordTypeName": "major-ninth",
                 "partwiseEaseOfTuning": [
                     0.08200464316209854,
                     0.15149729567870773,
@@ -546,7 +527,6 @@
                 "chordType": "major",
                 "voicing": "1537",
                 "repeats": 4,
-                "chordTypeName": "major-seventh",
                 "partwiseEaseOfTuning": [
                     0.20491427502448278,
                     0.19766127701692238,
@@ -558,7 +538,6 @@
                 "chordType": "major",
                 "voicing": "1573",
                 "repeats": 4,
-                "chordTypeName": "major-seventh",
                 "partwiseEaseOfTuning": [
                     0.14996542102436006,
                     0.1631501370132199,
@@ -570,7 +549,6 @@
                 "chordType": "major",
                 "voicing": "5137",
                 "repeats": 3,
-                "chordTypeName": "major-seventh",
                 "partwiseEaseOfTuning": [
                     0.17366650469386896,
                     0.11217754435727773,
@@ -582,7 +560,6 @@
                 "chordType": "major",
                 "voicing": "1735",
                 "repeats": 2,
-                "chordTypeName": "major-seventh",
                 "partwiseEaseOfTuning": [
                     0.2185879188298864,
                     0.0692895059549172,
@@ -594,7 +571,6 @@
                 "chordType": "major",
                 "voicing": "7135",
                 "repeats": 2,
-                "chordTypeName": "major-seventh",
                 "partwiseEaseOfTuning": [
                     0.061551691687252566,
                     0.12095634606665154,
@@ -614,7 +590,6 @@
                 "chordType": "minor",
                 "voicing": "1351",
                 "repeats": 4,
-                "chordTypeName": "minor",
                 "partwiseEaseOfTuning": [
                     0.254323861258273,
                     0.044060039993493144,
@@ -626,7 +601,6 @@
                 "chordType": "minor",
                 "voicing": "1513",
                 "repeats": 4,
-                "chordTypeName": "minor",
                 "partwiseEaseOfTuning": [
                     0.31716204790565916,
                     0.15776968962454124,
@@ -638,7 +612,6 @@
                 "chordType": "minor",
                 "voicing": "3135",
                 "repeats": 4,
-                "chordTypeName": "minor",
                 "partwiseEaseOfTuning": [
                     0.21065571395720656,
                     0.08713445519334448,
@@ -650,7 +623,6 @@
                 "chordType": "minor",
                 "voicing": "1135",
                 "repeats": 3,
-                "chordTypeName": "minor",
                 "partwiseEaseOfTuning": [
                     0.37255174061436347,
                     0.2902806708020408,
@@ -662,7 +634,6 @@
                 "chordType": "minor",
                 "voicing": "3513",
                 "repeats": 3,
-                "chordTypeName": "minor",
                 "partwiseEaseOfTuning": [
                     0.15424306317656056,
                     0.08405396184824776,
@@ -674,7 +645,6 @@
                 "chordType": "minor",
                 "voicing": "5135",
                 "repeats": 3,
-                "chordTypeName": "minor",
                 "partwiseEaseOfTuning": [
                     0.2447167467434836,
                     0.15519238461294294,
@@ -686,7 +656,6 @@
                 "chordType": "minor",
                 "voicing": "3151",
                 "repeats": 2,
-                "chordTypeName": "minor",
                 "partwiseEaseOfTuning": [
                     0.00999989871364737,
                     0.19930442247003624,
@@ -706,7 +675,6 @@
                 "chordType": "minor",
                 "voicing": "1573",
                 "repeats": 5,
-                "chordTypeName": "minor-seventh",
                 "partwiseEaseOfTuning": [
                     0.16112394984250755,
                     0.10822025919118687,
@@ -718,7 +686,6 @@
                 "chordType": "minor",
                 "voicing": "3751",
                 "repeats": 5,
-                "chordTypeName": "minor-seventh",
                 "partwiseEaseOfTuning": [
                     0.007381231251831544,
                     0.04526374665666426,
@@ -730,7 +697,6 @@
                 "chordType": "minor",
                 "voicing": "1735",
                 "repeats": 4,
-                "chordTypeName": "minor-seventh",
                 "partwiseEaseOfTuning": [
                     0.20019280848046644,
                     0.0704744838198185,
@@ -742,7 +708,6 @@
                 "chordType": "minor",
                 "voicing": "3715",
                 "repeats": 3,
-                "chordTypeName": "minor-seventh",
                 "partwiseEaseOfTuning": [
                     0.01258778097962987,
                     0.05175143272590621,
@@ -754,7 +719,6 @@
                 "chordType": "minor",
                 "voicing": "3571",
                 "repeats": 3,
-                "chordTypeName": "minor-seventh",
                 "partwiseEaseOfTuning": [
                     0.014922710104501302,
                     0.09141056803011663,
@@ -766,7 +730,6 @@
                 "chordType": "minor",
                 "voicing": "1537",
                 "repeats": 3,
-                "chordTypeName": "minor-seventh",
                 "partwiseEaseOfTuning": [
                     0.16759485841035288,
                     0.1556066800425216,
@@ -778,7 +741,6 @@
                 "chordType": "minor",
                 "voicing": "3157",
                 "repeats": 3,
-                "chordTypeName": "minor-seventh",
                 "partwiseEaseOfTuning": [
                     0.014612140399520857,
                     0.09460467918916068,
@@ -790,7 +752,6 @@
                 "chordType": "minor",
                 "voicing": "5137",
                 "repeats": 3,
-                "chordTypeName": "minor-seventh",
                 "partwiseEaseOfTuning": [
                     0.08740922358045689,
                     0.09678889323323338,
@@ -810,7 +771,6 @@
                 "chordType": "minor-sixth",
                 "voicing": "1563",
                 "repeats": 5,
-                "chordTypeName": "minor-sixth",
                 "partwiseEaseOfTuning": [
                     0.1642954958130024,
                     0.11110759850587894,
@@ -822,7 +782,6 @@
                 "chordType": "minor-sixth",
                 "voicing": "1635",
                 "repeats": 5,
-                "chordTypeName": "minor-sixth",
                 "partwiseEaseOfTuning": [
                     0.21161687065999613,
                     0.1039101093167486,
@@ -834,7 +793,6 @@
                 "chordType": "minor-sixth",
                 "voicing": "1356",
                 "repeats": 5,
-                "chordTypeName": "minor-sixth",
                 "partwiseEaseOfTuning": [
                     0.16168504375075762,
                     0.04751360203261035,
@@ -846,7 +804,6 @@
                 "chordType": "minor-sixth",
                 "voicing": "6351",
                 "repeats": 4,
-                "chordTypeName": "minor-sixth",
                 "partwiseEaseOfTuning": [
                     0.06744779980614313,
                     0.06633497763095508,
@@ -858,7 +815,6 @@
                 "chordType": "minor-sixth",
                 "voicing": "3615",
                 "repeats": 4,
-                "chordTypeName": "minor-sixth",
                 "partwiseEaseOfTuning": [
                     0.04419467191513926,
                     0.04504436388535908,
@@ -870,7 +826,6 @@
                 "chordType": "minor-sixth",
                 "voicing": "6513",
                 "repeats": 3,
-                "chordTypeName": "minor-sixth",
                 "partwiseEaseOfTuning": [
                     0.05827125936864866,
                     0.08717748112493219,
@@ -882,7 +837,6 @@
                 "chordType": "minor-sixth",
                 "voicing": "3561",
                 "repeats": 3,
-                "chordTypeName": "minor-sixth",
                 "partwiseEaseOfTuning": [
                     0.0487474843529101,
                     0.05793340654366259,
@@ -894,7 +848,6 @@
                 "chordType": "minor-sixth",
                 "voicing": "3156",
                 "repeats": 2,
-                "chordTypeName": "minor-sixth",
                 "partwiseEaseOfTuning": [
                     0.019973994479624224,
                     0.13758875703668505,
@@ -914,7 +867,6 @@
                 "chordType": "suspended",
                 "voicing": "4145",
                 "repeats": 3,
-                "chordTypeName": "suspended-fourth",
                 "partwiseEaseOfTuning": [
                     0.2998042701336405,
                     0.2288528297713343,
@@ -926,7 +878,6 @@
                 "chordType": "suspended",
                 "voicing": "1145",
                 "repeats": 2,
-                "chordTypeName": "suspended-fourth",
                 "partwiseEaseOfTuning": [
                     0.3903755051713499,
                     0.3351784977671498,
@@ -938,7 +889,6 @@
                 "chordType": "suspended",
                 "voicing": "1451",
                 "repeats": 2,
-                "chordTypeName": "suspended-fourth",
                 "partwiseEaseOfTuning": [
                     0.3159178621884283,
                     0.14926429939634567,

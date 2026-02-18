@@ -56,6 +56,13 @@ export function ExerciseScreen({
     }
   }, [phase, vowelPlayer])
 
+  // Stop audio on unmount (e.g. navigating away mid-exercise)
+  useEffect(() => {
+    return () => {
+      vowelPlayer?.stop({ rampTime: 0.3 })
+    }
+  }, [vowelPlayer])
+
   // Pitch detector lifecycle
   useEffect(() => {
     if (phase.type === 'match-root') {
@@ -64,6 +71,13 @@ export function ExerciseScreen({
       stop()
     }
   }, [phase.type, start, stop])
+
+  // Stop pitch detector on unmount
+  useEffect(() => {
+    return () => {
+      stop()
+    }
+  }, [stop])
 
   // Report current result to parent for immediate dot feedback
   const onChordMatchedRef = useRef(onChordMatched)
