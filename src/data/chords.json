@@ -1,337 +1,41 @@
 [
     {
-        "name": "Augmented Triads",
-        "slug": "augmented-triads",
-        "description": "",
-        "difficulty": "advanced",
-        "levels": [
-            {
-                "chordType": "augmented",
-                "voicing": "5351",
-                "repeats": 3,
-                "partwiseEaseOfTuning": [
-                    0.1961194635572847,
-                    0.10055839542140214,
-                    0.22277760298159932,
-                    0.01500694398087421
-                ]
-            },
-            {
-                "chordType": "augmented",
-                "voicing": "5135",
-                "repeats": 3,
-                "partwiseEaseOfTuning": [
-                    0.15924728160713847,
-                    0.05201540151193185,
-                    0.08949674411506392,
-                    0.1675466552487006
-                ]
-            },
-            {
-                "chordType": "augmented",
-                "voicing": "1513",
-                "repeats": 2,
-                "partwiseEaseOfTuning": [
-                    0.25056715876757063,
-                    0.004973264797966115,
-                    0.19734701016706624,
-                    0.08831287600368157
-                ]
-            },
-            {
-                "chordType": "augmented",
-                "voicing": "3135",
-                "repeats": 2,
-                "partwiseEaseOfTuning": [
-                    0.27367277294466863,
-                    0.06820748936208475,
-                    0.24328573395948094,
-                    0.09202224633859796
-                ]
-            }
-        ]
-    },
-    {
-        "name": "Diminished Triads",
-        "slug": "diminished-triads",
-        "description": "",
-        "difficulty": "advanced",
-        "levels": [
-            {
-                "chordType": "diminished",
-                "voicing": "3135",
-                "repeats": 3,
-                "partwiseEaseOfTuning": [
-                    0.19793484852198254,
-                    0.034995436247381995,
-                    0.20710089171347124,
-                    0.007309567308333653
-                ]
-            },
-            {
-                "chordType": "diminished",
-                "voicing": "1535",
-                "repeats": 2,
-                "partwiseEaseOfTuning": [
-                    0.05019456645249023,
-                    0.14651704444536456,
-                    0.03714605615131139,
-                    0.12138659840219301
-                ]
-            },
-            {
-                "chordType": "diminished",
-                "voicing": "3153",
-                "repeats": 2,
-                "partwiseEaseOfTuning": [
-                    0.08960912001263915,
-                    0.03479750951685012,
-                    0.0036557713882807708,
-                    0.10589812013506017
-                ]
-            },
-            {
-                "chordType": "diminished",
-                "voicing": "5135",
-                "repeats": 2,
-                "partwiseEaseOfTuning": [
-                    0.1723101894699769,
-                    0.03865926116559115,
-                    0.013568091570396623,
-                    0.156474756619565
-                ]
-            }
-        ]
-    },
-    {
-        "name": "Diminished Sevenths",
-        "slug": "diminished-sevenths",
-        "description": "",
-        "difficulty": "advanced",
-        "levels": [
-            {
-                "chordType": "diminished",
-                "voicing": "1357",
-                "repeats": 5,
-                "partwiseEaseOfTuning": [
-                    0.04144133708261055,
-                    0.03521696624522619,
-                    0.02232941339472968,
-                    0.021999008180457746
-                ]
-            },
-            {
-                "chordType": "diminished",
-                "voicing": "1735",
-                "repeats": 4,
-                "partwiseEaseOfTuning": [
-                    0.044734918836698376,
-                    0.05141461412348199,
-                    0.052734373540307966,
-                    0.044167711264223586
-                ]
-            },
-            {
-                "chordType": "diminished",
-                "voicing": "1573",
-                "repeats": 3,
-                "partwiseEaseOfTuning": [
-                    0.05163629401742653,
-                    0.030713574420012435,
-                    0.017558395324502873,
-                    0.03655158356440025
-                ]
-            },
-            {
-                "chordType": "diminished",
-                "voicing": "1753",
-                "repeats": 2,
-                "partwiseEaseOfTuning": [
-                    0.01777058194327874,
-                    0.04164865429390667,
-                    0.03522871431241392,
-                    0.017132029917314995
-                ]
-            }
-        ]
-    },
-    {
-        "name": "Dominant Sevenths",
-        "slug": "dominant-sevenths",
+        "name": "Suspended Fourths",
+        "slug": "suspended-fourths",
         "description": "",
         "difficulty": "beginner",
         "levels": [
             {
-                "chordType": "dominant",
-                "voicing": "1573",
-                "repeats": 6,
-                "partwiseEaseOfTuning": [
-                    0.17642116424143756,
-                    0.14761772470675838,
-                    0.06965007664748428,
-                    0.11164694120642531
-                ]
-            },
-            {
-                "chordType": "dominant",
-                "voicing": "5137",
-                "repeats": 6,
-                "partwiseEaseOfTuning": [
-                    0.1435439987394247,
-                    0.12341801459662145,
-                    0.0817790265111853,
-                    0.06279407747110673
-                ]
-            },
-            {
-                "chordType": "dominant",
-                "voicing": "5371",
-                "repeats": 5,
-                "partwiseEaseOfTuning": [
-                    0.1391283893086641,
-                    0.10393882467828425,
-                    0.0493972935459179,
-                    0.05606062637531478
-                ]
-            },
-            {
-                "chordType": "dominant",
-                "voicing": "1357",
-                "repeats": 5,
-                "partwiseEaseOfTuning": [
-                    0.14628227624336426,
-                    0.08393055884908765,
-                    0.11396407202858662,
-                    0.04786475750683304
-                ]
-            },
-            {
-                "chordType": "dominant",
-                "voicing": "5713",
-                "repeats": 5,
-                "partwiseEaseOfTuning": [
-                    0.1034741831313927,
-                    0.042181354946427274,
-                    0.09121032199603195,
-                    0.07187540345391008
-                ]
-            },
-            {
-                "chordType": "dominant",
-                "voicing": "1537",
-                "repeats": 5,
-                "partwiseEaseOfTuning": [
-                    0.2357446661171413,
-                    0.17310542442275056,
-                    0.1307938470714146,
-                    0.06725671212551565
-                ]
-            },
-            {
-                "chordType": "dominant",
-                "voicing": "1735",
-                "repeats": 4,
-                "partwiseEaseOfTuning": [
-                    0.23394439243263407,
-                    0.06868466100301884,
-                    0.09969030369630981,
-                    0.14296087110122618
-                ]
-            },
-            {
-                "chordType": "dominant",
-                "voicing": "3715",
+                "chordType": "suspended",
+                "voicing": "4145",
                 "repeats": 3,
                 "partwiseEaseOfTuning": [
-                    0.08149359151342905,
-                    0.06674461272573873,
-                    0.1004730029526387,
-                    0.09185042052399969
+                    0.2998042701336405,
+                    0.2288528297713343,
+                    0.241615568174944,
+                    0.11735229955374468
                 ]
             },
             {
-                "chordType": "dominant",
-                "voicing": "7135",
-                "repeats": 3,
-                "partwiseEaseOfTuning": [
-                    0.040171908299034276,
-                    0.12878240608092983,
-                    0.049988211247756986,
-                    0.1047497886139155
-                ]
-            },
-            {
-                "chordType": "dominant",
-                "voicing": "7351",
-                "repeats": 3,
-                "partwiseEaseOfTuning": [
-                    0.045842514178680016,
-                    0.0475492280167044,
-                    0.07252684653371787,
-                    0.055564772894048375
-                ]
-            },
-            {
-                "chordType": "dominant",
-                "voicing": "1375",
-                "repeats": 3,
-                "partwiseEaseOfTuning": [
-                    0.16712886764993914,
-                    0.08077952098410693,
-                    0.058398429725680295,
-                    0.1006345668738371
-                ]
-            }
-        ]
-    },
-    {
-        "name": "Dominant Ninths (no five)",
-        "slug": "dominant-ninths",
-        "description": "",
-        "difficulty": "intermediate",
-        "levels": [
-            {
-                "chordType": "dominant",
-                "voicing": "1379",
-                "repeats": 3,
-                "partwiseEaseOfTuning": [
-                    0.09007926924754125,
-                    0.0796115717681666,
-                    0.0726371366148999,
-                    0.038739697105128
-                ]
-            },
-            {
-                "chordType": "dominant",
-                "voicing": "1793",
-                "repeats": 3,
-                "partwiseEaseOfTuning": [
-                    0.1292626975081876,
-                    0.060778883832455596,
-                    0.047665832982753585,
-                    0.09871528259638906
-                ]
-            },
-            {
-                "chordType": "dominant",
-                "voicing": "1739",
+                "chordType": "suspended",
+                "voicing": "1145",
                 "repeats": 2,
                 "partwiseEaseOfTuning": [
-                    0.13906804568730646,
-                    0.06388306017627984,
-                    0.11695816368185552,
-                    0.05096052683360647
+                    0.3903755051713499,
+                    0.3351784977671498,
+                    0.07208835917236495,
+                    0.21981059798807312
                 ]
             },
             {
-                "chordType": "dominant",
-                "voicing": "1937",
+                "chordType": "suspended",
+                "voicing": "1451",
                 "repeats": 2,
                 "partwiseEaseOfTuning": [
-                    0.1521235192921766,
-                    0.029592815691486418,
-                    0.12796484554966792,
-                    0.07098815680484116
+                    0.3159178621884283,
+                    0.14926429939634567,
+                    0.14782327283169625,
+                    0.27818577088328145
                 ]
             }
         ]
@@ -450,6 +154,91 @@
                     0.2664564028990195,
                     0.13268078084741758,
                     0.24981066397407659
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Minor Triads",
+        "slug": "minor-triads",
+        "description": "",
+        "difficulty": "beginner",
+        "levels": [
+            {
+                "chordType": "minor",
+                "voicing": "1351",
+                "repeats": 4,
+                "partwiseEaseOfTuning": [
+                    0.254323861258273,
+                    0.044060039993493144,
+                    0.1623626813112503,
+                    0.1811064312439974
+                ]
+            },
+            {
+                "chordType": "minor",
+                "voicing": "1513",
+                "repeats": 4,
+                "partwiseEaseOfTuning": [
+                    0.31716204790565916,
+                    0.15776968962454124,
+                    0.2354944474114129,
+                    0.05438359999488862
+                ]
+            },
+            {
+                "chordType": "minor",
+                "voicing": "3135",
+                "repeats": 4,
+                "partwiseEaseOfTuning": [
+                    0.21065571395720656,
+                    0.08713445519334448,
+                    0.2220603399806558,
+                    0.09438872143306842
+                ]
+            },
+            {
+                "chordType": "minor",
+                "voicing": "1135",
+                "repeats": 3,
+                "partwiseEaseOfTuning": [
+                    0.37255174061436347,
+                    0.2902806708020408,
+                    0.07085221520926,
+                    0.1979734812255249
+                ]
+            },
+            {
+                "chordType": "minor",
+                "voicing": "3513",
+                "repeats": 3,
+                "partwiseEaseOfTuning": [
+                    0.15424306317656056,
+                    0.08405396184824776,
+                    0.04992096967689238,
+                    0.17561652913019282
+                ]
+            },
+            {
+                "chordType": "minor",
+                "voicing": "5135",
+                "repeats": 3,
+                "partwiseEaseOfTuning": [
+                    0.2447167467434836,
+                    0.15519238461294294,
+                    0.018987014582702577,
+                    0.22595531901166033
+                ]
+            },
+            {
+                "chordType": "minor",
+                "voicing": "3151",
+                "repeats": 2,
+                "partwiseEaseOfTuning": [
+                    0.00999989871364737,
+                    0.19930442247003624,
+                    0.13698749890785555,
+                    0.1312552366105415
                 ]
             }
         ]
@@ -581,182 +370,234 @@
         ]
     },
     {
-        "name": "Minor Triads",
-        "slug": "minor-triads",
+        "name": "Augmented Triads",
+        "slug": "augmented-triads",
         "description": "",
-        "difficulty": "beginner",
+        "difficulty": "advanced",
         "levels": [
             {
-                "chordType": "minor",
-                "voicing": "1351",
-                "repeats": 4,
-                "partwiseEaseOfTuning": [
-                    0.254323861258273,
-                    0.044060039993493144,
-                    0.1623626813112503,
-                    0.1811064312439974
-                ]
-            },
-            {
-                "chordType": "minor",
-                "voicing": "1513",
-                "repeats": 4,
-                "partwiseEaseOfTuning": [
-                    0.31716204790565916,
-                    0.15776968962454124,
-                    0.2354944474114129,
-                    0.05438359999488862
-                ]
-            },
-            {
-                "chordType": "minor",
-                "voicing": "3135",
-                "repeats": 4,
-                "partwiseEaseOfTuning": [
-                    0.21065571395720656,
-                    0.08713445519334448,
-                    0.2220603399806558,
-                    0.09438872143306842
-                ]
-            },
-            {
-                "chordType": "minor",
-                "voicing": "1135",
+                "chordType": "augmented",
+                "voicing": "5351",
                 "repeats": 3,
                 "partwiseEaseOfTuning": [
-                    0.37255174061436347,
-                    0.2902806708020408,
-                    0.07085221520926,
-                    0.1979734812255249
+                    0.1961194635572847,
+                    0.10055839542140214,
+                    0.22277760298159932,
+                    0.01500694398087421
                 ]
             },
             {
-                "chordType": "minor",
-                "voicing": "3513",
-                "repeats": 3,
-                "partwiseEaseOfTuning": [
-                    0.15424306317656056,
-                    0.08405396184824776,
-                    0.04992096967689238,
-                    0.17561652913019282
-                ]
-            },
-            {
-                "chordType": "minor",
+                "chordType": "augmented",
                 "voicing": "5135",
                 "repeats": 3,
                 "partwiseEaseOfTuning": [
-                    0.2447167467434836,
-                    0.15519238461294294,
-                    0.018987014582702577,
-                    0.22595531901166033
+                    0.15924728160713847,
+                    0.05201540151193185,
+                    0.08949674411506392,
+                    0.1675466552487006
                 ]
             },
             {
-                "chordType": "minor",
-                "voicing": "3151",
+                "chordType": "augmented",
+                "voicing": "1513",
                 "repeats": 2,
                 "partwiseEaseOfTuning": [
-                    0.00999989871364737,
-                    0.19930442247003624,
-                    0.13698749890785555,
-                    0.1312552366105415
+                    0.25056715876757063,
+                    0.004973264797966115,
+                    0.19734701016706624,
+                    0.08831287600368157
+                ]
+            },
+            {
+                "chordType": "augmented",
+                "voicing": "3135",
+                "repeats": 2,
+                "partwiseEaseOfTuning": [
+                    0.27367277294466863,
+                    0.06820748936208475,
+                    0.24328573395948094,
+                    0.09202224633859796
                 ]
             }
         ]
     },
     {
-        "name": "Minor Sevenths",
-        "slug": "minor-sevenths",
+        "name": "Dominant Sevenths",
+        "slug": "dominant-sevenths",
         "description": "",
         "difficulty": "intermediate",
         "levels": [
             {
-                "chordType": "minor",
+                "chordType": "dominant",
                 "voicing": "1573",
-                "repeats": 5,
+                "repeats": 6,
                 "partwiseEaseOfTuning": [
-                    0.16112394984250755,
-                    0.10822025919118687,
-                    0.05713670213720194,
-                    0.03890864696555796
+                    0.17642116424143756,
+                    0.14761772470675838,
+                    0.06965007664748428,
+                    0.11164694120642531
                 ]
             },
             {
-                "chordType": "minor",
-                "voicing": "3751",
-                "repeats": 5,
+                "chordType": "dominant",
+                "voicing": "5137",
+                "repeats": 6,
                 "partwiseEaseOfTuning": [
-                    0.007381231251831544,
-                    0.04526374665666426,
-                    0.08909535896051579,
-                    0.04461690974619098
+                    0.1435439987394247,
+                    0.12341801459662145,
+                    0.0817790265111853,
+                    0.06279407747110673
                 ]
             },
             {
-                "chordType": "minor",
+                "chordType": "dominant",
+                "voicing": "5371",
+                "repeats": 5,
+                "partwiseEaseOfTuning": [
+                    0.1391283893086641,
+                    0.10393882467828425,
+                    0.0493972935459179,
+                    0.05606062637531478
+                ]
+            },
+            {
+                "chordType": "dominant",
+                "voicing": "1357",
+                "repeats": 5,
+                "partwiseEaseOfTuning": [
+                    0.14628227624336426,
+                    0.08393055884908765,
+                    0.11396407202858662,
+                    0.04786475750683304
+                ]
+            },
+            {
+                "chordType": "dominant",
+                "voicing": "5713",
+                "repeats": 5,
+                "partwiseEaseOfTuning": [
+                    0.1034741831313927,
+                    0.042181354946427274,
+                    0.09121032199603195,
+                    0.07187540345391008
+                ]
+            },
+            {
+                "chordType": "dominant",
+                "voicing": "1537",
+                "repeats": 5,
+                "partwiseEaseOfTuning": [
+                    0.2357446661171413,
+                    0.17310542442275056,
+                    0.1307938470714146,
+                    0.06725671212551565
+                ]
+            },
+            {
+                "chordType": "dominant",
                 "voicing": "1735",
                 "repeats": 4,
                 "partwiseEaseOfTuning": [
-                    0.20019280848046644,
-                    0.0704744838198185,
-                    0.05500532024121818,
-                    0.17494015750598096
+                    0.23394439243263407,
+                    0.06868466100301884,
+                    0.09969030369630981,
+                    0.14296087110122618
                 ]
             },
             {
-                "chordType": "minor",
+                "chordType": "dominant",
                 "voicing": "3715",
                 "repeats": 3,
                 "partwiseEaseOfTuning": [
-                    0.01258778097962987,
-                    0.05175143272590621,
-                    0.08833785674729366,
-                    0.12452998958067464
+                    0.08149359151342905,
+                    0.06674461272573873,
+                    0.1004730029526387,
+                    0.09185042052399969
                 ]
             },
             {
-                "chordType": "minor",
-                "voicing": "3571",
+                "chordType": "dominant",
+                "voicing": "7135",
                 "repeats": 3,
                 "partwiseEaseOfTuning": [
-                    0.014922710104501302,
-                    0.09141056803011663,
-                    0.031081319761355614,
-                    0.0646479047277466
+                    0.040171908299034276,
+                    0.12878240608092983,
+                    0.049988211247756986,
+                    0.1047497886139155
                 ]
             },
             {
-                "chordType": "minor",
-                "voicing": "1537",
+                "chordType": "dominant",
+                "voicing": "7351",
                 "repeats": 3,
                 "partwiseEaseOfTuning": [
-                    0.16759485841035288,
-                    0.1556066800425216,
-                    0.0686928021871161,
-                    0.011093190358921756
+                    0.045842514178680016,
+                    0.0475492280167044,
+                    0.07252684653371787,
+                    0.055564772894048375
                 ]
             },
             {
-                "chordType": "minor",
-                "voicing": "3157",
+                "chordType": "dominant",
+                "voicing": "1375",
                 "repeats": 3,
                 "partwiseEaseOfTuning": [
-                    0.014612140399520857,
-                    0.09460467918916068,
-                    0.1034904918955175,
-                    0.020511499746077577
+                    0.16712886764993914,
+                    0.08077952098410693,
+                    0.058398429725680295,
+                    0.1006345668738371
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Diminished Triads",
+        "slug": "diminished-triads",
+        "description": "",
+        "difficulty": "intermediate",
+        "levels": [
+            {
+                "chordType": "diminished",
+                "voicing": "3135",
+                "repeats": 3,
+                "partwiseEaseOfTuning": [
+                    0.19793484852198254,
+                    0.034995436247381995,
+                    0.20710089171347124,
+                    0.007309567308333653
                 ]
             },
             {
-                "chordType": "minor",
-                "voicing": "5137",
-                "repeats": 3,
+                "chordType": "diminished",
+                "voicing": "1535",
+                "repeats": 2,
                 "partwiseEaseOfTuning": [
-                    0.08740922358045689,
-                    0.09678889323323338,
-                    0.017203551958401953,
-                    0.022220877030803
+                    0.05019456645249023,
+                    0.14651704444536456,
+                    0.03714605615131139,
+                    0.12138659840219301
+                ]
+            },
+            {
+                "chordType": "diminished",
+                "voicing": "3153",
+                "repeats": 2,
+                "partwiseEaseOfTuning": [
+                    0.08960912001263915,
+                    0.03479750951685012,
+                    0.0036557713882807708,
+                    0.10589812013506017
+                ]
+            },
+            {
+                "chordType": "diminished",
+                "voicing": "5135",
+                "repeats": 2,
+                "partwiseEaseOfTuning": [
+                    0.1723101894699769,
+                    0.03865926116559115,
+                    0.013568091570396623,
+                    0.156474756619565
                 ]
             }
         ]
@@ -765,7 +606,7 @@
         "name": "Minor Sixths",
         "slug": "minor-sixths",
         "description": "",
-        "difficulty": "intermediate",
+        "difficulty": "advanced",
         "levels": [
             {
                 "chordType": "minor-sixth",
@@ -858,42 +699,201 @@
         ]
     },
     {
-        "name": "Suspended Fourths",
-        "slug": "suspended-fourths",
-        "description": "",
-        "difficulty": "beginner",
+        "name": "Dominant Ninth",
+        "slug": "dominant-ninths",
+        "description": "(no five)",
+        "difficulty": "intermediate",
         "levels": [
             {
-                "chordType": "suspended",
-                "voicing": "4145",
+                "chordType": "dominant",
+                "voicing": "1379",
                 "repeats": 3,
                 "partwiseEaseOfTuning": [
-                    0.2998042701336405,
-                    0.2288528297713343,
-                    0.241615568174944,
-                    0.11735229955374468
+                    0.09007926924754125,
+                    0.0796115717681666,
+                    0.0726371366148999,
+                    0.038739697105128
                 ]
             },
             {
-                "chordType": "suspended",
-                "voicing": "1145",
-                "repeats": 2,
+                "chordType": "dominant",
+                "voicing": "1793",
+                "repeats": 3,
                 "partwiseEaseOfTuning": [
-                    0.3903755051713499,
-                    0.3351784977671498,
-                    0.07208835917236495,
-                    0.21981059798807312
+                    0.1292626975081876,
+                    0.060778883832455596,
+                    0.047665832982753585,
+                    0.09871528259638906
                 ]
             },
             {
-                "chordType": "suspended",
-                "voicing": "1451",
+                "chordType": "dominant",
+                "voicing": "1739",
                 "repeats": 2,
                 "partwiseEaseOfTuning": [
-                    0.3159178621884283,
-                    0.14926429939634567,
-                    0.14782327283169625,
-                    0.27818577088328145
+                    0.13906804568730646,
+                    0.06388306017627984,
+                    0.11695816368185552,
+                    0.05096052683360647
+                ]
+            },
+            {
+                "chordType": "dominant",
+                "voicing": "1937",
+                "repeats": 2,
+                "partwiseEaseOfTuning": [
+                    0.1521235192921766,
+                    0.029592815691486418,
+                    0.12796484554966792,
+                    0.07098815680484116
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Minor Sevenths",
+        "slug": "minor-sevenths",
+        "description": "",
+        "difficulty": "advanced",
+        "levels": [
+            {
+                "chordType": "minor",
+                "voicing": "1573",
+                "repeats": 5,
+                "partwiseEaseOfTuning": [
+                    0.16112394984250755,
+                    0.10822025919118687,
+                    0.05713670213720194,
+                    0.03890864696555796
+                ]
+            },
+            {
+                "chordType": "minor",
+                "voicing": "3751",
+                "repeats": 5,
+                "partwiseEaseOfTuning": [
+                    0.007381231251831544,
+                    0.04526374665666426,
+                    0.08909535896051579,
+                    0.04461690974619098
+                ]
+            },
+            {
+                "chordType": "minor",
+                "voicing": "1735",
+                "repeats": 4,
+                "partwiseEaseOfTuning": [
+                    0.20019280848046644,
+                    0.0704744838198185,
+                    0.05500532024121818,
+                    0.17494015750598096
+                ]
+            },
+            {
+                "chordType": "minor",
+                "voicing": "3715",
+                "repeats": 3,
+                "partwiseEaseOfTuning": [
+                    0.01258778097962987,
+                    0.05175143272590621,
+                    0.08833785674729366,
+                    0.12452998958067464
+                ]
+            },
+            {
+                "chordType": "minor",
+                "voicing": "3571",
+                "repeats": 3,
+                "partwiseEaseOfTuning": [
+                    0.014922710104501302,
+                    0.09141056803011663,
+                    0.031081319761355614,
+                    0.0646479047277466
+                ]
+            },
+            {
+                "chordType": "minor",
+                "voicing": "1537",
+                "repeats": 3,
+                "partwiseEaseOfTuning": [
+                    0.16759485841035288,
+                    0.1556066800425216,
+                    0.0686928021871161,
+                    0.011093190358921756
+                ]
+            },
+            {
+                "chordType": "minor",
+                "voicing": "3157",
+                "repeats": 3,
+                "partwiseEaseOfTuning": [
+                    0.014612140399520857,
+                    0.09460467918916068,
+                    0.1034904918955175,
+                    0.020511499746077577
+                ]
+            },
+            {
+                "chordType": "minor",
+                "voicing": "5137",
+                "repeats": 3,
+                "partwiseEaseOfTuning": [
+                    0.08740922358045689,
+                    0.09678889323323338,
+                    0.017203551958401953,
+                    0.022220877030803
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Diminished Sevenths",
+        "slug": "diminished-sevenths",
+        "description": "",
+        "difficulty": "advanced",
+        "levels": [
+            {
+                "chordType": "diminished",
+                "voicing": "1357",
+                "repeats": 5,
+                "partwiseEaseOfTuning": [
+                    0.04144133708261055,
+                    0.03521696624522619,
+                    0.02232941339472968,
+                    0.021999008180457746
+                ]
+            },
+            {
+                "chordType": "diminished",
+                "voicing": "1735",
+                "repeats": 4,
+                "partwiseEaseOfTuning": [
+                    0.044734918836698376,
+                    0.05141461412348199,
+                    0.052734373540307966,
+                    0.044167711264223586
+                ]
+            },
+            {
+                "chordType": "diminished",
+                "voicing": "1573",
+                "repeats": 3,
+                "partwiseEaseOfTuning": [
+                    0.05163629401742653,
+                    0.030713574420012435,
+                    0.017558395324502873,
+                    0.03655158356440025
+                ]
+            },
+            {
+                "chordType": "diminished",
+                "voicing": "1753",
+                "repeats": 2,
+                "partwiseEaseOfTuning": [
+                    0.01777058194327874,
+                    0.04164865429390667,
+                    0.03522871431241392,
+                    0.017132029917314995
                 ]
             }
         ]
