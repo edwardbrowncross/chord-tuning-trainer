@@ -46,12 +46,10 @@ export function AdjustChordView({
           <Text size="xl" fw={700} c={isInRange ? 'green' : undefined}>
             {pitch !== null ? `${pitch.toFixed(1)} Hz` : 'Keep singing...'}
           </Text>
-          {centsOff !== null && (
-            <Text size="md" c={isInRange ? 'green' : 'red'}>
-              {centsOff > 0 ? '+' : ''}{centsOff.toFixed(0)} cents
-            </Text>
-          )}
           <PitchIndicator centsOff={centsOff} thresholdCents={thresholdCents} />
+          <Text size="md" c={isInRange ? 'green' : 'red'} style={{ visibility: centsOff !== null ? 'visible' : 'hidden' }}>
+            {centsOff !== null ? `${centsOff > 0 ? '+' : ''}${centsOff.toFixed(0)} cents` : '\u00A0'}
+          </Text>
         </Stack>
       </div>
       <Text size="sm" c="dimmed">{elapsed.toFixed(1)}s</Text>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Card, Group, Modal, Stack, Text, Title, UnstyledButton } from '@mantine/core'
+import { Button, Card, Group, Modal, SimpleGrid, Stack, Text, Title, UnstyledButton } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconStarFilled } from '@tabler/icons-react'
 import type { ModuleSpecification } from '../../modules/types'
@@ -40,8 +40,8 @@ export function ModuleSelectView({
     const someCompleted = continueLevel > 0
 
     return (
-      <Card key={mi} shadow="sm" padding="md" radius="md" withBorder>
-        <Stack gap="xs">
+      <Card key={mi} shadow="sm" padding="md" radius="md" withBorder style={{ display: 'flex', flexDirection: 'column' }}>
+        <Stack gap="xs" style={{ flex: 1 }} justify="space-between">
           <Group justify="space-between">
             <Text fw={600}>{mod.name}</Text>
             <Group gap={4}>
@@ -52,30 +52,32 @@ export function ModuleSelectView({
             </Group>
           </Group>
           <Text size="sm" c="dimmed">{mod.description}</Text>
-          <UnstyledButton onClick={() => openLevelModal(mi)}>
-            <Text size="xs" c="blue" td="underline" style={{ cursor: 'pointer' }}>
-              {mod.levels.length} levels
-            </Text>
-          </UnstyledButton>
-          <Group justify="flex-end">
-            {allCompleted ? (
-              <Button onClick={() => onSelectLevel(mi, 0)}>
-                Practice Again
-              </Button>
-            ) : someCompleted ? (
-              <>
-                <Button onClick={() => onSelectLevel(mi, continueLevel)}>
-                  Continue
+          <Group justify="space-between" align="center">
+            <UnstyledButton onClick={() => openLevelModal(mi)}>
+              <Text size="xs" c="blue" td="underline" style={{ cursor: 'pointer' }}>
+                {mod.levels.length} levels
+              </Text>
+            </UnstyledButton>
+            <Group gap="xs">
+              {allCompleted ? (
+                <Button onClick={() => onSelectLevel(mi, 0)}>
+                  Practice Again
                 </Button>
-                <Button variant="outline" onClick={() => onSelectLevel(mi, 0)}>
-                  Start Again
+              ) : someCompleted ? (
+                <>
+                  <Button variant="outline" onClick={() => onSelectLevel(mi, 0)}>
+                    Restart
+                  </Button>
+                  <Button onClick={() => onSelectLevel(mi, continueLevel)}>
+                    Continue
+                  </Button>
+                </>
+              ) : (
+                <Button onClick={() => onSelect(mi)}>
+                  Start
                 </Button>
-              </>
-            ) : (
-              <Button onClick={() => onSelect(mi)}>
-                Start
-              </Button>
-            )}
+              )}
+            </Group>
           </Group>
         </Stack>
       </Card>
@@ -96,7 +98,9 @@ export function ModuleSelectView({
           return (
             <Stack key={difficulty} gap="sm">
               <Title order={4}>{difficultyLabels[difficulty]}</Title>
-              {modulesInCategory.map(({ mod, mi }) => renderModuleCard(mod, mi))}
+              <SimpleGrid cols={{ base: 1, xs: 2, sm: 3 }} spacing="md">
+                {modulesInCategory.map(({ mod, mi }) => renderModuleCard(mod, mi))}
+              </SimpleGrid>
             </Stack>
           )
         })}
@@ -109,14 +113,14 @@ export function ModuleSelectView({
             const score = modalScores[li]
             return (
               <Group key={li} justify="space-between">
-                <Group gap="sm">
+                <Group gap="sm" align="center">
                   <Text size="sm" fw={500}>Level {li + 1}</Text>
                   <Text size="sm" c="dimmed">({level.voicing})</Text>
-                  <Group gap={4}>
+                  <Group gap={4} align="center">
                     <Text size="xs" c="dimmed">
-                      {score !== null ? `${score}/${maxStars}` : '—'}
+                      {`${score ?? 0}/${maxStars}`}
                     </Text>
-                    <IconStarFilled size={12} color="gold" />
+                    <IconStarFilled size={12} color={score && score > 0 ? "gold" : "lightgray"} />
                   </Group>
                 </Group>
                 <Button
@@ -127,7 +131,7 @@ export function ModuleSelectView({
                     onSelectLevel(modalModuleIndex, li)
                   }}
                 >
-                  Start
+                  {score ? "Retry" : "Start"}
                 </Button>
               </Group>
             )

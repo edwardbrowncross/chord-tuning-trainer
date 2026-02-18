@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useCallback, useMemo } from 'react'
+import { useReducer, useEffect, useCallback, useRef } from 'react'
 import { Stack } from '@mantine/core'
 import { useVowelPlayer, usePitchDetector } from '../audio/AudioProvider'
 import { midiToHz } from '../audio/cents'
@@ -9,20 +9,19 @@ import type { ExerciseResult } from '../progress/types'
 import { MatchRootView } from './views/MatchRootView'
 import { AdjustChordView } from './views/AdjustChordView'
 import { ResultView } from './views/ResultView'
-import { ExerciseDots } from './views/ExerciseDots'
 
 export function ExerciseScreen({
   exercises,
   exerciseIndex,
   exerciseCount,
-  results,
   onComplete,
+  onChordMatched,
 }: {
   exercises: Exercise[]
   exerciseIndex: number
   exerciseCount: number
-  results: ExerciseResult[]
   onComplete: (result: ExerciseResult) => void
+  onChordMatched?: (result: ExerciseResult | null) => void
 }) {
   const config = exercises[exerciseIndex]
   const [phase, dispatch] = useReducer(exerciseReducer, initialPhase)
@@ -66,12 +65,18 @@ export function ExerciseScreen({
     }
   }, [phase.type, start, stop])
 
-  const dotsResults = useMemo(() => {
+  // Report current result to parent for immediate dot feedback
+  const onChordMatchedRef = useRef(onChordMatched)
+  useEffect(() => {
+    onChordMatchedRef.current = onChordMatched
+  })
+  useEffect(() => {
     if (phase.type === 'result') {
-      return [...results, { stars: phase.stars, durationMs: phase.durationMs }]
+      onChordMatchedRef.current?.({ stars: phase.stars, durationMs: phase.durationMs })
+    } else {
+      onChordMatchedRef.current?.(null)
     }
-    return results
-  }, [phase, results])
+  }, [phase])
 
   const handleRetry = useCallback(() => {
     if (phase.type === 'result') {
@@ -125,11 +130,6 @@ export function ExerciseScreen({
           }
         })()}
       </Stack>
-      <ExerciseDots
-        count={exerciseCount}
-        currentIndex={exerciseIndex}
-        results={dotsResults}
-      />
     </>
   )
 }

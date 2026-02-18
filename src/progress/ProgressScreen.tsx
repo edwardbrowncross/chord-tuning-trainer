@@ -1,10 +1,13 @@
+import { useMemo, useState } from 'react'
 import { Button, Container, NativeSelect, Stack, Text, Title } from '@mantine/core'
 import { useAudio } from '../audio/AudioProvider'
 import type { Part } from '../exercise/types'
+import type { ExerciseResult } from './types'
 import { ExerciseScreen } from '../exercise/ExerciseScreen'
 import { ModuleSelectView } from './views/ModuleSelectView'
 import { LevelCompleteView } from './views/LevelCompleteView'
 import { Breadcrumb } from './views/Breadcrumb'
+import { ExerciseDots } from './views/ExerciseDots'
 import { useProgressState } from './useProgressState'
 
 export function ProgressScreen() {
@@ -19,6 +22,7 @@ export function ProgressScreen() {
     handleSetPart,
   } = useProgressState()
   const { getOrCreateAudioContext } = useAudio()
+  const [currentResult, setCurrentResult] = useState<ExerciseResult | null>(null)
 
   const handleStartLevel = () => {
     getOrCreateAudioContext()
@@ -26,11 +30,15 @@ export function ProgressScreen() {
   }
 
   const { phase } = state
+  const dotsResults = useMemo(() => {
+    const levelResults = phase.type === 'level-active' ? phase.level.results : []
+    return currentResult ? [...levelResults, currentResult] : levelResults
+  }, [phase, currentResult])
 
   switch (phase.type) {
     case 'module-select':
       return (
-        <Container size="xs" py="xl" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <Container size="md" py="xl" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
           <NativeSelect
             label="Voice part"
             value={state.part}
@@ -77,14 +85,21 @@ export function ProgressScreen() {
               </Button>
             </Stack>
           ) : phase.type === 'level-active' ? (
-            <ExerciseScreen
-              key={`${phase.moduleIndex}-${phase.levelIndex}`}
-              exercises={phase.level.exercises}
-              exerciseIndex={phase.level.exerciseIndex}
-              exerciseCount={phase.level.exercises.length}
-              results={phase.level.results}
-              onComplete={handleExerciseComplete}
-            />
+            <>
+              <ExerciseScreen
+                key={`${phase.moduleIndex}-${phase.levelIndex}`}
+                exercises={phase.level.exercises}
+                exerciseIndex={phase.level.exerciseIndex}
+                exerciseCount={phase.level.exercises.length}
+                onComplete={handleExerciseComplete}
+                onChordMatched={setCurrentResult}
+              />
+              <ExerciseDots
+                count={phase.level.exercises.length}
+                currentIndex={phase.level.exerciseIndex}
+                results={dotsResults}
+              />
+            </>
           ) : (
             <LevelCompleteView
               results={phase.results}

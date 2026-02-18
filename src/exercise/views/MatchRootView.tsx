@@ -21,12 +21,10 @@ export function MatchRootView({
         {pitch !== null ? `${pitch.toFixed(1)} Hz` : 'Sing now...'}
       </Text>
       <Text size="sm" c="dimmed">Target: {targetHz.toFixed(1)} Hz</Text>
-      {centsOff !== null && (
-        <Text size="md" c={isClose ? 'green' : 'red'}>
-          {centsOff > 0 ? '+' : ''}{centsOff.toFixed(0)} cents
-        </Text>
-      )}
       <PitchIndicator centsOff={centsOff} thresholdCents={thresholdCents} />
+      <Text size="md" c={isClose ? 'green' : 'red'} style={{ visibility: centsOff !== null ? 'visible' : 'hidden' }}>
+        {centsOff !== null ? `${centsOff > 0 ? '+' : ''}${centsOff.toFixed(0)} cents` : '\u00A0'}
+      </Text>
     </Stack>
   )
 }
