@@ -3,8 +3,8 @@ import type { Part } from '../../types'
 import type { ModuleSpecification } from '../../data/types'
 import type { ModuleState, ModuleAction } from './types'
 
-export function createInitialState(modules: ModuleSpecification[], part: Part | null): ModuleState {
-  const sortedModules = part != null
+export function sortModules(modules: ModuleSpecification[], part: Part | null): ModuleSpecification[] {
+  return part != null
     ? modules.map(mod => ({
         ...mod,
         levels: [...mod.levels].sort(
@@ -12,11 +12,19 @@ export function createInitialState(modules: ModuleSpecification[], part: Part | 
         ),
       }))
     : modules.map(mod => ({ ...mod, levels: [...mod.levels] }))
+}
+
+export function createInitialState(
+  modules: ModuleSpecification[],
+  part: Part | null,
+  scores?: (number | null)[][],
+): ModuleState {
+  const sortedModules = sortModules(modules, part)
   return {
     phase: { type: 'module-select' },
     modules: sortedModules,
     part,
-    moduleScores: sortedModules.map(m => m.levels.map(() => null)),
+    moduleScores: scores ?? sortedModules.map(m => m.levels.map(() => null)),
   }
 }
 
@@ -74,7 +82,7 @@ export function moduleReducer(state: ModuleState, action: ModuleAction): ModuleS
 
     case 'SET_PART': {
       if (state.phase.type !== 'module-select') return state
-      return createInitialState(state.modules, action.part)
+      return createInitialState(state.modules, action.part, action.scores)
     }
   }
 }

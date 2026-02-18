@@ -1,9 +1,10 @@
-import { useReducer, useCallback } from 'react'
+import { useReducer, useCallback, useEffect } from 'react'
 import { allModules } from '../../data'
 import type { Part } from '../../types'
 import type { ModuleSpecification } from '../../data/types'
 import type { ExerciseResult } from '../../exercise/state/types'
-import { moduleReducer, createInitialState } from './moduleReducer'
+import { moduleReducer, createInitialState, sortModules } from './moduleReducer'
+import { loadScores, saveScores } from './scoreStorage'
 
 const PART_STORAGE_KEY = 'tuning-trainer:part'
 const VALID_PARTS: Part[] = ['bass', 'bari', 'lead', 'tenor']
@@ -38,7 +39,11 @@ function getHashPath(): string {
 }
 
 function initState({ modules, part }: { modules: typeof allModules; part: Part | null }) {
-  const initial = createInitialState(modules, part)
+  // Sort first so we can load scores in the correct positional order
+  // (createInitialState will sort again, but sort is stable/idempotent)
+  const sorted = sortModules(modules, part)
+  const scores = part != null ? loadScores(part, sorted) : undefined
+  const initial = createInitialState(modules, part, scores)
   const parsed = parseLevelPath(getHashPath())
   if (parsed) {
     const moduleIndex = findModuleIndexBySlug(initial.modules, parsed.slug)
@@ -75,6 +80,14 @@ export function useModuleState() {
     dispatch({ type: 'LEVEL_COMPLETED', results, moduleIndex, levelIndex })
   }, [])
 
+  // Save scores after every level completion
+  const { part, modules, moduleScores } = state
+  useEffect(() => {
+    if (part != null) {
+      saveScores(part, modules, moduleScores)
+    }
+  }, [moduleScores, part, modules])
+
   const handleNextLevel = useCallback(() => {
     dispatch({ type: 'NEXT_LEVEL' })
   }, [])
@@ -84,7 +97,9 @@ export function useModuleState() {
   }, [])
 
   const handleSetPart = useCallback((part: Part) => {
-    dispatch({ type: 'SET_PART', part })
+    const sorted = sortModules(allModules, part)
+    const scores = loadScores(part, sorted)
+    dispatch({ type: 'SET_PART', part, scores })
   }, [])
 
   return {

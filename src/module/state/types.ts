@@ -20,4 +20,4 @@ export type ModuleAction =
   | { type: 'LEVEL_COMPLETED'; results: ExerciseResult[]; moduleIndex: number; levelIndex: number }
   | { type: 'NEXT_LEVEL' }
   | { type: 'BACK_TO_MODULES' }
-  | { type: 'SET_PART'; part: Part }
+  | { type: 'SET_PART'; part: Part; scores: (number | null)[][] }

@@ -191,22 +191,29 @@ describe('moduleReducer', () => {
 
   describe('SET_PART', () => {
     it('changes the part from module-select', () => {
-      const next = moduleReducer(initialState, { type: 'SET_PART', part: 'bass' })
+      const next = moduleReducer(initialState, { type: 'SET_PART', part: 'bass', scores: [[null, null], [null]] })
       expect(next.part).toBe('bass')
     })
 
-    it('resets scores when changing part', () => {
+    it('resets scores when changing part without saved scores', () => {
       const state: ModuleState = {
         ...initialState,
         moduleScores: initialState.moduleScores.map(row => row.map(() => 5)),
       }
-      const next = moduleReducer(state, { type: 'SET_PART', part: 'bass' })
+      const next = moduleReducer(state, { type: 'SET_PART', part: 'bass', scores: [[null, null], [null]] })
       expect(next.part).toBe('bass')
       expect(next.moduleScores.every(row => row.every(s => s === null))).toBe(true)
     })
 
+    it('uses provided scores when changing part', () => {
+      const scores: (number | null)[][] = [[7, null], [5]]
+      const next = moduleReducer(initialState, { type: 'SET_PART', part: 'bass', scores })
+      expect(next.part).toBe('bass')
+      expect(next.moduleScores).toEqual([[7, null], [5]])
+    })
+
     it('reinitializes when setting the same part', () => {
-      const next = moduleReducer(initialState, { type: 'SET_PART', part: 'lead' })
+      const next = moduleReducer(initialState, { type: 'SET_PART', part: 'lead', scores: [[null, null], [null]] })
       expect(next).not.toBe(initialState)
       expect(next.part).toBe('lead')
     })
@@ -216,7 +223,7 @@ describe('moduleReducer', () => {
         ...initialState,
         phase: { type: 'module-active', moduleIndex: 0, levelIndex: 0 },
       }
-      const next = moduleReducer(state, { type: 'SET_PART', part: 'bass' })
+      const next = moduleReducer(state, { type: 'SET_PART', part: 'bass', scores: [[null, null], [null]] })
       expect(next).toBe(state)
     })
   })
