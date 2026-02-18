@@ -1,6 +1,6 @@
-import { generateExercises, PART_INDEX } from '../exercise/exerciseGenerator'
-import type { Part } from '../exercise/types'
-import type { ModuleSpecification } from '../modules/types'
+import { generateExercises, PART_INDEX } from '../../exercise/state/exerciseGenerator'
+import type { Part } from '../../types'
+import type { ModuleSpecification } from '../../data/types'
 import type { ProgressState, ProgressAction } from './types'
 
 export function createInitialState(modules: ModuleSpecification[], part: Part): ProgressState {

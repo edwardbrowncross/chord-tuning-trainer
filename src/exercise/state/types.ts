@@ -1,7 +1,6 @@
 import type { PerceptualParams } from 'cantor-digitalis'
 
-// --- Exercise Generator ---
-export type Part = 'bass' | 'bari' | 'lead' | 'tenor'
+export type ExerciseResult = { stars: 1 | 2 | 3; durationMs: number }
 
 // --- Exercise Configuration ---
 // A single exercise config, with all parameters fully specified, to be delivered to the user

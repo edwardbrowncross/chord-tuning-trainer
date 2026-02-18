@@ -1,7 +1,7 @@
-import type { Exercise, Part } from '../exercise/types'
-import type { ModuleSpecification } from '../modules/types'
-
-export type ExerciseResult = { stars: 1 | 2 | 3; durationMs: number }
+import type { Exercise, ExerciseResult } from '../../exercise/state/types'
+export type { ExerciseResult } from '../../exercise/state/types'
+import type { Part } from '../../types'
+import type { ModuleSpecification } from '../../data/types'
 
 export type LevelProgress = {
   exerciseIndex: number

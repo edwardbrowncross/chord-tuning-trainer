@@ -3,9 +3,9 @@ import { Button, Group, Stack, Text, Title } from '@mantine/core'
 import { useAudio } from '../../audio/AudioProvider'
 import { getMidiChord } from '../../audio/intervals'
 import { makeVoice } from '../../audio/makeVoice'
-import { PART_INDEX } from '../../exercise/exerciseGenerator'
+import { PART_INDEX } from '../../exercise/state/exerciseGenerator'
 import type { ChordType } from '../../audio/intervals'
-import type { Part } from '../../exercise/types'
+import type { Part } from '../../types'
 import { IconVolume } from '@tabler/icons-react'
 
 const TONE_NAMES: Record<string, string> = {

@@ -1,15 +1,15 @@
 import { useMemo, useState } from 'react'
 import { Container, NativeSelect, Stack } from '@mantine/core'
 import { useAudio } from '../audio/AudioProvider'
-import type { Part } from '../exercise/types'
-import type { ExerciseResult } from './types'
+import type { Part } from '../types'
+import type { ExerciseResult } from './state/types'
 import { ExerciseScreen } from '../exercise/ExerciseScreen'
 import { ModuleSelectView } from './views/ModuleSelectView'
 import { LevelCompleteView } from './views/LevelCompleteView'
-import { Breadcrumb } from './views/Breadcrumb'
+import { Breadcrumb } from './components/Breadcrumb'
 import { LevelReadyView } from './views/LevelReadyView'
-import { ExerciseDots } from './views/ExerciseDots'
-import { useProgressState } from './useProgressState'
+import { ExerciseDots } from './components/ExerciseDots'
+import { useProgressState } from './state/useProgressState'
 
 export function ProgressScreen() {
   const {

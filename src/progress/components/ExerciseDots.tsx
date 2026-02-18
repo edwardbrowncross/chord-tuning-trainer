@@ -1,5 +1,5 @@
 import { Box, Group } from '@mantine/core'
-import type { ExerciseResult } from '../types'
+import type { ExerciseResult } from '../state/types'
 
 export function ExerciseDots({
   count,

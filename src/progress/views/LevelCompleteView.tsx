@@ -1,6 +1,6 @@
 import { Button, Group, Stack, Text, Title } from '@mantine/core'
 import { IconStar, IconStarFilled } from '@tabler/icons-react'
-import type { ExerciseResult } from '../types'
+import type { ExerciseResult } from '../state/types'
 
 export function LevelCompleteView({
   results,

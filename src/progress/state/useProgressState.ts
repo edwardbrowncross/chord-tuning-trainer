@@ -1,7 +1,7 @@
 import { useReducer, useCallback, useEffect, useRef } from 'react'
-import { allModules } from '../modules'
-import type { Part } from '../exercise/types'
-import type { ModuleSpecification } from '../modules/types'
+import { allModules } from '../../data'
+import type { Part } from '../../types'
+import type { ModuleSpecification } from '../../data/types'
 import { progressReducer, createInitialState } from './progressReducer'
 import type { ExerciseResult } from './types'
 
@@ -78,7 +78,9 @@ export function useProgressState() {
   // Track whether a URL change was triggered by popstate so we don't push back
   const isPopstateRef = useRef(false)
   const modulesRef = useRef(state.modules)
-  modulesRef.current = state.modules
+  useEffect(() => {
+    modulesRef.current = state.modules
+  }, [state.modules])
 
   useEffect(() => {
     localStorage.setItem(PART_STORAGE_KEY, state.part)

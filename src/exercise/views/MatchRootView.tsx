@@ -1,6 +1,6 @@
 import { Stack, Text } from '@mantine/core'
 import { centsDistance } from '../../audio/cents'
-import { PitchIndicator } from './PitchIndicator'
+import { PitchIndicator } from '../components/PitchIndicator'
 
 export function MatchRootView({
   targetHz,

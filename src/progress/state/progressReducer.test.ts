@@ -1,17 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { progressReducer, createInitialState } from './progressReducer'
 import type { ProgressState, ExerciseResult } from './types'
-import type { Exercise } from '../exercise/types'
-import type { ModuleSpecification } from '../modules/types'
+import type { Exercise } from '../../exercise/state/types'
+import type { ModuleSpecification } from '../../data/types'
 import type { PerceptualParams } from 'cantor-digitalis'
 
 // Mock exerciseGenerator to avoid randomness in tests
-vi.mock('../exercise/exerciseGenerator', () => ({
+vi.mock('../../exercise/state/exerciseGenerator', () => ({
   generateExercises: vi.fn(() => [stubExercise, stubExercise, stubExercise]),
   PART_INDEX: { bass: 0, bari: 1, lead: 2, tenor: 3 },
 }))
 
-import { generateExercises } from '../exercise/exerciseGenerator'
+import { generateExercises } from '../../exercise/state/exerciseGenerator'
 const mockGenerateExercises = vi.mocked(generateExercises)
 
 const stubVoice: PerceptualParams = {

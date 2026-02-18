@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { generateExercises, PART_RANGES, PART_INDEX } from './exerciseGenerator'
-import { getMidiChord } from '../audio/intervals'
-import { englishVowelTable } from '../audio/vowels'
-import type { LevelSpecification } from '../modules/types'
-import type { Part } from './types'
+import { getMidiChord } from '../../audio/intervals'
+import { englishVowelTable } from '../../audio/vowels'
+import type { LevelSpecification } from '../../data/types'
+import type { Part } from '../../types'
 
 const baseLevel: LevelSpecification = {
   chordType: 'major',

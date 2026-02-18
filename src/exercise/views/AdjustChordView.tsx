@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Stack, Text } from '@mantine/core'
 import { centsDistance } from '../../audio/cents'
-import { PitchIndicator } from './PitchIndicator'
-import { CircleIndicator } from './CircleIndicator'
+import { PitchIndicator } from '../components/PitchIndicator'
+import { CircleIndicator } from '../components/CircleIndicator'
 
 export function AdjustChordView({
   targetHz,

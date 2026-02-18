@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type Dispatch } from 'react'
-import { centsDistance, midiToHz } from '../audio/cents'
+import { centsDistance, midiToHz } from '../../audio/cents'
 import type { ExercisePhase, ExerciseAction } from './types'
 
 /**

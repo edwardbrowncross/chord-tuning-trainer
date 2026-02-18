@@ -1,6 +1,6 @@
 import { Breadcrumbs, Menu, UnstyledButton, Text, Group } from '@mantine/core'
 import { IconChevronDown, IconStarFilled } from '@tabler/icons-react'
-import type { LevelSpecification } from '../../modules/types'
+import type { LevelSpecification } from '../../data/types'
 
 export function Breadcrumb({
   moduleName,
