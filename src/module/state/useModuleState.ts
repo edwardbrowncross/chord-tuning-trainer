@@ -10,9 +10,9 @@ const VALID_PARTS: Part[] = ['bass', 'bari', 'lead', 'tenor']
 
 const LEVEL_PATH_RE = /^#\/module\/([a-z0-9-]+)\/level\/([a-zA-Z0-9]+)$/
 
-function loadPart(): Part {
+function loadPart(): Part | null {
   const stored = localStorage.getItem(PART_STORAGE_KEY)
-  return VALID_PARTS.includes(stored as Part) ? (stored as Part) : 'lead'
+  return VALID_PARTS.includes(stored as Part) ? (stored as Part) : null
 }
 
 function parseLevelPath(hash: string): { slug: string; voicing: string } | null {
@@ -37,7 +37,7 @@ function getHashPath(): string {
   return window.location.hash || '#/'
 }
 
-function initState({ modules, part }: { modules: typeof allModules; part: Part }) {
+function initState({ modules, part }: { modules: typeof allModules; part: Part | null }) {
   const initial = createInitialState(modules, part)
   const parsed = parseLevelPath(getHashPath())
   if (parsed) {

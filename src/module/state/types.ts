@@ -10,7 +10,7 @@ export type ModulePhase =
 export type ModuleState = {
   phase: ModulePhase
   modules: ModuleSpecification[]
-  part: Part
+  part: Part | null
   /** Best stars per [module][level], null = not yet completed */
   moduleScores: (number | null)[][]
 }

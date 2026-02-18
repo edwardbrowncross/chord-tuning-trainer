@@ -18,9 +18,9 @@ beforeEach(() => {
 
 describe('useNavigation', () => {
   describe('localStorage persistence', () => {
-    it('defaults to lead when localStorage is empty', () => {
+    it('defaults to null when localStorage is empty', () => {
       const { result } = renderHook(() => useModuleWithNavigation())
-      expect(result.current.state.part).toBe('lead')
+      expect(result.current.state.part).toBeNull()
     })
 
     it('loads a stored part from localStorage', () => {
@@ -29,10 +29,10 @@ describe('useNavigation', () => {
       expect(result.current.state.part).toBe('bass')
     })
 
-    it('falls back to lead when localStorage contains an invalid value', () => {
+    it('defaults to null when localStorage contains an invalid value', () => {
       localStorage.setItem(PART_STORAGE_KEY, 'soprano')
       const { result } = renderHook(() => useModuleWithNavigation())
-      expect(result.current.state.part).toBe('lead')
+      expect(result.current.state.part).toBeNull()
     })
 
     it('persists part to localStorage when it changes', () => {

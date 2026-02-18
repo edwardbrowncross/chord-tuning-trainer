@@ -205,9 +205,10 @@ describe('moduleReducer', () => {
       expect(next.moduleScores.every(row => row.every(s => s === null))).toBe(true)
     })
 
-    it('is a no-op when part is already selected', () => {
+    it('reinitializes when setting the same part', () => {
       const next = moduleReducer(initialState, { type: 'SET_PART', part: 'lead' })
-      expect(next).toBe(initialState)
+      expect(next).not.toBe(initialState)
+      expect(next.part).toBe('lead')
     })
 
     it('is a no-op when not in module-select phase', () => {

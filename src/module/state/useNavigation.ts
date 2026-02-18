@@ -56,7 +56,9 @@ export function useNavigation(
 
   // Persist part to localStorage
   useEffect(() => {
-    localStorage.setItem(PART_STORAGE_KEY, state.part)
+    if (state.part != null) {
+      localStorage.setItem(PART_STORAGE_KEY, state.part)
+    }
   }, [state.part])
 
   // Sync URL when the navigable location (module/level identity) changes
