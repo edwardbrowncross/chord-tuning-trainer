@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Button, Container, Modal, NativeSelect, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { ActionIcon, Button, Container, Group, Modal, NativeSelect, SimpleGrid, Stack, Text, Title, Tooltip } from '@mantine/core'
 import type { Part } from '../types'
 import type { ExerciseResult } from '../exercise/state/types'
 import { ModuleSelectView } from './views/ModuleSelectView'
@@ -8,6 +8,7 @@ import { Breadcrumb } from './components/Breadcrumb'
 import { LevelScreen } from '../level/LevelScreen'
 import { useModuleState } from './state/useModuleState'
 import { useNavigation } from './state/useNavigation'
+import { IconBrandGithubFilled } from '@tabler/icons-react'
 
 const PART_OPTIONS: { value: Part; label: string, colour: string }[] = [
   { value: 'bass', label: 'Bass', colour: 'blue' },
@@ -43,7 +44,7 @@ export function ModuleScreen() {
 
   if (state.part == null) {
     return (
-      <Modal opened withCloseButton={false} onClose={() => {}} centered title={<Title order={3}>Welcome</Title>}>
+      <Modal opened withCloseButton={false} onClose={() => { }} centered title={<Title order={3}>Welcome</Title>}>
         <Text mb="md">Select your voice part to get started.</Text>
         <SimpleGrid cols={2}>
           {PART_OPTIONS.map(({ value, label, colour }) => (
@@ -60,13 +61,29 @@ export function ModuleScreen() {
     case 'module-select':
       return (
         <Container size="md" py="xl" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-          <NativeSelect
-            label="Voice part"
-            value={state.part}
-            onChange={(e) => handleSetPart(e.currentTarget.value as Part)}
-            data={PART_OPTIONS}
-            style={{ alignSelf: 'flex-end', display: 'flex', alignItems: 'center', gap: 8 }}
-          />
+          <Group justify="space-between" w="100%" mb="xl">
+            <Tooltip label="View source on GitHub" withArrow position="right">
+              <ActionIcon
+                component="a"
+                href="https://github.com/edwardbrowncross/chord-tuning-trainer"
+                target="_blank"
+                variant="filled"
+                color="dark"
+                size="lg"
+                aria-label="View source on GitHub"
+                radius="xl"
+              >
+                <IconBrandGithubFilled size={22} />
+              </ActionIcon>
+            </Tooltip>
+            <NativeSelect
+              label="Voice part"
+              value={state.part}
+              onChange={(e) => handleSetPart(e.currentTarget.value as Part)}
+              data={PART_OPTIONS}
+              style={{ alignSelf: 'flex-end', display: 'flex', alignItems: 'center', gap: 8 }}
+            />
+          </Group>
           <Stack align="center" justify="center" style={{ flex: 1 }}>
             <ModuleSelectView
               modules={state.modules}
