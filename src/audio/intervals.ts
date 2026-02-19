@@ -3,6 +3,7 @@ export const JUST_INTERVALS = {
   unison: 0,                              // 1:1
   minorSecond: 12 * Math.log2(16 / 15),   // 16:15
   majorSecond: 12 * Math.log2(9 / 8),     // 9:8
+  septimalThird: 12 * Math.log2(7 / 6),   // 7:6
   minorThird: 12 * Math.log2(6 / 5),      // 6:5
   majorThird: 12 * Math.log2(5 / 4),      // 5:4 ≈ 3.8631
   perfectFourth: 12 * Math.log2(4 / 3),   // 4:3
@@ -67,7 +68,7 @@ export const CHORD_TYPES = {
   },
   'minor-sixth': {
     '1': JUST_INTERVALS.unison,
-    '3': JUST_INTERVALS.minorThird,
+    '3': JUST_INTERVALS.septimalThird,
     '5': JUST_INTERVALS.perfectFifth,
     '6': JUST_INTERVALS.majorSixth,
   },
