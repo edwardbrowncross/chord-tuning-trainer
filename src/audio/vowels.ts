@@ -90,36 +90,36 @@ export const englishVowelTable = {
     //   ],
     //   volumeAdjustment: 0,
     // },
-    {
-      // 444.2	647.2	822.1	142.5	2640.6	88.5	3355.0	188.4	4281.6	59.5
-      ipa: "ɔː",
-      h: 0,
-      v: 0.35,
-      formants: [
-        { frequency: 444.2, amplitude: -15, bandwidth: 150 },
-        { frequency: 822.1, amplitude: -5, bandwidth: 150 },
-        { frequency: 2640.6, amplitude: -15, bandwidth: 150 },
-        { frequency: 3355.0, amplitude: -15, bandwidth: 300 },
-        { frequency: 4281.6, amplitude: -20, bandwidth: 300 },
-        { frequency: 6543.4, amplitude: -20, bandwidth: 150 },
-      ],
-      volumeAdjustment: -1,
-    },
     // {
-    //   // 456.7	192.2	968.8	116.5	2746.0	184.2	3359.2	662.8	4265.8	543.2
-    //   ipa: "ʊ",
-    //   h: 0.1,
-    //   v: 0.4,
+    //   // 444.2	647.2	822.1	142.5	2640.6	88.5	3355.0	188.4	4281.6	59.5
+    //   ipa: "ɔː",
+    //   h: 0,
+    //   v: 0.35,
     //   formants: [
-    //     { frequency: 456.7, amplitude: -10, bandwidth: 150 },
-    //     { frequency: 968.8, amplitude: -10, bandwidth: 150 },
-    //     { frequency: 2746.0, amplitude: -15, bandwidth: 150 },
-    //     { frequency: 3359.2, amplitude: -15, bandwidth: 300 },
-    //     { frequency: 4265.8, amplitude: -20, bandwidth: 300 },
-    //     { frequency: 6718.4, amplitude: -20, bandwidth: 150 },
+    //     { frequency: 444.2, amplitude: -15, bandwidth: 150 },
+    //     { frequency: 822.1, amplitude: -5, bandwidth: 150 },
+    //     { frequency: 2640.6, amplitude: -15, bandwidth: 150 },
+    //     { frequency: 3355.0, amplitude: -15, bandwidth: 300 },
+    //     { frequency: 4281.6, amplitude: -20, bandwidth: 300 },
+    //     { frequency: 6543.4, amplitude: -20, bandwidth: 150 },
     //   ],
     //   volumeAdjustment: -1,
     // },
+    {
+      // 456.7	192.2	968.8	116.5	2746.0	184.2	3359.2	662.8	4265.8	543.2
+      ipa: "ʊ",
+      h: 0.1,
+      v: 0.4,
+      formants: [
+        { frequency: 456.7, amplitude: -10, bandwidth: 150 },
+        { frequency: 968.8, amplitude: -10, bandwidth: 150 },
+        { frequency: 2746.0, amplitude: -15, bandwidth: 150 },
+        { frequency: 3359.2, amplitude: -15, bandwidth: 300 },
+        { frequency: 4265.8, amplitude: -20, bandwidth: 300 },
+        { frequency: 6718.4, amplitude: -20, bandwidth: 150 },
+      ],
+      volumeAdjustment: -1,
+    },
     {
       // 1.0	0.0002	5	301.5	88.1	1149.6	246.0	2482.0	411.3	3700.3	530.6	4511.2	406.0
       ipa: "uː",
