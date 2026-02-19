@@ -1,49 +1,8 @@
 [
     {
-        "name": "Suspended Fourths",
-        "slug": "suspended-fourths",
-        "description": "",
-        "difficulty": "beginner",
-        "levels": [
-            {
-                "chordType": "suspended",
-                "voicing": "4145",
-                "repeats": 3,
-                "partwiseEaseOfTuning": [
-                    0.2998042701336405,
-                    0.2288528297713343,
-                    0.241615568174944,
-                    0.11735229955374468
-                ]
-            },
-            {
-                "chordType": "suspended",
-                "voicing": "1145",
-                "repeats": 2,
-                "partwiseEaseOfTuning": [
-                    0.3903755051713499,
-                    0.3351784977671498,
-                    0.07208835917236495,
-                    0.21981059798807312
-                ]
-            },
-            {
-                "chordType": "suspended",
-                "voicing": "1451",
-                "repeats": 2,
-                "partwiseEaseOfTuning": [
-                    0.3159178621884283,
-                    0.14926429939634567,
-                    0.14782327283169625,
-                    0.27818577088328145
-                ]
-            }
-        ]
-    },
-    {
         "name": "Major Triads",
         "slug": "major-triads",
-        "description": "",
+        "description": "Happy little chords!",
         "difficulty": "beginner",
         "levels": [
             {
@@ -161,7 +120,7 @@
     {
         "name": "Minor Triads",
         "slug": "minor-triads",
-        "description": "",
+        "description": "So sad",
         "difficulty": "beginner",
         "levels": [
             {
@@ -246,7 +205,7 @@
     {
         "name": "Major Add Nine",
         "slug": "major-add-nine",
-        "description": "",
+        "description": "When you like your jazz mild",
         "difficulty": "intermediate",
         "levels": [
             {
@@ -309,7 +268,7 @@
     {
         "name": "Major Sevenths",
         "slug": "major-sevenths",
-        "description": "",
+        "description": "The rarest seventh, but easiest to tune",
         "difficulty": "beginner",
         "levels": [
             {
@@ -370,53 +329,42 @@
         ]
     },
     {
-        "name": "Augmented Triads",
-        "slug": "augmented-triads",
-        "description": "",
-        "difficulty": "advanced",
+        "name": "Suspended Fourths",
+        "slug": "suspended-fourths",
+        "description": "That's NOT barbershop!",
+        "difficulty": "beginner",
         "levels": [
             {
-                "chordType": "augmented",
-                "voicing": "5351",
+                "chordType": "suspended",
+                "voicing": "4145",
                 "repeats": 3,
                 "partwiseEaseOfTuning": [
-                    0.1961194635572847,
-                    0.10055839542140214,
-                    0.22277760298159932,
-                    0.01500694398087421
+                    0.2998042701336405,
+                    0.2288528297713343,
+                    0.241615568174944,
+                    0.11735229955374468
                 ]
             },
             {
-                "chordType": "augmented",
-                "voicing": "5135",
-                "repeats": 3,
-                "partwiseEaseOfTuning": [
-                    0.15924728160713847,
-                    0.05201540151193185,
-                    0.08949674411506392,
-                    0.1675466552487006
-                ]
-            },
-            {
-                "chordType": "augmented",
-                "voicing": "1513",
+                "chordType": "suspended",
+                "voicing": "1145",
                 "repeats": 2,
                 "partwiseEaseOfTuning": [
-                    0.25056715876757063,
-                    0.004973264797966115,
-                    0.19734701016706624,
-                    0.08831287600368157
+                    0.3903755051713499,
+                    0.3351784977671498,
+                    0.07208835917236495,
+                    0.21981059798807312
                 ]
             },
             {
-                "chordType": "augmented",
-                "voicing": "3135",
+                "chordType": "suspended",
+                "voicing": "1451",
                 "repeats": 2,
                 "partwiseEaseOfTuning": [
-                    0.27367277294466863,
-                    0.06820748936208475,
-                    0.24328573395948094,
-                    0.09202224633859796
+                    0.3159178621884283,
+                    0.14926429939634567,
+                    0.14782327283169625,
+                    0.27818577088328145
                 ]
             }
         ]
@@ -424,7 +372,7 @@
     {
         "name": "Dominant Sevenths",
         "slug": "dominant-sevenths",
-        "description": "",
+        "description": "That's barbershop! *jazzhands*",
         "difficulty": "intermediate",
         "levels": [
             {
@@ -550,62 +498,10 @@
             }
         ]
     },
-    {
-        "name": "Diminished Triads",
-        "slug": "diminished-triads",
-        "description": "",
-        "difficulty": "intermediate",
-        "levels": [
-            {
-                "chordType": "diminished",
-                "voicing": "3135",
-                "repeats": 3,
-                "partwiseEaseOfTuning": [
-                    0.19793484852198254,
-                    0.034995436247381995,
-                    0.20710089171347124,
-                    0.007309567308333653
-                ]
-            },
-            {
-                "chordType": "diminished",
-                "voicing": "1535",
-                "repeats": 2,
-                "partwiseEaseOfTuning": [
-                    0.05019456645249023,
-                    0.14651704444536456,
-                    0.03714605615131139,
-                    0.12138659840219301
-                ]
-            },
-            {
-                "chordType": "diminished",
-                "voicing": "3153",
-                "repeats": 2,
-                "partwiseEaseOfTuning": [
-                    0.08960912001263915,
-                    0.03479750951685012,
-                    0.0036557713882807708,
-                    0.10589812013506017
-                ]
-            },
-            {
-                "chordType": "diminished",
-                "voicing": "5135",
-                "repeats": 2,
-                "partwiseEaseOfTuning": [
-                    0.1723101894699769,
-                    0.03865926116559115,
-                    0.013568091570396623,
-                    0.156474756619565
-                ]
-            }
-        ]
-    },
-    {
+        {
         "name": "Minor Sixths",
         "slug": "minor-sixths",
-        "description": "",
+        "description": "The penultimate chord in all the tags",
         "difficulty": "advanced",
         "levels": [
             {
@@ -699,9 +595,61 @@
         ]
     },
     {
+        "name": "Diminished Triads",
+        "slug": "diminished-triads",
+        "description": "At least its not a diminished seventh",
+        "difficulty": "intermediate",
+        "levels": [
+            {
+                "chordType": "diminished",
+                "voicing": "3135",
+                "repeats": 3,
+                "partwiseEaseOfTuning": [
+                    0.19793484852198254,
+                    0.034995436247381995,
+                    0.20710089171347124,
+                    0.007309567308333653
+                ]
+            },
+            {
+                "chordType": "diminished",
+                "voicing": "1535",
+                "repeats": 2,
+                "partwiseEaseOfTuning": [
+                    0.05019456645249023,
+                    0.14651704444536456,
+                    0.03714605615131139,
+                    0.12138659840219301
+                ]
+            },
+            {
+                "chordType": "diminished",
+                "voicing": "3153",
+                "repeats": 2,
+                "partwiseEaseOfTuning": [
+                    0.08960912001263915,
+                    0.03479750951685012,
+                    0.0036557713882807708,
+                    0.10589812013506017
+                ]
+            },
+            {
+                "chordType": "diminished",
+                "voicing": "5135",
+                "repeats": 2,
+                "partwiseEaseOfTuning": [
+                    0.1723101894699769,
+                    0.03865926116559115,
+                    0.013568091570396623,
+                    0.156474756619565
+                ]
+            }
+        ]
+    },
+    {
         "name": "Dominant Ninth",
         "slug": "dominant-ninths",
-        "description": "(no five)",
+        "description": "Barbershop seventh with a 9 but no 5",
         "difficulty": "intermediate",
         "levels": [
             {
@@ -753,7 +701,7 @@
     {
         "name": "Minor Sevenths",
         "slug": "minor-sevenths",
-        "description": "",
+        "description": "That's sad barbershop *sadhands*",
         "difficulty": "advanced",
         "levels": [
             {
@@ -846,10 +794,62 @@
             }
         ]
     },
+        {
+        "name": "Augmented Triads",
+        "slug": "augmented-triads",
+        "description": "An occasional passing chord",
+        "difficulty": "advanced",
+        "levels": [
+            {
+                "chordType": "augmented",
+                "voicing": "5351",
+                "repeats": 3,
+                "partwiseEaseOfTuning": [
+                    0.1961194635572847,
+                    0.10055839542140214,
+                    0.22277760298159932,
+                    0.01500694398087421
+                ]
+            },
+            {
+                "chordType": "augmented",
+                "voicing": "5135",
+                "repeats": 3,
+                "partwiseEaseOfTuning": [
+                    0.15924728160713847,
+                    0.05201540151193185,
+                    0.08949674411506392,
+                    0.1675466552487006
+                ]
+            },
+            {
+                "chordType": "augmented",
+                "voicing": "1513",
+                "repeats": 2,
+                "partwiseEaseOfTuning": [
+                    0.25056715876757063,
+                    0.004973264797966115,
+                    0.19734701016706624,
+                    0.08831287600368157
+                ]
+            },
+            {
+                "chordType": "augmented",
+                "voicing": "3135",
+                "repeats": 2,
+                "partwiseEaseOfTuning": [
+                    0.27367277294466863,
+                    0.06820748936208475,
+                    0.24328573395948094,
+                    0.09202224633859796
+                ]
+            }
+        ]
+    },
     {
         "name": "Diminished Sevenths",
         "slug": "diminished-sevenths",
-        "description": "",
+        "description": "What does in-tune even mean any more?",
         "difficulty": "advanced",
         "levels": [
             {
