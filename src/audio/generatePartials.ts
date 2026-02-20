@@ -13,9 +13,11 @@ export type PartialsResult = {
  */
 export function generatePartials(
   synthParams: SynthParams,
-  partialsCount: number = 64,
+  maxFrequency: number = 6000,
 ): PartialsResult {
   const f0 = synthParams.f0;
+
+  const partialsCount = Math.floor(maxFrequency / f0);
 
   const frequencies = Array.from(
     { length: partialsCount },
@@ -28,7 +30,7 @@ export function generatePartials(
   const imag = new Float32Array(partialsCount);
 
   for (let i = 0; i < partialsCount; i++) {
-    real[i] = amplitudes[i] / 20; // Scale down to prevent clipping
+    real[i] = 0.1 * (amplitudes[i] * 64) / partialsCount;
   }
 
   return { real, imag };

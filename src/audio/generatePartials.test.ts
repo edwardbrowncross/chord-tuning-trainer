@@ -23,29 +23,33 @@ const defaultSynthParams: SynthParams =
   generateSynthParams(defaultPerceptualParams);
 
 describe("generatePartials", () => {
-  it("passes frequencies that are multiples of f0 to getFrequencyResponse", async () => {
+  it("passes frequencies that are multiples of f0 up to maxFrequency to getFrequencyResponse", async () => {
     const { Voice } = await import("cantor-digitalis");
     const spy = vi.spyOn(Voice, "getFrequencyResponse");
 
-    const partialsCount = 8;
-    generatePartials(defaultSynthParams, partialsCount);
-
     const f0 = defaultSynthParams.f0;
+    const maxFrequency = f0 * 8;
+    generatePartials(defaultSynthParams, maxFrequency);
+
+    const expectedCount = Math.floor(maxFrequency / f0);
 
     expect(spy).toHaveBeenCalledOnce();
     const frequencies = spy.mock.calls[0][0];
-    expect(frequencies).toHaveLength(partialsCount);
-    for (let i = 0; i < partialsCount; i++) {
+    expect(frequencies).toHaveLength(expectedCount);
+    for (let i = 0; i < expectedCount; i++) {
       expect(frequencies[i]).toBeCloseTo(f0 * (i + 1));
     }
 
     spy.mockRestore();
   });
 
-  it("returns arrays of the requested length", () => {
-    const { real, imag } = generatePartials(defaultSynthParams, 16);
-    expect(real).toHaveLength(16);
-    expect(imag).toHaveLength(16);
+  it("returns arrays sized by maxFrequency / f0", () => {
+    const f0 = defaultSynthParams.f0;
+    const maxFrequency = f0 * 16;
+    const expectedCount = Math.floor(maxFrequency / f0);
+    const { real, imag } = generatePartials(defaultSynthParams, maxFrequency);
+    expect(real).toHaveLength(expectedCount);
+    expect(imag).toHaveLength(expectedCount);
   });
 
   it("returns all zeros for imag", () => {
@@ -54,7 +58,7 @@ describe("generatePartials", () => {
   });
 
   it("returns real values that are not all zero", () => {
-    const { real } = generatePartials(defaultSynthParams, 16);
+    const { real } = generatePartials(defaultSynthParams);
     expect(real.some((v) => v !== 0)).toBe(true);
   });
 });
