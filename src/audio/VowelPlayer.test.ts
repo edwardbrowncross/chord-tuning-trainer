@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { PerceptualParams, SynthParams } from "cantor-digitalis";
-import { VowelPlayer } from "./VowelPlayer";
+import { VowelPlayer, type VoiceParams } from "./VowelPlayer";
 
 const defaultParams: PerceptualParams = {
   pitch: 0.5,
@@ -67,10 +67,19 @@ function createMockOscillatorNode() {
   };
 }
 
+function createMockStereoPannerNode() {
+  return {
+    pan: { value: 0 },
+    connect: vi.fn(),
+    disconnect: vi.fn(),
+  };
+}
+
 function createMockAudioContext() {
   const destination = {} as AudioDestinationNode;
   const gains: ReturnType<typeof createMockGainNode>[] = [];
   const oscillators: ReturnType<typeof createMockOscillatorNode>[] = [];
+  const panners: ReturnType<typeof createMockStereoPannerNode>[] = [];
 
   return {
     currentTime: 0,
@@ -86,9 +95,15 @@ function createMockAudioContext() {
       return o;
     }),
     createPeriodicWave: vi.fn(() => ({}) as PeriodicWave),
+    createStereoPanner: vi.fn(() => {
+      const p = createMockStereoPannerNode();
+      panners.push(p);
+      return p;
+    }),
     // Expose for assertions
     _gains: gains,
     _oscillators: oscillators,
+    _panners: panners,
   };
 }
 
@@ -265,5 +280,59 @@ describe("VowelPlayer", () => {
     player.play(defaultParams);
 
     expect(ctx.createOscillator).toHaveBeenCalledTimes(2);
+  });
+
+  describe("panning", () => {
+    const pannedParams: VoiceParams = { ...defaultParams, pan: 0.5 };
+
+    it("creates a StereoPannerNode and sets pan value when pan is provided", () => {
+      const player = new VowelPlayer(ctx as unknown as AudioContext);
+      player.play(pannedParams);
+
+      expect(ctx.createStereoPanner).toHaveBeenCalledOnce();
+      const panner = ctx._panners[0];
+      expect(panner.pan.value).toBe(0.5);
+    });
+
+    it("routes gate → panner → masterGain when pan is set", () => {
+      const player = new VowelPlayer(ctx as unknown as AudioContext);
+      player.play(pannedParams);
+
+      const masterGain = ctx._gains[0];
+      const gate = ctx._gains[1];
+      const panner = ctx._panners[0];
+
+      expect(gate.connect).toHaveBeenCalledWith(panner);
+      expect(panner.connect).toHaveBeenCalledWith(masterGain);
+      // gate should NOT connect directly to masterGain
+      expect(gate.connect).not.toHaveBeenCalledWith(masterGain);
+    });
+
+    it("does not create a StereoPannerNode when pan is 0", () => {
+      const player = new VowelPlayer(ctx as unknown as AudioContext);
+      player.play({ ...defaultParams, pan: 0 });
+
+      expect(ctx.createStereoPanner).not.toHaveBeenCalled();
+    });
+
+    it("does not create a StereoPannerNode when pan is absent", () => {
+      const player = new VowelPlayer(ctx as unknown as AudioContext);
+      player.play(defaultParams);
+
+      expect(ctx.createStereoPanner).not.toHaveBeenCalled();
+    });
+
+    it("disconnects panner via onended", () => {
+      const player = new VowelPlayer(ctx as unknown as AudioContext);
+      player.play(pannedParams);
+
+      const panner = ctx._panners[0];
+      const osc = ctx._oscillators[0];
+
+      player.stop();
+      osc.onended!();
+
+      expect(panner.disconnect).toHaveBeenCalled();
+    });
   });
 });

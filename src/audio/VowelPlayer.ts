@@ -11,7 +11,10 @@ export const defaultSynthOptions: SynthOptions = {
   harmonicCoincidenceAttenuation: true,
 };
 
-type ActiveVoice = { oscillator: OscillatorNode; gate: GainNode };
+/** `PerceptualParams` extended with an optional stereo pan value in [-1, 1]. */
+export type VoiceParams = PerceptualParams & { pan?: number };
+
+type ActiveVoice = { oscillator: OscillatorNode; gate: GainNode; panner?: StereoPannerNode };
 
 export class VowelPlayer {
   private readonly ctx: AudioContext;
@@ -31,18 +34,18 @@ export class VowelPlayer {
     this.masterGain.gain.value = value;
   }
 
-  play(params: PerceptualParams | PerceptualParams[], { rampTime = 0.015 } = {}): void {
+  play(params: VoiceParams | VoiceParams[], { rampTime = 0.015 } = {}): void {
     this.stop({ rampTime });
     const paramsArray = Array.isArray(params) ? params : [params];
     this.startVoices(paramsArray, rampTime, paramsArray.length);
   }
 
-  addVoices(params: PerceptualParams | PerceptualParams[], { rampTime = 0.015, totalVoiceCount }: { rampTime?: number; totalVoiceCount?: number } = {}): void {
+  addVoices(params: VoiceParams | VoiceParams[], { rampTime = 0.015, totalVoiceCount }: { rampTime?: number; totalVoiceCount?: number } = {}): void {
     const paramsArray = Array.isArray(params) ? params : [params];
     this.startVoices(paramsArray, rampTime, totalVoiceCount ?? paramsArray.length);
   }
 
-  private startVoices(paramsArray: PerceptualParams[], rampTime: number, voiceCount: number): void {
+  private startVoices(paramsArray: VoiceParams[], rampTime: number, voiceCount: number): void {
     for (const p of paramsArray) {
       const synthParams = generateSynthParams(p, this.options);
       const { real, imag } = generatePartials(synthParams);
@@ -60,24 +63,34 @@ export class VowelPlayer {
       );
 
       oscillator.connect(gate);
-      gate.connect(this.masterGain);
-      oscillator.start();
 
-      this.activeVoices.push({ oscillator, gate });
+      if (p.pan !== undefined && p.pan !== 0) {
+        const panner = this.ctx.createStereoPanner();
+        panner.pan.value = p.pan;
+        gate.connect(panner);
+        panner.connect(this.masterGain);
+        oscillator.start();
+        this.activeVoices.push({ oscillator, gate, panner });
+      } else {
+        gate.connect(this.masterGain);
+        oscillator.start();
+        this.activeVoices.push({ oscillator, gate });
+      }
     }
   }
 
   stop({ rampTime = 0.015 } = {}): void {
     const now = this.ctx.currentTime;
 
-    for (const { oscillator, gate } of this.activeVoices) {
+    for (const { oscillator, gate, panner } of this.activeVoices) {
       gate.gain.cancelScheduledValues(now);
       gate.gain.setValueAtTime(gate.gain.value, now);
       gate.gain.linearRampToValueAtTime(0.001, now + rampTime);
       oscillator.stop(now + rampTime);
       oscillator.onended = () => {
-        gate.disconnect();
         oscillator.disconnect();
+        gate.disconnect();
+        panner?.disconnect();
       };
     }
 

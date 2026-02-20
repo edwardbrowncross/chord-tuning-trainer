@@ -1,4 +1,4 @@
-import type { PerceptualParams } from 'cantor-digitalis'
+import type { VoiceParams } from '../../audio/VowelPlayer'
 
 export type ExerciseResult = { stars: 1 | 2 | 3; durationMs: number; meanOffsetCents: number }
 
@@ -6,11 +6,11 @@ export type ExerciseResult = { stars: 1 | 2 | 3; durationMs: number; meanOffsetC
 // A single exercise config, with all parameters fully specified, to be delivered to the user
 export type Exercise = {
   /** Single voice for match-root playback (the note the user will sing) */
-  referenceTone: PerceptualParams
+  referenceTone: VoiceParams
   /** MIDI note number for the user's destination pitch in the chord */
   targetNote: number
   /** The other 3 chord voices (played during adjust-chord) */
-  chordVoices: PerceptualParams[]
+  chordVoices: VoiceParams[]
   /** How close (cents) the user must be to pass adjust-chord */
   adjustThresholdCents: number
   /** How long (ms) the user must sustain within threshold for adjust-chord */

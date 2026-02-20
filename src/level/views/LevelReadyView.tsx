@@ -3,6 +3,7 @@ import { Button, Group, Stack, Text, Title } from '@mantine/core'
 import { useAudio, useAudioSettings } from '../../audio/AudioProvider'
 import { getMidiChord } from '../../audio/intervals'
 import { makeVoice } from '../../audio/makeVoice'
+import { getPan } from '../../audio/panning'
 import { PART_INDEX } from '../../exercise/state/exerciseGenerator'
 import type { ChordType } from '../../audio/intervals'
 import type { Part } from '../../types'
@@ -68,6 +69,7 @@ export function LevelReadyView({ chordTypeName, chordType, voicing, part, onStar
 
     // Build voices with the user's part last and slightly louder
     // Track the original voicing index so we can animate the right digit
+    const partsByIndex: Part[] = ['bass', 'bari', 'lead', 'tenor']
     const order = [
       ...chordNotes.flatMap((midi, i) => i !== partIdx ? [{ midi, isUserPart: false, voicingIdx: i }] : []),
       { midi: chordNotes[partIdx], isUserPart: true, voicingIdx: partIdx },
@@ -77,9 +79,13 @@ export function LevelReadyView({ chordTypeName, chordType, voicing, part, onStar
     setActiveVoices(new Set())
     for (let i = 0; i < order.length; i++) {
       const { midi, isUserPart, voicingIdx } = order[i]
-      const voice = makeVoice(midi, isUserPart
-        ? { vocalEffort: part === 'tenor' ? 0.8 : 0.7, vocalTractSize: audioSettings.vocalTractSize }
-        : { vocalTractSize: audioSettings.vocalTractSize })
+      const pan = isUserPart ? 0 : getPan(part, partsByIndex[voicingIdx])
+      const voice = {
+        ...makeVoice(midi, isUserPart
+          ? { vocalEffort: part === 'tenor' ? 0.8 : 0.7, vocalTractSize: audioSettings.vocalTractSize }
+          : { vocalTractSize: audioSettings.vocalTractSize }),
+        pan,
+      }
       const id = setTimeout(() => {
         player.addVoices(voice, { rampTime: VOICE_RAMP_TIME, totalVoiceCount: 4 })
         setActiveVoices(prev => new Set(prev).add(voicingIdx))

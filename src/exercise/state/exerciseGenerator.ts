@@ -2,6 +2,7 @@ import type { PerceptualParams } from 'cantor-digitalis'
 import type { AudioSettings } from '../../audio/AudioProvider'
 import { getMidiChord } from '../../audio/intervals'
 import { makeVoice } from '../../audio/makeVoice'
+import { getPan } from '../../audio/panning'
 import { englishVowelTable } from '../../audio/vowels'
 import type { LevelSpecification } from '../../data/types'
 import type { Part } from '../../types'
@@ -22,6 +23,9 @@ export const PART_INDEX: Record<Part, number> = {
   lead: 2,
   tenor: 3,
 }
+
+/** Reverse mapping: voicing index → Part */
+const INDEX_TO_PART: Part[] = ['bass', 'bari', 'lead', 'tenor']
 
 
 /** Random integer in [min, max] inclusive */
@@ -99,10 +103,12 @@ export function generateExercises(level: LevelSpecification, part: Part, audioSe
       : vowelOverride
 
     // Generate the three other chord voices (all voices except the user's part)
-    const chordVoices: PerceptualParams[] = []
+    const chordVoices = []
     for (let j = 0; j < 4; j++) {
       if (j === partIdx) continue
-      chordVoices.push(makeVoice(chordNotes[j], tractOverride))
+      const voicePart = INDEX_TO_PART[j]
+      const pan = getPan(part, voicePart)
+      chordVoices.push({ ...makeVoice(chordNotes[j], tractOverride), pan })
     }
 
     // Generate the offset for the starting reference tone
