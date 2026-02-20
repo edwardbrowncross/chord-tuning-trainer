@@ -1,4 +1,4 @@
-import { Button, Modal, Text, Title } from '@mantine/core'
+import { Button, Modal, Text } from '@mantine/core'
 import { useAudioSettings } from '../../audio/AudioProvider'
 
 const VOCAL_TRACT_SIZES = [
@@ -13,7 +13,7 @@ export function SettingsModal({ opened, onClose }: { opened: boolean; onClose: (
   const [audioSettings, setAudioSettings] = useAudioSettings()
 
   return (
-    <Modal opened={opened} onClose={onClose} title={<Title order={4}>Settings</Title>} centered>
+    <Modal opened={opened} onClose={onClose} title="Settings" centered transitionProps={{ transition: 'fade' }}>
       <Text size="sm" c="dimmed" mb="xs">Voice synthesis model</Text>
       <Button.Group>
         {VOCAL_TRACT_SIZES.map(({ label, value }) => (
