@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Button, Card, Group, Modal, SimpleGrid, Stack, Text, Title, UnstyledButton } from '@mantine/core'
+import { Button, Card, Group, SimpleGrid, Stack, Text, Title, UnstyledButton } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconStarFilled } from '@tabler/icons-react'
 import type { ModuleSpecification } from '../../data/types'
+import { LevelSelectModal } from '../components/LevelSelectModal'
 
 export function ModuleSelectView({
   modules,
@@ -64,38 +65,13 @@ export function ModuleSelectView({
         })}
       </Stack>
 
-      <Modal opened={opened} onClose={close} title={modalModule?.name} size="md">
-        <Stack gap="sm">
-          {modalModule?.levels.map((level, li) => {
-            const maxStars = (level.repeats ?? 1) * 3
-            const score = modalScores[li]
-            return (
-              <Group key={li} justify="space-between">
-                <Group gap="sm" align="center">
-                  <Text size="sm" fw={500}>Level {li + 1}</Text>
-                  <Text size="sm" c="dimmed">({level.voicing})</Text>
-                  <Group gap={4} align="center">
-                    <Text size="xs" c="dimmed">
-                      {`${score ?? 0}/${maxStars}`}
-                    </Text>
-                    <IconStarFilled size={12} color={score && score > 0 ? "gold" : "lightgray"} />
-                  </Group>
-                </Group>
-                <Button
-                  size="xs"
-                  variant="light"
-                  onClick={() => {
-                    close()
-                    onSelectLevel(modalModuleIndex, li)
-                  }}
-                >
-                  {score ? "Retry" : "Start"}
-                </Button>
-              </Group>
-            )
-          })}
-        </Stack>
-      </Modal>
+      <LevelSelectModal
+        opened={opened}
+        onClose={close}
+        module={modalModule}
+        scores={modalScores}
+        onSelectLevel={(li) => onSelectLevel(modalModuleIndex, li)}
+      />
     </>
   )
 }
