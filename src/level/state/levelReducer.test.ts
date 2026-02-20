@@ -15,7 +15,7 @@ const mockGenerateExercises = vi.mocked(generateExercises)
 const stubVoice: PerceptualParams = {
   pitch: 0, pitchOffset: 50, vocalEffort: 0.7, vowelHeight: 0.5,
   vowelBackness: 0.5, tenseness: 0.5, breathiness: 0, roughness: 0,
-  vocalTractSize: 0.3, isFalsetto: false,
+  vocalTractSize: 0.28, isFalsetto: false,
 }
 
 const stubExercise: Exercise = {
@@ -54,7 +54,7 @@ describe('createLevelState', () => {
 
   it('calls generateExercises with levelSpec and part', () => {
     createLevelState(testLevelSpec, 'bass')
-    expect(mockGenerateExercises).toHaveBeenCalledWith(testLevelSpec, 'bass')
+    expect(mockGenerateExercises).toHaveBeenCalledWith(testLevelSpec, 'bass', undefined)
   })
 })
 

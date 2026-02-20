@@ -1,5 +1,5 @@
 import { useReducer, useCallback, useEffect, useRef, useState, useMemo } from 'react'
-import { useAudio } from '../../audio/AudioProvider'
+import { useAudio, useAudioSettings } from '../../audio/AudioProvider'
 import { generateExercises } from '../../exercise/state/exerciseGenerator'
 import type { LevelSpecification } from '../../data/types'
 import type { Part } from '../../types'
@@ -15,8 +15,11 @@ export function useLevelState({
   part: Part
   onLevelComplete: (results: ExerciseResult[]) => void
 }) {
-  const [state, dispatch] = useReducer(levelReducer, { levelSpec, part }, ({ levelSpec, part }) =>
-    createLevelState(levelSpec, part),
+  const [audioSettings] = useAudioSettings()
+  const [state, dispatch] = useReducer(
+    levelReducer,
+    { levelSpec, part, audioSettings },
+    ({ levelSpec, part, audioSettings }) => createLevelState(levelSpec, part, audioSettings),
   )
   const { getOrCreateAudioContext } = useAudio()
   const [currentResult, setCurrentResult] = useState<ExerciseResult | null>(null)
@@ -45,8 +48,8 @@ export function useLevelState({
 
   const handleRetry = useCallback(() => {
     setCurrentResult(null)
-    dispatch({ type: 'RETRY', exercises: generateExercises(levelSpec, part) })
-  }, [levelSpec, part])
+    dispatch({ type: 'RETRY', exercises: generateExercises(levelSpec, part, audioSettings) })
+  }, [levelSpec, part, audioSettings])
 
   const dotsResults = useMemo(() => {
     const levelResults = state.results

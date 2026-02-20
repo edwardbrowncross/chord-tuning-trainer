@@ -1,12 +1,13 @@
+import type { AudioSettings } from '../../audio/AudioProvider'
 import { generateExercises } from '../../exercise/state/exerciseGenerator'
 import type { LevelSpecification } from '../../data/types'
 import type { Part } from '../../types'
 import type { LevelState, LevelAction } from './types'
 
-export function createLevelState(levelSpec: LevelSpecification, part: Part): LevelState {
+export function createLevelState(levelSpec: LevelSpecification, part: Part, audioSettings?: AudioSettings): LevelState {
   return {
     phase: 'ready',
-    exercises: generateExercises(levelSpec, part),
+    exercises: generateExercises(levelSpec, part, audioSettings),
     exerciseIndex: 0,
     results: [],
   }

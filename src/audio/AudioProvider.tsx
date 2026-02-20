@@ -1,9 +1,14 @@
-import { createContext, useCallback, useContext, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react'
 import { VowelPlayer } from './VowelPlayer'
 import { PitchDetector } from './PitchDetector'
 import { useMedianBuffer } from '../hooks/useMedianBuffer'
+import { loadAudioSettings, saveAudioSettings } from './audioSettingsStorage'
 
 type AudioState = 'uninitialized' | 'running' | 'suspended'
+
+export interface AudioSettings {
+  vocalTractSize: number
+}
 
 interface AudioContextValue {
   getOrCreateAudioContext: () => AudioContext
@@ -12,6 +17,8 @@ interface AudioContextValue {
   getVowelPlayer: () => VowelPlayer | null
   pitchDetector: PitchDetector | null
   getPitchDetector: () => PitchDetector | null
+  audioSettings: AudioSettings
+  setAudioSettings: React.Dispatch<React.SetStateAction<AudioSettings>>
 }
 
 const AudioCtx = createContext<AudioContextValue | null>(null)
@@ -23,6 +30,11 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AudioState>('uninitialized')
   const [vowelPlayer, setVowelPlayer] = useState<VowelPlayer | null>(null)
   const [pitchDetector, setPitchDetector] = useState<PitchDetector | null>(null)
+  const [audioSettings, setAudioSettings] = useState<AudioSettings>(loadAudioSettings)
+
+  useEffect(() => {
+    saveAudioSettings(audioSettings)
+  }, [audioSettings])
 
   const getOrCreateAudioContext = useCallback(() => {
     if (ctxRef.current) {
@@ -51,7 +63,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   const getPitchDetector = useCallback(() => pitchDetectorRef.current, [])
 
   return (
-    <AudioCtx.Provider value={{ getOrCreateAudioContext, state, vowelPlayer, getVowelPlayer, pitchDetector, getPitchDetector }}>
+    <AudioCtx.Provider value={{ getOrCreateAudioContext, state, vowelPlayer, getVowelPlayer, pitchDetector, getPitchDetector, audioSettings, setAudioSettings }}>
       {children}
     </AudioCtx.Provider>
   )
@@ -64,6 +76,12 @@ export function useAudio(): AudioContextValue {
     throw new Error('useAudio must be used within an AudioProvider')
   }
   return value
+}
+
+// eslint-disable-next-line react-refresh/only-export-components
+export function useAudioSettings(): [AudioSettings, React.Dispatch<React.SetStateAction<AudioSettings>>] {
+  const { audioSettings, setAudioSettings } = useAudio()
+  return [audioSettings, setAudioSettings]
 }
 
 // eslint-disable-next-line react-refresh/only-export-components

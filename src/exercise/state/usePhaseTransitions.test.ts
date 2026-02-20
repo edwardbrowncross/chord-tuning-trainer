@@ -7,7 +7,7 @@ import type { PerceptualParams } from 'cantor-digitalis'
 const stubVoice: PerceptualParams = {
   pitch: 0, pitchOffset: 69, vocalEffort: 0.7, vowelHeight: 0.5,
   vowelBackness: 0.5, tenseness: 0.5, breathiness: 0, roughness: 0,
-  vocalTractSize: 0.3, isFalsetto: false,
+  vocalTractSize: 0.28, isFalsetto: false,
 }
 
 const testConfig: Exercise = {

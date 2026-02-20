@@ -8,7 +8,7 @@ import { englishVowelTable } from "./vowels";
 
 export const defaultSynthOptions: SynthOptions = {
   vowelTable: englishVowelTable,
-  harmonicCoincidenceAttenuation: false,
+  harmonicCoincidenceAttenuation: true,
 };
 
 type ActiveVoice = { oscillator: OscillatorNode; gate: GainNode };

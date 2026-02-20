@@ -12,7 +12,7 @@ export function makeVoice(pitchOffset: number, overrides?: Partial<PerceptualPar
     tenseness: isFalsetto ? 0.65 : 0.3,
     breathiness: 0,
     roughness: 0,
-    vocalTractSize: 0.3,
+    vocalTractSize: 0.28,
     isFalsetto,
     ...overrides,
   }

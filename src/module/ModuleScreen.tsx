@@ -1,10 +1,12 @@
 import { useCallback } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ActionIcon, Button, Container, Group, Modal, NativeSelect, SimpleGrid, Stack, Text, Title, Tooltip } from '@mantine/core'
+import { ActionIcon, Button, Container, Group, Modal, NativeSelect, SimpleGrid, Stack, Text, Title, Tooltip, UnstyledButton } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import type { Part } from '../types'
 import type { ExerciseResult } from '../exercise/state/types'
 import { ModuleSelectView } from './views/ModuleSelectView'
 import { Breadcrumb } from './components/Breadcrumb'
+import { SettingsModal } from './components/SettingsModal'
 import { LevelScreen } from '../level/LevelScreen'
 import { useModuleState } from './state/useModuleState'
 import { useNavigation } from './state/useNavigation'
@@ -27,6 +29,7 @@ export function ModuleScreen() {
     handleBack,
     handleSetPart,
   } = useModuleState()
+  const [settingsOpened, { open: openSettings, close: closeSettings }] = useDisclosure(false)
 
   useNavigation(state, { handleSelectModule, handleSelectLevel, handleBack })
 
@@ -92,6 +95,12 @@ export function ModuleScreen() {
               onSelectLevel={handleSelectLevel}
             />
           </Stack>
+          <Text ta="center" py="sm">
+            <UnstyledButton onClick={openSettings}>
+              <Text size="sm" c="dimmed" td="underline" style={{ cursor: 'pointer' }}>Settings</Text>
+            </UnstyledButton>
+          </Text>
+          <SettingsModal opened={settingsOpened} onClose={closeSettings} />
         </Container>
       )
 

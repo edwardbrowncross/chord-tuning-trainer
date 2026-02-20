@@ -11,7 +11,7 @@ const defaultParams: PerceptualParams = {
   tenseness: 0.5,
   breathiness: 0.02,
   roughness: 0.01,
-  vocalTractSize: 0.3,
+  vocalTractSize: 0.28,
   isFalsetto: false,
 };
 

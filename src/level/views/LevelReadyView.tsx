@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button, Group, Stack, Text, Title } from '@mantine/core'
-import { useAudio } from '../../audio/AudioProvider'
+import { useAudio, useAudioSettings } from '../../audio/AudioProvider'
 import { getMidiChord } from '../../audio/intervals'
 import { makeVoice } from '../../audio/makeVoice'
 import { PART_INDEX } from '../../exercise/state/exerciseGenerator'
@@ -35,6 +35,7 @@ export function LevelReadyView({ chordTypeName, chordType, voicing, part, onStar
   const toneName = TONE_NAMES[tone] ?? tone
 
   const { getOrCreateAudioContext, getVowelPlayer } = useAudio()
+  const [audioSettings] = useAudioSettings()
   const [isPlaying, setIsPlaying] = useState(false)
   const [activeVoices, setActiveVoices] = useState<Set<number>>(new Set())
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([])
@@ -76,7 +77,9 @@ export function LevelReadyView({ chordTypeName, chordType, voicing, part, onStar
     setActiveVoices(new Set())
     for (let i = 0; i < order.length; i++) {
       const { midi, isUserPart, voicingIdx } = order[i]
-      const voice = makeVoice(midi, isUserPart ? { vocalEffort: part === 'tenor' ? 0.8 : 0.7 } : undefined)
+      const voice = makeVoice(midi, isUserPart
+        ? { vocalEffort: part === 'tenor' ? 0.8 : 0.7, vocalTractSize: audioSettings.vocalTractSize }
+        : { vocalTractSize: audioSettings.vocalTractSize })
       const id = setTimeout(() => {
         player.addVoices(voice, { rampTime: VOICE_RAMP_TIME, totalVoiceCount: 4 })
         setActiveVoices(prev => new Set(prev).add(voicingIdx))

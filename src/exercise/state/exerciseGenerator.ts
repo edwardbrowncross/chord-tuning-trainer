@@ -1,4 +1,5 @@
 import type { PerceptualParams } from 'cantor-digitalis'
+import type { AudioSettings } from '../../audio/AudioProvider'
 import { getMidiChord } from '../../audio/intervals'
 import { makeVoice } from '../../audio/makeVoice'
 import { englishVowelTable } from '../../audio/vowels'
@@ -40,7 +41,7 @@ const DEFAULT_STAR_THRESHOLDS: [number, number] = [3000, 8000]
 /**
  * Generate an array of Exercises from an Level specification, for a voice part.
  */
-export function generateExercises(level: LevelSpecification, part: Part): Exercise[] {
+export function generateExercises(level: LevelSpecification, part: Part, audioSettings?: AudioSettings): Exercise[] {
   const repeats = level.repeats ?? 1
   const partIdx = PART_INDEX[part]
 
@@ -93,11 +94,15 @@ export function generateExercises(level: LevelSpecification, part: Part): Exerci
       vowelOverride = { vowelHeight: randomVowel.h, vowelBackness: randomVowel.v }
     }
 
+    const tractOverride: Partial<PerceptualParams> = audioSettings !== undefined
+      ? { ...vowelOverride, vocalTractSize: audioSettings.vocalTractSize }
+      : vowelOverride
+
     // Generate the three other chord voices (all voices except the user's part)
     const chordVoices: PerceptualParams[] = []
     for (let j = 0; j < 4; j++) {
       if (j === partIdx) continue
-      chordVoices.push(makeVoice(chordNotes[j], vowelOverride))
+      chordVoices.push(makeVoice(chordNotes[j], tractOverride))
     }
 
     // Generate the offset for the starting reference tone
@@ -112,7 +117,7 @@ export function generateExercises(level: LevelSpecification, part: Part): Exerci
     }
     const referencePitch = targetNote + (sign * offsetCents) / 100
 
-    const referenceTone = makeVoice(referencePitch, vowelOverride)
+    const referenceTone = makeVoice(referencePitch, tractOverride)
 
     configs.push({
       referenceTone,
