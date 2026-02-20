@@ -332,7 +332,7 @@
         "name": "Suspended Fourths",
         "slug": "suspended-fourths",
         "description": "That's NOT barbershop!",
-        "difficulty": "beginner",
+        "difficulty": "intermediate",
         "levels": [
             {
                 "chordType": "suspended",
@@ -373,7 +373,7 @@
         "name": "Dominant Sevenths",
         "slug": "dominant-sevenths",
         "description": "That's barbershop! *jazzhands*",
-        "difficulty": "intermediate",
+        "difficulty": "beginner",
         "levels": [
             {
                 "chordType": "dominant",
@@ -502,7 +502,7 @@
         "name": "Minor Sixths",
         "slug": "minor-sixths",
         "description": "The penultimate chord in all the tags",
-        "difficulty": "advanced",
+        "difficulty": "intermediate",
         "levels": [
             {
                 "chordType": "minor-sixth",
@@ -598,7 +598,7 @@
         "name": "Diminished Triads",
         "slug": "diminished-triads",
         "description": "At least its not a diminished seventh",
-        "difficulty": "intermediate",
+        "difficulty": "advanced",
         "levels": [
             {
                 "chordType": "diminished",
