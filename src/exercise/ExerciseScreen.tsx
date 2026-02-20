@@ -1,6 +1,7 @@
 import { Stack } from '@mantine/core'
 import { midiToHz } from '../audio/cents'
 import { useExerciseState } from './state/useExerciseState'
+import { MATCH_THRESHOLD_CENTS } from './state/usePhaseTransitions'
 import type { Exercise, ExerciseResult } from './state/types'
 import { MatchRootView } from './views/MatchRootView'
 import { AdjustChordView } from './views/AdjustChordView'
@@ -34,7 +35,7 @@ export function ExerciseScreen({
                 <MatchRootView
                   targetHz={midiToHz(phase.config.referenceTone.pitchOffset)}
                   pitch={pitch}
-                  thresholdCents={phase.config.matchThresholdCents}
+                  thresholdCents={MATCH_THRESHOLD_CENTS}
                 />
               )
             case 'adjust-chord':

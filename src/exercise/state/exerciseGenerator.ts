@@ -123,8 +123,6 @@ export function generateExercises(level: LevelSpecification, part: Part, audioSe
       referenceTone,
       targetNote,
       chordVoices,
-      matchThresholdCents: 20,
-      matchSustainMs: 1000,
       adjustThresholdCents: 10,
       adjustSustainMs: 1500,
       starThresholds,

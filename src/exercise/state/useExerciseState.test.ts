@@ -34,8 +34,6 @@ const testConfig: Exercise = {
   referenceTone: stubVoice,
   targetNote: 69,
   chordVoices: [stubVoice, stubVoice, stubVoice],
-  matchThresholdCents: 50,
-  matchSustainMs: 500,
   adjustThresholdCents: 15,
   adjustSustainMs: 2000,
   starThresholds: [3000, 8000],

@@ -22,8 +22,6 @@ const stubExercise: Exercise = {
   referenceTone: stubVoice,
   targetNote: 50,
   chordVoices: [stubVoice, stubVoice, stubVoice],
-  matchThresholdCents: 20,
-  matchSustainMs: 1000,
   adjustThresholdCents: 10,
   adjustSustainMs: 1500,
   starThresholds: [3000, 8000],

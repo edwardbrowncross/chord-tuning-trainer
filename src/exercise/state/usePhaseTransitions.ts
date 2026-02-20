@@ -2,6 +2,9 @@ import { useEffect, useRef, useState, type Dispatch } from 'react'
 import { centsDistance, midiToHz } from '../../audio/cents'
 import type { ExercisePhase, ExerciseAction } from './types'
 
+export const MATCH_THRESHOLD_CENTS = 20
+export const MATCH_SUSTAIN_MS = 1000
+
 /**
  * Bridges real-time pitch readings to discrete exercise phase transitions.
  * Dispatches ROOT_MATCHED or CHORD_LOCKED when the user sustains pitch
@@ -34,27 +37,27 @@ export function usePhaseTransitions(
     lastTickRef.current = now
 
     if (phase.type === 'match-root') {
-      const { referenceTone, matchThresholdCents, matchSustainMs } = phase.config
+      const { referenceTone } = phase.config
       const referenceHz = midiToHz(referenceTone.pitchOffset)
 
       const absCents = pitch !== null
         ? Math.abs(centsDistance(pitch, referenceHz))
         : Infinity
-      const inRange = absCents <= matchThresholdCents
+      const inRange = absCents <= MATCH_THRESHOLD_CENTS
 
       if (inRange) {
-        const speed = 2 * (1 - absCents / matchThresholdCents)
+        const speed = 2 * (1 - absCents / MATCH_THRESHOLD_CENTS)
         sustainProgressRef.current += delta * speed
       } else {
-        const decayRate = Math.min(1, (absCents - matchThresholdCents) / matchThresholdCents)
+        const decayRate = Math.min(1, (absCents - MATCH_THRESHOLD_CENTS) / MATCH_THRESHOLD_CENTS)
         sustainProgressRef.current = Math.max(0, sustainProgressRef.current - delta * decayRate)
       }
 
-      if (sustainProgressRef.current >= matchSustainMs) {
+      if (sustainProgressRef.current >= MATCH_SUSTAIN_MS) {
         dispatch({ type: 'ROOT_MATCHED', timestamp: now })
       }
 
-      setSustainFraction(Math.min(1, Math.max(0, sustainProgressRef.current / matchSustainMs)))
+      setSustainFraction(Math.min(1, Math.max(0, sustainProgressRef.current / MATCH_SUSTAIN_MS)))
     } else if (phase.type === 'adjust-chord') {
       const { targetNote, adjustThresholdCents, adjustSustainMs } = phase.config
       const targetHz = midiToHz(targetNote)

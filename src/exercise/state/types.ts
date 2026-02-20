@@ -11,10 +11,6 @@ export type Exercise = {
   targetNote: number
   /** The other 3 chord voices (played during adjust-chord) */
   chordVoices: PerceptualParams[]
-  /** How close (cents) the user must be to pass match-root */
-  matchThresholdCents: number
-  /** How long (ms) the user must sustain within threshold for match-root */
-  matchSustainMs: number
   /** How close (cents) the user must be to pass adjust-chord */
   adjustThresholdCents: number
   /** How long (ms) the user must sustain within threshold for adjust-chord */

@@ -14,8 +14,6 @@ const testConfig: Exercise = {
   referenceTone: stubVoice,
   targetNote: 69, // A4 = 440Hz
   chordVoices: [stubVoice, stubVoice, stubVoice],
-  matchThresholdCents: 50,
-  matchSustainMs: 500,
   adjustThresholdCents: 15,
   adjustSustainMs: 2000,
   starThresholds: [3000, 8000],
@@ -61,7 +59,7 @@ function renderTransitions(props: Props) {
 
 describe('usePhaseTransitions', () => {
   describe('match-root phase', () => {
-    // threshold=50 cents, sustainMs=500
+    // MATCH_THRESHOLD_CENTS = 20, MATCH_SUSTAIN_MS = 1000
     const matchPhase: ExercisePhase = { type: 'match-root', config: testConfig }
 
     it('dispatches ROOT_MATCHED at 2x speed when dead center', () => {
@@ -71,39 +69,39 @@ describe('usePhaseTransitions', () => {
       // First tick at center: delta=0, progress=0
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
 
-      // 200ms * speed 2 = 400 progress (< 500)
-      now = 1200
+      // 400ms * speed 2 = 800 progress (< 1000)
+      now = 1400
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
       expect(dispatch).not.toHaveBeenCalled()
 
-      // 50ms * 2 = 100. Total = 500 → dispatch
-      now = 1250
+      // 100ms * 2 = 200. Total = 1000 → dispatch
+      now = 1500
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
       expect(dispatch).toHaveBeenCalledWith({
         type: 'ROOT_MATCHED',
-        timestamp: 1250,
+        timestamp: 1500,
       })
     })
 
-    it('accumulates at 1x speed when 25 cents from center', () => {
+    it('accumulates at 1x speed when half-threshold from center', () => {
       const dispatch = vi.fn()
       const { rerender } = renderTransitions({ phase: matchPhase, pitch: null, dispatch })
 
-      // 25 cents off: speed = 2*(1-25/50) = 1.0
-      const pitch25 = hzAtCents(25)
-      rerender({ phase: tick(matchPhase), pitch: pitch25, dispatch })
+      // 10 cents off (half of MATCH_THRESHOLD_CENTS=20): speed = 2*(1-10/20) = 1.0
+      const pitch10 = hzAtCents(10)
+      rerender({ phase: tick(matchPhase), pitch: pitch10, dispatch })
 
-      // 400ms * 1.0 = 400 (< 500)
-      now = 1400
-      rerender({ phase: tick(matchPhase), pitch: pitch25, dispatch })
+      // 900ms * 1.0 = 900 (< 1000)
+      now = 1900
+      rerender({ phase: tick(matchPhase), pitch: pitch10, dispatch })
       expect(dispatch).not.toHaveBeenCalled()
 
-      // 110ms more ≈ 510 (overshoot to avoid float edge) → dispatch
-      now = 1510
-      rerender({ phase: tick(matchPhase), pitch: pitch25, dispatch })
+      // 110ms more ≈ 1010 (overshoot to avoid float edge) → dispatch
+      now = 2010
+      rerender({ phase: tick(matchPhase), pitch: pitch10, dispatch })
       expect(dispatch).toHaveBeenCalledWith({
         type: 'ROOT_MATCHED',
-        timestamp: 1510,
+        timestamp: 2010,
       })
     })
 
@@ -111,13 +109,13 @@ describe('usePhaseTransitions', () => {
       const dispatch = vi.fn()
       const { rerender } = renderTransitions({ phase: matchPhase, pitch: null, dispatch })
 
-      // 49 cents: speed = 2*(1-49/50) = 0.04
-      const pitch49 = hzAtCents(49)
-      rerender({ phase: tick(matchPhase), pitch: pitch49, dispatch })
+      // 19 cents (near MATCH_THRESHOLD_CENTS=20): speed = 2*(1-19/20) = 0.1
+      const pitch19 = hzAtCents(19)
+      rerender({ phase: tick(matchPhase), pitch: pitch19, dispatch })
 
-      // 1000ms * 0.04 = 40 progress (far from 500)
+      // 1000ms * 0.1 = 100 progress (far from 1000)
       now = 2000
-      rerender({ phase: tick(matchPhase), pitch: pitch49, dispatch })
+      rerender({ phase: tick(matchPhase), pitch: pitch19, dispatch })
       expect(dispatch).not.toHaveBeenCalled()
     })
 
@@ -134,17 +132,17 @@ describe('usePhaseTransitions', () => {
       now = 1200
       rerender({ phase: tick(matchPhase), pitch: 300, dispatch })
 
-      // Back at center: 150ms * 2 = 300. Total = 100+300=400 (< 500)
-      now = 1350
+      // Back at center: 350ms * 2 = 700. Total = 100+700=800 (< 1000)
+      now = 1550
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
       expect(dispatch).not.toHaveBeenCalled()
 
-      // 50ms * 2 = 100. Total = 500 → dispatch
-      now = 1400
+      // 100ms * 2 = 200. Total = 1000 → dispatch
+      now = 1650
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
       expect(dispatch).toHaveBeenCalledWith({
         type: 'ROOT_MATCHED',
-        timestamp: 1400,
+        timestamp: 1650,
       })
     })
 
@@ -161,19 +159,15 @@ describe('usePhaseTransitions', () => {
       now = 1600
       rerender({ phase: tick(matchPhase), pitch: 300, dispatch })
 
-      // Need full 500 from zero at speed 2 → 250ms
-      now = 1700
+      // Need full 1000 from zero at speed 2 → 500ms wall-clock
+      // 400ms * 2 = 800 (< 1000)
+      now = 2000
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
-      // delta=100 * 2 = 200
-
-      now = 1800
-      rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
-      // delta=100 * 2 = 200. Total = 400 (< 500)
       expect(dispatch).not.toHaveBeenCalled()
 
-      now = 1850
+      // 100ms * 2 = 200. Total = 1000 → dispatch
+      now = 2100
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
-      // delta=50 * 2 = 100. Total = 500 → dispatch
       expect(dispatch).toHaveBeenCalled()
     })
 
@@ -189,17 +183,17 @@ describe('usePhaseTransitions', () => {
       now = 1200
       rerender({ phase: tick(matchPhase), pitch: null, dispatch })
 
-      // Back at center: 100ms * 2 = 200. Total = 100+200=300
-      now = 1300
+      // Back at center: 200ms * 2 = 400. Total = 500
+      now = 1400
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
 
-      // 50ms * 2 = 100. Total = 400 (< 500)
-      now = 1350
+      // 200ms * 2 = 400. Total = 900 (< 1000)
+      now = 1600
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
       expect(dispatch).not.toHaveBeenCalled()
 
-      // 50ms * 2 = 100. Total = 500 → dispatch
-      now = 1400
+      // 50ms * 2 = 100. Total = 1000 → dispatch
+      now = 1650
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
       expect(dispatch).toHaveBeenCalled()
     })
@@ -213,22 +207,22 @@ describe('usePhaseTransitions', () => {
       now = 1200
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
 
-      // 60 cents out: decayRate = (60-50)/50 = 0.2
+      // 24 cents out (MATCH_THRESHOLD_CENTS=20): decayRate = (24-20)/20 = 0.2
       // 500ms * 0.2 = 100 decay. 400-100=300
       now = 1700
-      rerender({ phase: tick(matchPhase), pitch: hzAtCents(60), dispatch })
+      rerender({ phase: tick(matchPhase), pitch: hzAtCents(24), dispatch })
 
-      // Back at center: 50ms * 2 = 100. 300+100=400 (< 500)
-      now = 1750
+      // Back at center: 300ms * 2 = 600. 300+600=900 (< 1000)
+      now = 2000
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
       expect(dispatch).not.toHaveBeenCalled()
 
-      // 60ms * 2 = 120. 400+120=520 (overshoot to avoid float edge) → dispatch
-      now = 1810
+      // 60ms * 2 = 120. 900+120=1020 (overshoot to avoid float edge) → dispatch
+      now = 2060
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
       expect(dispatch).toHaveBeenCalledWith({
         type: 'ROOT_MATCHED',
-        timestamp: 1810,
+        timestamp: 2060,
       })
     })
   })
@@ -326,13 +320,13 @@ describe('usePhaseTransitions', () => {
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
       expect(result.current).toBe(0)
 
-      // Dead center: speed=2. 125ms * 2 = 250 progress. 250/500 = 0.5
-      now = 1125
+      // Dead center: speed=2. 250ms * 2 = 500 progress. 500/1000 = 0.5
+      now = 1250
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
       expect(result.current).toBeCloseTo(0.5)
 
-      // 125ms * 2 = 250 more. 500/500 = 1.0
-      now = 1250
+      // 250ms * 2 = 500 more. 1000/1000 = 1.0
+      now = 1500
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
       expect(result.current).toBe(1)
     })
@@ -358,16 +352,16 @@ describe('usePhaseTransitions', () => {
       const matchPhase: ExercisePhase = { type: 'match-root', config: testConfig }
       const { result, rerender } = renderTransitions({ phase: matchPhase, pitch: null, dispatch })
 
-      // Build 300 progress: 150ms at center * speed 2. 300/500 = 0.6
+      // Build 600 progress: 300ms at center * speed 2. 600/1000 = 0.6
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
-      now = 1150
+      now = 1300
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
       expect(result.current).toBeCloseTo(0.6)
 
-      // Far out (300Hz, decayRate=1.0) for 100ms → 300-100=200. 200/500=0.4
-      now = 1250
+      // Far out (300Hz, decayRate=1.0) for 100ms → 600-100=500. 500/1000=0.5
+      now = 1400
       rerender({ phase: tick(matchPhase), pitch: 300, dispatch })
-      expect(result.current).toBeCloseTo(0.4)
+      expect(result.current).toBeCloseTo(0.5)
     })
 
     it('clamps progress at 0 (never negative)', () => {
@@ -400,9 +394,9 @@ describe('usePhaseTransitions', () => {
 
       const { result, rerender } = renderTransitions({ phase: matchPhase, pitch: null, dispatch })
 
-      // Build up: 125ms at center * 2 = 250. 250/500 = 0.5
+      // Build up: 250ms at center * 2 = 500. 500/1000 = 0.5
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
-      now = 1125
+      now = 1250
       rerender({ phase: tick(matchPhase), pitch: 440, dispatch })
       expect(result.current).toBeCloseTo(0.5)
 
