@@ -79,7 +79,7 @@ export function LevelReadyView({ chordTypeName, chordType, voicing, part, onStar
     setActiveVoices(new Set())
     for (let i = 0; i < order.length; i++) {
       const { midi, isUserPart, voicingIdx } = order[i]
-      const pan = isUserPart ? 0 : getPan(part, partsByIndex[voicingIdx])
+      const pan = (isUserPart || !audioSettings.stereo) ? 0 : getPan(part, partsByIndex[voicingIdx])
       const voice = {
         ...makeVoice(midi, isUserPart
           ? { vocalEffort: part === 'tenor' ? 0.8 : 0.7, vocalTractSize: audioSettings.vocalTractSize }

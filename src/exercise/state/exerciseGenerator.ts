@@ -107,7 +107,7 @@ export function generateExercises(level: LevelSpecification, part: Part, audioSe
     for (let j = 0; j < 4; j++) {
       if (j === partIdx) continue
       const voicePart = INDEX_TO_PART[j]
-      const pan = getPan(part, voicePart)
+      const pan = (audioSettings?.stereo ?? true) ? getPan(part, voicePart) : 0
       chordVoices.push({ ...makeVoice(chordNotes[j], tractOverride), pan })
     }
 

@@ -4,6 +4,7 @@ const STORAGE_KEY = 'tuning-trainer:audio-settings'
 
 const DEFAULT_AUDIO_SETTINGS: AudioSettings = {
   vocalTractSize: 0.3,
+  stereo: true,
 }
 
 export function loadAudioSettings(): AudioSettings {

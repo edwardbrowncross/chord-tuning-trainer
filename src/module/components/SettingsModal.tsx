@@ -1,4 +1,4 @@
-import { Button, Modal, Text } from '@mantine/core'
+import { Button, Modal, Switch, Text } from '@mantine/core'
 import { useAudioSettings } from '../../audio/AudioProvider'
 
 const VOCAL_TRACT_SIZES = [
@@ -26,6 +26,13 @@ export function SettingsModal({ opened, onClose }: { opened: boolean; onClose: (
           </Button>
         ))}
       </Button.Group>
+
+      <Text size="sm" c="dimmed" mt="md" mb="xs">Stereo effects</Text>
+      <Switch
+        label="Place voices in stereo"
+        checked={audioSettings.stereo}
+        onChange={e => setAudioSettings(s => ({ ...s, stereo: e.currentTarget.checked }))}
+      />
     </Modal>
   )
 }
