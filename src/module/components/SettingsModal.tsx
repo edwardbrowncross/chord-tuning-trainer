@@ -1,4 +1,4 @@
-import { Button, Modal, Switch, Text } from '@mantine/core'
+import { Button, Modal, Slider, Switch, Text } from '@mantine/core'
 import { useAudioSettings } from '../../audio/AudioProvider'
 
 const VOCAL_TRACT_SIZES = [
@@ -26,6 +26,22 @@ export function SettingsModal({ opened, onClose }: { opened: boolean; onClose: (
           </Button>
         ))}
       </Button.Group>
+
+      <Text size="sm" c="dimmed" mt="md" mb="xs">Pitch offset (semitones)</Text>
+      <Slider
+        min={-4}
+        max={8}
+        step={1}
+        value={audioSettings.pitchOffset}
+        onChange={v => setAudioSettings(s => ({ ...s, pitchOffset: v }))}
+        marks={[
+          { value: -4, label: '-4' },
+          { value: 0, label: '0' },
+          { value: 4, label: '+4' },
+          { value: 8, label: '+8' },
+        ]}
+        mb="xl"
+      />
 
       <Text size="sm" c="dimmed" mt="md" mb="xs">Stereo effects</Text>
       <Switch

@@ -53,14 +53,15 @@ export function generateExercises(level: LevelSpecification, part: Part, audioSe
   const referenceChord = getMidiChord(0, level.chordType, level.voicing)
 
   // Determine valid root note range so ALL four parts stay within their vocal ranges
+  const pitchOffset = audioSettings?.pitchOffset ?? 0
   const parts: Part[] = ['bass', 'bari', 'lead', 'tenor']
   let minRoot = -Infinity
   let maxRoot = Infinity
   for (const p of parts) {
     const range = PART_RANGES[p]
     const offset = referenceChord[PART_INDEX[p]]
-    minRoot = Math.max(minRoot, Math.ceil(range.min - offset))
-    maxRoot = Math.min(maxRoot, Math.floor(range.max - offset))
+    minRoot = Math.max(minRoot, Math.ceil(range.min + pitchOffset - offset))
+    maxRoot = Math.min(maxRoot, Math.floor(range.max + pitchOffset - offset))
   }
 
   if (minRoot > maxRoot) {

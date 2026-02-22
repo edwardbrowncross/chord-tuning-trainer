@@ -9,6 +9,7 @@ type AudioState = 'uninitialized' | 'running' | 'suspended'
 export interface AudioSettings {
   vocalTractSize: number
   stereo: boolean
+  pitchOffset: number
 }
 
 interface AudioContextValue {
