@@ -114,6 +114,18 @@ Patterns in use:
 Components:
 - **StarReveal** (`src/exercise/components/StarReveal.tsx`) — animated 1–3 star display with staggered pop-in and particle bursts. Used by `ResultView`.
 
+## Analytics
+
+GoatCounter is used for analytics (`https://ebrowncross.goatcounter.com/count`). The script tag in `index.html` handles page view tracking automatically. Custom events are fired via `trackEvent(path)` from `src/analytics.ts`, which wraps `window.goatcounter.count()` and is a safe no-op if the script hasn't loaded.
+
+Tracked events:
+
+| Event path | Where fired | Notes |
+|---|---|---|
+| `welcome/part-selected/{voiceType}/{part}` | `WelcomeModal` | First-time part selection; `voiceType` is `mens` or `womens` |
+| `level/{chordType}/{voicing}/{part}/start` | `useLevelState.handleStart` | User clicks "Start Level" |
+| `level/{chordType}/{voicing}/{part}/complete/{n}stars` | `useLevelState` | Level fully completed; `n` is total stars across all exercises |
+
 ## Testing
 
 Tests live alongside source files as `*.test.ts`. Vitest is configured in `vite.config.ts` with the jsdom environment.

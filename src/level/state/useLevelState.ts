@@ -5,6 +5,7 @@ import type { LevelSpecification } from '../../data/types'
 import type { Part } from '../../types'
 import type { ExerciseResult } from '../../exercise/state/types'
 import { levelReducer, createLevelState } from './levelReducer'
+import { trackEvent } from '../../analytics'
 
 export function useLevelState({
   levelSpec,
@@ -30,16 +31,19 @@ export function useLevelState({
     if (state.phase === 'complete' && !completedRef.current) {
       completedRef.current = true
       onLevelComplete(state.results)
+      const totalStars = state.results.reduce((sum, r) => sum + r.stars, 0)
+      trackEvent(`level/${levelSpec.chordType}/${levelSpec.voicing}/${part}/complete/${totalStars}stars`)
     }
     if (state.phase !== 'complete') {
       completedRef.current = false
     }
-  }, [state.phase, state.results, onLevelComplete])
+  }, [state.phase, state.results, onLevelComplete, levelSpec.chordType, levelSpec.voicing, part])
 
   const handleStart = useCallback(() => {
     getOrCreateAudioContext()
     dispatch({ type: 'START' })
-  }, [getOrCreateAudioContext])
+    trackEvent(`level/${levelSpec.chordType}/${levelSpec.voicing}/${part}/start`)
+  }, [getOrCreateAudioContext, levelSpec.chordType, levelSpec.voicing, part])
 
   const handleExerciseComplete = useCallback((result: ExerciseResult) => {
     setCurrentResult(null)

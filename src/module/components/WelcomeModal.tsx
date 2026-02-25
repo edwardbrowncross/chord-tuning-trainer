@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Anchor, Button, Group, Modal, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { IconHeadphones, IconLeaf } from '@tabler/icons-react'
 import type { Part } from '../../types'
 import type { AudioSettings } from '../../audio/AudioProvider'
+import { trackEvent } from '../../analytics'
 
 type VoiceType = 'mens' | 'womens'
 
@@ -31,6 +32,11 @@ interface WelcomeModalProps {
 export function WelcomeModal({ onSelectPart }: WelcomeModalProps) {
   const [voiceType, setVoiceType] = useState<VoiceType>('mens')
 
+  const handleSelectPart = useCallback((part: Part) => {
+    trackEvent(`welcome/part-selected/${voiceType}/${part}`)
+    onSelectPart(part, getWelcomeSettings(part, voiceType))
+  }, [voiceType, onSelectPart])
+
   return (
     <Modal opened withCloseButton={false} onClose={() => { }} centered title={<Title order={3}>Welcome to Tuning Training</Title>}>
       <Stack gap={6} mb="xl">
@@ -47,7 +53,7 @@ export function WelcomeModal({ onSelectPart }: WelcomeModalProps) {
       <Text mb="md">Select your voice part to get started.</Text>
       <SimpleGrid cols={2}>
         {PART_OPTIONS.map(({ value, label, colour }) => (
-          <Button key={value} variant="outline" color={colour} onClick={() => onSelectPart(value, getWelcomeSettings(value, voiceType))}>
+          <Button key={value} variant="outline" color={colour} onClick={() => handleSelectPart(value)}>
             {label}
           </Button>
         ))}
