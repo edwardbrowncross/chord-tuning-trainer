@@ -43,6 +43,10 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       return ctxRef.current
     }
 
+    if ('audioSession' in navigator) {
+      (navigator.audioSession as { type: string }).type = 'play-and-record'
+    }
+
     const ctx = new AudioContext()
     ctxRef.current = ctx
     const player = new VowelPlayer(ctx)
