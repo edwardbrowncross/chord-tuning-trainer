@@ -38,8 +38,8 @@ function pickRandom<T>(arr: readonly T[]): T {
   return arr[Math.floor(Math.random() * arr.length)]
 }
 
-const DEFAULT_MIN_OFFSET_CENTS = 15
-const DEFAULT_MAX_OFFSET_CENTS = 50
+const DEFAULT_MIN_OFFSET_CENTS = 10
+const DEFAULT_MAX_OFFSET_CENTS = 30
 const DEFAULT_STAR_THRESHOLDS: [number, number] = [3000, 8000]
 
 /**
