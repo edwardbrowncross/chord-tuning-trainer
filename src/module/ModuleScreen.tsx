@@ -1,6 +1,6 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ActionIcon, Button, Container, Group, Modal, NativeSelect, SimpleGrid, Stack, Text, Title, Tooltip, UnstyledButton } from '@mantine/core'
+import { ActionIcon, Anchor, Button, Container, Group, Modal, NativeSelect, SimpleGrid, Stack, Text, Title, Tooltip, UnstyledButton } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import type { Part } from '../types'
 import type { ExerciseResult } from '../exercise/state/types'
@@ -10,7 +10,21 @@ import { SettingsModal } from './components/SettingsModal'
 import { LevelScreen } from '../level/LevelScreen'
 import { useModuleState } from './state/useModuleState'
 import { useNavigation } from './state/useNavigation'
+import { useAudioSettings } from '../audio/AudioProvider'
 import { IconBrandGithubFilled } from '@tabler/icons-react'
+
+type VoiceType = 'mens' | 'womens'
+
+function getWelcomeSettings(part: Part, voiceType: VoiceType) {
+  const isMens = voiceType === 'mens'
+  const isHighPart = part === 'lead' || part === 'tenor'
+  return {
+    pitchOffset: isMens ? 0 : 8,
+    vocalTractSize: isMens
+      ? (isHighPart ? 0.28 : 0.22)   // tenor or bass
+      : (isHighPart ? 0.40 : 0.34),  // soprano or alto
+  }
+}
 
 const PART_OPTIONS: { value: Part; label: string, colour: string }[] = [
   { value: 'bass', label: 'Bass', colour: 'blue' },
@@ -30,6 +44,8 @@ export function ModuleScreen() {
     handleSetPart,
   } = useModuleState()
   const [settingsOpened, { open: openSettings, close: closeSettings }] = useDisclosure(false)
+  const [, setAudioSettings] = useAudioSettings()
+  const [voiceType, setVoiceType] = useState<VoiceType>('mens')
 
   useNavigation(state, { handleSelectModule, handleSelectLevel, handleBack })
 
@@ -47,16 +63,30 @@ export function ModuleScreen() {
   }, [handleLevelCompleted, moduleIndex, levelIndex])
 
   if (state.part == null) {
+    const handlePartSelect = (part: Part) => {
+      setAudioSettings(prev => ({ ...prev, ...getWelcomeSettings(part, voiceType) }))
+      handleSetPart(part)
+    }
     return (
       <Modal opened withCloseButton={false} onClose={() => { }} centered title={<Title order={3}>Welcome</Title>}>
         <Text mb="md">Select your voice part to get started.</Text>
         <SimpleGrid cols={2}>
           {PART_OPTIONS.map(({ value, label, colour }) => (
-            <Button key={value} variant="outline" color={colour} onClick={() => handleSetPart(value)}>
+            <Button key={value} variant="outline" color={colour} onClick={() => handlePartSelect(value)}>
               {label}
             </Button>
           ))}
         </SimpleGrid>
+        <Text size="xs" c="dimmed" ta="center" mt="md">
+          Singing <Text span td="underline">{voiceType === `mens` ? `men's` : `women's`}</Text> barbershop{' '}
+          <Anchor
+            size="xs"
+            onClick={() => setVoiceType(v => v === 'mens' ? 'womens' : 'mens')}
+            style={{ cursor: 'pointer' }}
+          >
+            (change)
+          </Anchor>
+        </Text>
       </Modal>
     )
   }
