@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import type { LevelSpecification } from '../data/types'
 import type { Part } from '../types'
@@ -23,6 +24,7 @@ export function LevelScreen({
   chordTypeName,
   levelIndex,
   hasNextLevel,
+  previousScore,
   onLevelComplete,
   onNextLevel,
   onRetry,
@@ -33,11 +35,14 @@ export function LevelScreen({
   chordTypeName: string
   levelIndex: number
   hasNextLevel: boolean
+  previousScore: number | null
   onLevelComplete: (results: ExerciseResult[]) => void
   onNextLevel: () => void
   onRetry?: () => void
   onQuit: () => void
 }) {
+  // Capture the score at mount time — after LEVEL_COMPLETED fires, the prop may update
+  const previousScoreRef = useRef(previousScore)
   const {
     state,
     handleStart,
@@ -81,6 +86,7 @@ export function LevelScreen({
             results={state.results}
             levelIndex={levelIndex}
             hasNextLevel={hasNextLevel}
+            previousScore={previousScoreRef.current}
             onNextLevel={onNextLevel}
             onRetry={onRetry ?? handleRetry}
             onCompleteModule={onQuit}

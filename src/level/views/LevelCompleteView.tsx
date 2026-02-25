@@ -20,6 +20,7 @@ export function LevelCompleteView({
   results,
   levelIndex,
   hasNextLevel,
+  previousScore,
   onNextLevel,
   onRetry,
   onCompleteModule,
@@ -28,6 +29,7 @@ export function LevelCompleteView({
   results: ExerciseResult[]
   levelIndex: number
   hasNextLevel: boolean
+  previousScore: number | null
   onNextLevel: () => void
   onRetry: () => void
   onCompleteModule: () => void
@@ -38,12 +40,17 @@ export function LevelCompleteView({
   const avgDuration = results.reduce((sum, r) => sum + r.durationMs, 0) / results.length
   const avgOffset = results.reduce((sum, r) => sum + r.meanOffsetCents, 0) / results.length
 
+  const isPersonalBest = previousScore !== null && totalStars > previousScore
+
   return (
     <Stack align="center" justify="center" gap="md" style={{ flex: 1 }}>
       <Title order={3}>Level {levelIndex + 1} Complete!</Title>
       <Text size="lg" fw={500}>
         {totalStars} / {maxStars} Stars
       </Text>
+      {isPersonalBest && (
+        <Text size="sm" fw={600} c="green">Personal Best!</Text>
+      )}
       <Stack gap="xs">
         {results.map((r, i) => (
           <Group key={i} gap="sm">

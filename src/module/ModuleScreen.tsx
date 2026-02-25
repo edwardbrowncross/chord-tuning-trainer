@@ -131,6 +131,7 @@ export function ModuleScreen() {
                 chordTypeName={mod.name}
                 levelIndex={levelIndex}
                 hasNextLevel={levelIndex + 1 < mod.levels.length}
+                previousScore={state.moduleScores[moduleIndex][levelIndex]}
                 onLevelComplete={onLevelComplete}
                 onNextLevel={handleNextLevel}
                 onRetry={() => handleSelectLevel(moduleIndex, levelIndex)}
