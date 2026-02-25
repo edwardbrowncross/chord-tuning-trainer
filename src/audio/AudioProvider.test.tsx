@@ -158,7 +158,7 @@ describe('usePitchDetector', () => {
     mockDetectorStart = vi.fn().mockResolvedValue(undefined)
     vi.mocked(PitchDetector).mockImplementation(function (this: PitchDetector) {
       const snapshot = { isRunning: false, pitch: null }
-      this.start = mockDetectorStart
+      this.start = mockDetectorStart as () => Promise<void>
       this.stop = vi.fn()
       this.subscribe = vi.fn(() => () => {})
       this.getSnapshot = vi.fn(() => snapshot)
