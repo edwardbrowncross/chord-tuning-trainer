@@ -1,5 +1,8 @@
-import { Button, Modal, Slider, Switch, Text } from '@mantine/core'
+import { Button, Divider, Modal, Slider, Switch, Text } from '@mantine/core'
+import { useState } from 'react'
 import { useAudioSettings } from '../../audio/AudioProvider'
+
+const STORAGE_KEYS = ['tuning-trainer:audio-settings', 'tuning-trainer:part', 'tuning-trainer:scores']
 
 const VOCAL_TRACT_SIZES = [
   { label: 'Bass', value: 0.22 },
@@ -11,6 +14,14 @@ const VOCAL_TRACT_SIZES = [
 
 export function SettingsModal({ opened, onClose }: { opened: boolean; onClose: () => void }) {
   const [audioSettings, setAudioSettings] = useAudioSettings()
+  const [confirming, setConfirming] = useState(false)
+
+  function handleDeleteAllData() {
+    STORAGE_KEYS.forEach(key => localStorage.removeItem(key))
+    setConfirming(false)
+    onClose()
+    window.location.reload()
+  }
 
   return (
     <Modal opened={opened} onClose={onClose} title="Settings" centered transitionProps={{ transition: 'fade' }}>
@@ -49,6 +60,22 @@ export function SettingsModal({ opened, onClose }: { opened: boolean; onClose: (
         checked={audioSettings.stereo}
         onChange={e => setAudioSettings(s => ({ ...s, stereo: e.currentTarget.checked }))}
       />
+
+      <Divider mt="xl" mb="md" />
+
+      {confirming ? (
+        <>
+          <Text size="sm" mb="sm">This will delete all scores and settings. Are you sure?</Text>
+          <Button.Group>
+            <Button color="red" onClick={handleDeleteAllData}>Yes, delete everything</Button>
+            <Button variant="outline" onClick={() => setConfirming(false)}>Cancel</Button>
+          </Button.Group>
+        </>
+      ) : (
+        <Button color="red" variant="outline" onClick={() => setConfirming(true)}>
+          Delete all data
+        </Button>
+      )}
     </Modal>
   )
 }
