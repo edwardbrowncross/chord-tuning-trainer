@@ -101,10 +101,12 @@ export function usePitchDetector(options?: { medianCount?: number }): {
   start: () => Promise<void>
   stop: () => void
   pitch: number | null
+  micError: string | null
 } {
   const { getOrCreateAudioContext, pitchDetector, getPitchDetector } = useAudio()
   const medianCount = options?.medianCount ?? 1
   const { value: medianValue, push: medianPush, shift: medianShift, clear: medianClear } = useMedianBuffer(medianCount)
+  const [micError, setMicError] = useState<string | null>(null)
 
   const subscribe = useCallback(
     (onStoreChange: () => void) => {
@@ -129,16 +131,28 @@ export function usePitchDetector(options?: { medianCount?: number }): {
   )
 
   const start = useCallback(async () => {
+    setMicError(null)
     getOrCreateAudioContext()
     const detector = getPitchDetector()
     if (detector) {
-      await detector.start()
+      try {
+        await detector.start()
+      } catch (err) {
+        if (err instanceof DOMException && err.name === 'NotAllowedError') {
+          setMicError(
+            'Microphone access was denied. Check your browser\'s site permissions, and ensure your browser has microphone access in your system settings.',
+          )
+        } else {
+          setMicError('Could not access the microphone. Please check your device settings.')
+        }
+      }
     }
   }, [getOrCreateAudioContext, getPitchDetector])
 
   const stop = useCallback(() => {
     getPitchDetector()?.stop()
     medianClear()
+    setMicError(null)
   }, [getPitchDetector, medianClear])
 
   return {
@@ -146,5 +160,6 @@ export function usePitchDetector(options?: { medianCount?: number }): {
     start,
     stop,
     pitch: medianValue,
+    micError,
   }
 }

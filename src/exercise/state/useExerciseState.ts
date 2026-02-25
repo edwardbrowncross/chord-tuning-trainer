@@ -13,7 +13,7 @@ export function useExerciseState(
   const config = exercises[exerciseIndex]
   const [phase, dispatch] = useReducer(exerciseReducer, initialPhase)
   const vowelPlayer = useVowelPlayer()
-  const { pitch, start, stop } = usePitchDetector({ medianCount: 20 })
+  const { pitch, start, stop, micError } = usePitchDetector({ medianCount: 20 })
 
   // Phase transition detection
   const sustainProgress = usePhaseTransitions(phase, pitch, dispatch)
@@ -91,5 +91,5 @@ export function useExerciseState(
     }
   }, [phase, onComplete])
 
-  return { phase, pitch, sustainProgress, handleRetry, handleNext }
+  return { phase, pitch, sustainProgress, micError, handleRetry, handleNext }
 }

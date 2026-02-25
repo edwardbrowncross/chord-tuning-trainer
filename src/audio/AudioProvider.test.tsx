@@ -1,13 +1,17 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { createElement, type ReactNode } from 'react'
-import { AudioProvider, useAudio, useVowelPlayer } from './AudioProvider'
+import { AudioProvider, useAudio, useVowelPlayer, usePitchDetector } from './AudioProvider'
 import { VowelPlayer } from './VowelPlayer'
+import { PitchDetector } from './PitchDetector'
 
-vi.mock('./VowelPlayer', () => {
-  const VowelPlayer = vi.fn()
-  return { VowelPlayer }
-})
+vi.mock('./VowelPlayer', () => ({
+  VowelPlayer: vi.fn(),
+}))
+
+vi.mock('./PitchDetector', () => ({
+  PitchDetector: vi.fn(),
+}))
 
 function createMockAudioContext() {
   return {
@@ -36,6 +40,13 @@ describe('AudioProvider', () => {
     vi.stubGlobal('AudioContext', vi.fn(function () {
       return mockCtx
     }))
+    vi.mocked(PitchDetector).mockImplementation(function (this: PitchDetector) {
+      const snapshot = { isRunning: false, pitch: null }
+      this.start = vi.fn().mockResolvedValue(undefined)
+      this.stop = vi.fn()
+      this.subscribe = vi.fn(() => () => {})
+      this.getSnapshot = vi.fn(() => snapshot)
+    } as unknown as typeof PitchDetector)
   })
 
   afterEach(() => {
@@ -128,5 +139,96 @@ describe('AudioProvider', () => {
     expect(() => {
       renderHook(() => useVowelPlayer())
     }).toThrow('useAudio must be used within an AudioProvider')
+  })
+})
+
+describe('usePitchDetector', () => {
+  let mockDetectorStart: ReturnType<typeof vi.fn>
+
+  beforeEach(() => {
+    vi.stubGlobal('AudioContext', vi.fn(function () {
+      return {
+        sampleRate: 44100,
+        state: 'running' as AudioContextState,
+        onstatechange: null,
+        createGain: vi.fn(() => ({ gain: { value: 1 }, connect: vi.fn() })),
+        destination: {},
+      }
+    }))
+    mockDetectorStart = vi.fn().mockResolvedValue(undefined)
+    vi.mocked(PitchDetector).mockImplementation(function (this: PitchDetector) {
+      const snapshot = { isRunning: false, pitch: null }
+      this.start = mockDetectorStart
+      this.stop = vi.fn()
+      this.subscribe = vi.fn(() => () => {})
+      this.getSnapshot = vi.fn(() => snapshot)
+    } as unknown as typeof PitchDetector)
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('micError is null initially', () => {
+    const { result } = renderHook(() => usePitchDetector(), { wrapper })
+    expect(result.current.micError).toBeNull()
+  })
+
+  it('sets permission denied message when start throws NotAllowedError', async () => {
+    mockDetectorStart.mockRejectedValue(new DOMException('Permission denied', 'NotAllowedError'))
+
+    const { result } = renderHook(() => usePitchDetector(), { wrapper })
+
+    await act(async () => {
+      await result.current.start()
+    })
+
+    expect(result.current.micError).toContain('Microphone access was denied')
+    expect(result.current.micError).toContain('system settings')
+  })
+
+  it('sets generic message when start throws an unexpected error', async () => {
+    mockDetectorStart.mockRejectedValue(new Error('Something went wrong'))
+
+    const { result } = renderHook(() => usePitchDetector(), { wrapper })
+
+    await act(async () => {
+      await result.current.start()
+    })
+
+    expect(result.current.micError).toContain('Could not access the microphone')
+  })
+
+  it('clears micError when stop is called', async () => {
+    mockDetectorStart.mockRejectedValue(new DOMException('Permission denied', 'NotAllowedError'))
+
+    const { result } = renderHook(() => usePitchDetector(), { wrapper })
+
+    await act(async () => {
+      await result.current.start()
+    })
+    expect(result.current.micError).not.toBeNull()
+
+    act(() => {
+      result.current.stop()
+    })
+    expect(result.current.micError).toBeNull()
+  })
+
+  it('clears micError at the start of a retry', async () => {
+    mockDetectorStart.mockRejectedValueOnce(new DOMException('Permission denied', 'NotAllowedError'))
+
+    const { result } = renderHook(() => usePitchDetector(), { wrapper })
+
+    await act(async () => {
+      await result.current.start()
+    })
+    expect(result.current.micError).not.toBeNull()
+
+    // Second call succeeds — micError should clear
+    await act(async () => {
+      await result.current.start()
+    })
+    expect(result.current.micError).toBeNull()
   })
 })

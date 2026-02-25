@@ -1,4 +1,4 @@
-import { Stack } from '@mantine/core'
+import { Alert, Stack } from '@mantine/core'
 import { midiToHz } from '../audio/cents'
 import { useExerciseState } from './state/useExerciseState'
 import { MATCH_THRESHOLD_CENTS } from './state/usePhaseTransitions'
@@ -20,7 +20,7 @@ export function ExerciseScreen({
   onComplete: (result: ExerciseResult) => void
   onChordMatched?: (result: ExerciseResult | null) => void
 }) {
-  const { phase, pitch, sustainProgress, handleRetry, handleNext } =
+  const { phase, pitch, sustainProgress, micError, handleRetry, handleNext } =
     useExerciseState(exercises, exerciseIndex, onComplete, onChordMatched)
 
   return (
@@ -31,7 +31,11 @@ export function ExerciseScreen({
             case 'idle':
               return null
             case 'match-root':
-              return (
+              return micError ? (
+                <Alert color="red" title="Microphone access denied" maw={360}>
+                  {micError}
+                </Alert>
+              ) : (
                 <MatchRootView
                   targetHz={midiToHz(phase.config.referenceTone.pitchOffset)}
                   pitch={pitch}

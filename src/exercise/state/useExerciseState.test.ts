@@ -18,6 +18,7 @@ vi.mock('../../audio/AudioProvider', () => ({
     start: mockStart,
     stop: mockStop,
     isRunning: false,
+    micError: null,
   }),
 }))
 
