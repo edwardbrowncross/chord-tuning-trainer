@@ -48,7 +48,7 @@ export class VowelPlayer {
   private startVoices(paramsArray: VoiceParams[], rampTime: number, voiceCount: number): void {
     for (const p of paramsArray) {
       const synthParams = generateSynthParams(p, this.options);
-      const { real, imag } = generatePartials(synthParams);
+      const { real, imag } = generatePartials(synthParams, p.vocalEffort);
 
       const periodicWave = this.ctx.createPeriodicWave(real, imag, { disableNormalization: true });
       const oscillator = this.ctx.createOscillator();
@@ -58,7 +58,7 @@ export class VowelPlayer {
       const gate = this.ctx.createGain();
       gate.gain.setValueAtTime(0.001, this.ctx.currentTime);
       gate.gain.linearRampToValueAtTime(
-        0.2 / voiceCount,
+        0.2 / Math.sqrt(voiceCount),
         this.ctx.currentTime + rampTime,
       );
 

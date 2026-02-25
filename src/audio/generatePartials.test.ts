@@ -29,7 +29,7 @@ describe("generatePartials", () => {
 
     const f0 = defaultSynthParams.f0;
     const maxFrequency = f0 * 8;
-    generatePartials(defaultSynthParams, maxFrequency);
+    generatePartials(defaultSynthParams, defaultPerceptualParams.vocalEffort, maxFrequency);
 
     const expectedCount = Math.floor(maxFrequency / f0);
 
@@ -47,18 +47,18 @@ describe("generatePartials", () => {
     const f0 = defaultSynthParams.f0;
     const maxFrequency = f0 * 16;
     const expectedCount = Math.floor(maxFrequency / f0);
-    const { real, imag } = generatePartials(defaultSynthParams, maxFrequency);
+    const { real, imag } = generatePartials(defaultSynthParams, defaultPerceptualParams.vocalEffort, maxFrequency);
     expect(real).toHaveLength(expectedCount);
     expect(imag).toHaveLength(expectedCount);
   });
 
   it("returns all zeros for imag", () => {
-    const { imag } = generatePartials(defaultSynthParams, 16);
+    const { imag } = generatePartials(defaultSynthParams, defaultPerceptualParams.vocalEffort, 16);
     expect(imag.every((v) => v === 0)).toBe(true);
   });
 
   it("returns real values that are not all zero", () => {
-    const { real } = generatePartials(defaultSynthParams);
+    const { real } = generatePartials(defaultSynthParams, defaultPerceptualParams.vocalEffort);
     expect(real.some((v) => v !== 0)).toBe(true);
   });
 });
