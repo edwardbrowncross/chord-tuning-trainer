@@ -38,6 +38,7 @@ export function ModuleScreen() {
   // Derive module-active props (always computed, but only used in module-active phase)
   const moduleIndex = phase.type === 'module-active' ? phase.moduleIndex : 0
   const levelIndex = phase.type === 'module-active' ? phase.levelIndex : 0
+  const retryCount = phase.type === 'module-active' ? phase.retryCount : 0
   const mod = state.modules[moduleIndex]
   const levelSpec = mod?.levels[levelIndex]
 
@@ -117,7 +118,7 @@ export function ModuleScreen() {
           />
           <AnimatePresence mode="wait">
             <motion.div
-              key={`${moduleIndex}-${levelIndex}`}
+              key={`${moduleIndex}-${levelIndex}-${retryCount}`}
               style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}

@@ -36,12 +36,18 @@ export function moduleReducer(state: ModuleState, action: ModuleAction): ModuleS
       const levelIndex = action.levelIndex ?? 0
       const levelSpec = mod.levels[levelIndex]
       if (!levelSpec) return state
+      const prevPhase = state.phase
+      const isSameLevel =
+        prevPhase.type === 'module-active' &&
+        prevPhase.moduleIndex === action.moduleIndex &&
+        prevPhase.levelIndex === levelIndex
       return {
         ...state,
         phase: {
           type: 'module-active',
           moduleIndex: action.moduleIndex,
           levelIndex,
+          retryCount: isSameLevel ? prevPhase.retryCount + 1 : 0,
         },
       }
     }
@@ -73,6 +79,7 @@ export function moduleReducer(state: ModuleState, action: ModuleAction): ModuleS
           type: 'module-active',
           moduleIndex,
           levelIndex: nextLevelIndex,
+          retryCount: 0,
         },
       }
     }

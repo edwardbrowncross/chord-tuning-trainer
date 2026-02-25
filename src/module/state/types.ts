@@ -5,7 +5,7 @@ import type { ModuleSpecification } from '../../data/types'
 
 export type ModulePhase =
   | { type: 'module-select' }
-  | { type: 'module-active'; moduleIndex: number; levelIndex: number }
+  | { type: 'module-active'; moduleIndex: number; levelIndex: number; retryCount: number }
 
 export type ModuleState = {
   phase: ModulePhase

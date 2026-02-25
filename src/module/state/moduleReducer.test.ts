@@ -71,21 +71,30 @@ describe('moduleReducer', () => {
   describe('SELECT_MODULE', () => {
     it('transitions from module-select to module-active at level 0', () => {
       const next = moduleReducer(initialState, { type: 'SELECT_MODULE', moduleIndex: 0 })
-      expect(next.phase).toEqual({ type: 'module-active', moduleIndex: 0, levelIndex: 0 })
+      expect(next.phase).toEqual({ type: 'module-active', moduleIndex: 0, levelIndex: 0, retryCount: 0 })
     })
 
     it('allows jumping to a different module from module-active phase', () => {
       const activeState: ModuleState = {
         ...initialState,
-        phase: { type: 'module-active', moduleIndex: 0, levelIndex: 0 },
+        phase: { type: 'module-active', moduleIndex: 0, levelIndex: 0, retryCount: 0 },
       }
       const next = moduleReducer(activeState, { type: 'SELECT_MODULE', moduleIndex: 1 })
-      expect(next.phase).toEqual({ type: 'module-active', moduleIndex: 1, levelIndex: 0 })
+      expect(next.phase).toEqual({ type: 'module-active', moduleIndex: 1, levelIndex: 0, retryCount: 0 })
     })
 
     it('accepts an optional levelIndex', () => {
       const next = moduleReducer(initialState, { type: 'SELECT_MODULE', moduleIndex: 0, levelIndex: 1 })
-      expect(next.phase).toEqual({ type: 'module-active', moduleIndex: 0, levelIndex: 1 })
+      expect(next.phase).toEqual({ type: 'module-active', moduleIndex: 0, levelIndex: 1, retryCount: 0 })
+    })
+
+    it('increments retryCount when selecting the same module and level', () => {
+      const activeState: ModuleState = {
+        ...initialState,
+        phase: { type: 'module-active', moduleIndex: 0, levelIndex: 1, retryCount: 2 },
+      }
+      const next = moduleReducer(activeState, { type: 'SELECT_MODULE', moduleIndex: 0, levelIndex: 1 })
+      expect(next.phase).toEqual({ type: 'module-active', moduleIndex: 0, levelIndex: 1, retryCount: 3 })
     })
 
     it('is a no-op for invalid level index', () => {
@@ -143,16 +152,16 @@ describe('moduleReducer', () => {
     it('advances to next level within the module', () => {
       const state: ModuleState = {
         ...initialState,
-        phase: { type: 'module-active', moduleIndex: 0, levelIndex: 0 },
+        phase: { type: 'module-active', moduleIndex: 0, levelIndex: 0, retryCount: 0 },
       }
       const next = moduleReducer(state, { type: 'NEXT_LEVEL' })
-      expect(next.phase).toEqual({ type: 'module-active', moduleIndex: 0, levelIndex: 1 })
+      expect(next.phase).toEqual({ type: 'module-active', moduleIndex: 0, levelIndex: 1, retryCount: 0 })
     })
 
     it('returns to module-select when no more levels', () => {
       const state: ModuleState = {
         ...initialState,
-        phase: { type: 'module-active', moduleIndex: 0, levelIndex: 1 },
+        phase: { type: 'module-active', moduleIndex: 0, levelIndex: 1, retryCount: 0 },
       }
       const next = moduleReducer(state, { type: 'NEXT_LEVEL' })
       expect(next.phase).toEqual({ type: 'module-select' })
@@ -161,7 +170,7 @@ describe('moduleReducer', () => {
     it('returns to module-select when single-level module is complete', () => {
       const state: ModuleState = {
         ...initialState,
-        phase: { type: 'module-active', moduleIndex: 1, levelIndex: 0 },
+        phase: { type: 'module-active', moduleIndex: 1, levelIndex: 0, retryCount: 0 },
       }
       const next = moduleReducer(state, { type: 'NEXT_LEVEL' })
       expect(next.phase).toEqual({ type: 'module-select' })
@@ -177,7 +186,7 @@ describe('moduleReducer', () => {
     it('returns to module-select from module-active', () => {
       const state: ModuleState = {
         ...initialState,
-        phase: { type: 'module-active', moduleIndex: 0, levelIndex: 0 },
+        phase: { type: 'module-active', moduleIndex: 0, levelIndex: 0, retryCount: 0 },
       }
       const next = moduleReducer(state, { type: 'BACK_TO_MODULES' })
       expect(next.phase).toEqual({ type: 'module-select' })
@@ -221,7 +230,7 @@ describe('moduleReducer', () => {
     it('is a no-op when not in module-select phase', () => {
       const state: ModuleState = {
         ...initialState,
-        phase: { type: 'module-active', moduleIndex: 0, levelIndex: 0 },
+        phase: { type: 'module-active', moduleIndex: 0, levelIndex: 0, retryCount: 0 },
       }
       const next = moduleReducer(state, { type: 'SET_PART', part: 'bass', scores: [[null, null], [null]] })
       expect(next).toBe(state)
