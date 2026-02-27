@@ -41,7 +41,7 @@ export function SettingsModal({ opened, onClose }: { opened: boolean; onClose: (
       <Text size="sm" c="dimmed" mt="md" mb="xs">Pitch offset (semitones)</Text>
       <Slider
         min={-4}
-        max={8}
+        max={12}
         step={1}
         value={audioSettings.pitchOffset}
         onChange={v => setAudioSettings(s => ({ ...s, pitchOffset: v }))}
@@ -50,6 +50,7 @@ export function SettingsModal({ opened, onClose }: { opened: boolean; onClose: (
           { value: 0, label: '0' },
           { value: 4, label: '+4' },
           { value: 8, label: '+8' },
+          { value: 12, label: '+12' },
         ]}
         mb="xl"
       />
